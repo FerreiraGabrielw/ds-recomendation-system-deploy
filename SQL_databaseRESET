@@ -1,0 +1,38 @@
+Para Limpar as Tabelas no banco:
+USE ecommerce_db;
+
+SET SQL_SAFE_UPDATES = 0;
+
+-- 1) Desabilitar checagem de FKs
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- 2) Limpar tabelas FILHAS primeiro
+DELETE FROM product_views;
+DELETE FROM transactions;
+
+-- 3) Limpar tabelas PAI
+DELETE FROM products;
+DELETE FROM customers;
+
+-- 4) Resetar AUTO_INCREMENT
+ALTER TABLE customers AUTO_INCREMENT = 1;
+ALTER TABLE products AUTO_INCREMENT = 1;
+ALTER TABLE transactions AUTO_INCREMENT = 1;
+ALTER TABLE product_views AUTO_INCREMENT = 1;
+
+-- 5) Reativar FKs
+SET FOREIGN_KEY_CHECKS = 1;
+
+SET SQL_SAFE_UPDATES = 0;
+
+SHOW VARIABLES LIKE 'local_infile';
+SET GLOBAL local_infile = 1;
+
+
+---------
+
+
+Para carregar via script os novos dados 
+
+
+mysql --local-infile=1 -u root -p < "G:\Documentos\1. CarreiraProfissional\CientistaDeDados\ProjetosDataScience\ProductRecomendation\ds-recomendation-system-deploy\data\load_data_local.sql"

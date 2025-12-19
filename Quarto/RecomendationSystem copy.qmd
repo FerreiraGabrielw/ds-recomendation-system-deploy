@@ -1,0 +1,244 @@
+---
+title: "Hybrid Recommender System for E-commerce (End-to-End)"
+author: "Gabriel Ferreira"
+date: "2025-12-19"
+format:
+  html:
+    page-layout: full
+    code-fold: true
+    code-summary: "Show Code"
+    toc: true
+    toc-depth: 1
+    toc-title: "Project Index"
+    anchor-sections: false
+engine: jupytern
+jupyter: python3
+---
+
+## # Introduction
+
+Este projeto desenvolve um **sistema de recomendação híbrido para e-commerce**, combinando sinais comportamentais, semânticos e contextuais para gerar recomendações personalizadas e escaláveis.
+
+O objetivo é simular **um ambiente real de produção**, cobrindo todo o ciclo de vida de um projeto de Data Science aplicado: modelagem relacional, EDA em SQL, construção de modelos de Machine Learning, avaliação offline rigorosa e deploy em cloud (AWS).
+
+A solução integra:
+
+* **Item-Item Collaborative Filtering**
+* **Content-Based Filtering (TF-IDF)**
+* **Association Rules (Apriori)**
+
+Treinados **offline** e servidos **via API serverless**, seguindo boas práticas de engenharia e controle de custos.
+
+---
+
+## # Project Structure
+
+O fluxo do projeto segue uma arquitetura end-to-end:
+
+1. Objetivo de negócio
+2. Mapeamento e geração de dados
+3. Ingestão (CSV → MySQL)
+4. EDA em SQL
+5. Exportação para Python
+6. Feature Engineering
+7. Modelagem (CF, CB, AR)
+8. Avaliação offline
+9. Modelo híbrido final
+10. Deploy (AWS S3 + Lambda + API Gateway)
+
+```mermaid
+flowchart TD
+A[Objetivo de Negócio]
+--> B[Mapeamento de Dados]
+--> C[Ingestão CSV → MySQL]
+--> D[EDA SQL]
+--> E[Export p/ Python]
+--> F[Preprocessing]
+--> G[Feature Engineering]
+--> H[Modelagem ML]
+--> I[Avaliação]
+--> J[Deploy AWS]
+--> K[Entrega: API + QMD]
+```
+
+---
+
+## # Data Sources
+          
+* Tabelas:
+
+  * `customers`
+  * `products`
+  * `transactions`
+  * `product_views`
+
+Granularidade por item (linha = item comprado), simulando logs reais de e-commerce.
+
+---
+
+## # SQL Database & EDA
+
+Antes da modelagem em Python, os dados são explorados diretamente no **MySQL**, garantindo integridade, entendimento do comportamento e suporte às decisões de modelagem.
+
+### 🎥 Video — Database Schema & SQL Setup
+
+{{< video sql_schema_and_setup.mp4 >}}
+
+---
+
+## ## SQL Sanity Checks
+
+#| echo: true
+#| warning: false
+#| message: false
+
+from sqlalchemy import create_engine, text
+import pandas as pd
+
+engine = create_engine(CONN_STR, echo=False)
+
+sql = """
+SELECT
+(SELECT COUNT(*) FROM customers) AS n_customers,
+(SELECT COUNT(*) FROM products) AS n_products,
+(SELECT COUNT(*) FROM transactions) AS n_transactions,
+(SELECT COUNT(*) FROM product_views) AS n_views;
+"""
+pd.read_sql_query(sql=text(sql), con=engine)
+
+Decisão: base íntegra, sem nulos ou duplicações — apta para modelagem.
+
+---
+
+## ## SQL EDA (Business Insights)
+
+* Top produtos por quantidade e receita
+* Distribuição de preços
+* Série temporal de vendas
+* RFM
+* Views → Buys
+* Sparsity da matriz cliente × produto
+
+# exemplo de uma query já existente no seu notebook
+
+sql = """
+SELECT p.category, SUM(t.total_value) AS revenue
+FROM transactions t
+JOIN products p ON t.product_id = p.product_id
+GROUP BY p.category
+ORDER BY revenue DESC;
+"""
+pd.read_sql_query(sql=text(sql), con=engine)
+
+### 🎥 Video — SQL EDA & Business Insights
+
+{{< video sql_eda_analysis.mp4 >}}
+
+---
+
+## # Modeling Strategy
+
+A EDA revela:
+
+* Alta **sparsity (~93%)**
+* Forte sinal comportamental
+* Necessidade de **modelo híbrido**
+
+Decisão arquitetural:
+
+* CF como sinal principal
+* CB para cold start e cobertura
+* AR para cross-sell contextual
+
+---
+
+## # Item-Item Collaborative Filtering
+
+#| echo: true
+from sklearn.metrics.pairwise import cosine_similarity
+
+(⚠️ aqui você **cola exatamente o código do notebook**, sem alterar)
+
+**Justificativa:**
+Item-based CF é mais robusto e escalável em matrizes esparsas típicas de e-commerce.
+
+---
+
+## # Content-Based Filtering (TF-IDF)
+
+# TF-IDF sobre nome, categoria e marca
+
+Complementa CF, mitigando cold start de produtos e ampliando cobertura.
+
+---
+
+## # CF vs CB — Offline Evaluation
+
+Antes do híbrido, os modelos são avaliados separadamente usando **Leave-One-Out temporal** e **Hit Rate@K**.
+
+# avaliação CF vs CB
+
+Resultado: CF domina, CB agrega valor incremental.
+
+---
+
+## # Hybrid Model — Weight Tuning
+
+# tuning de pesos
+
+Melhor resultado:
+
+* `w_cf = 0.6`
+* `w_cb = 0.4`
+
+---
+
+## # Association Rules (Apriori)
+
+Regras de associação capturam padrões explícitos de co-ocorrência:
+
+> *“Quem compra X costuma comprar Y”*
+
+# Apriori + rules
+
+Uso **controlado**, apenas quando aplicável.
+
+---
+
+## # Final Hybrid Recommender
+
+Combinação:
+
+* CF (personalização)
+* CB (semântica)
+* AR (cross-sell)
+
+# recommend_hybrid()
+
+---
+
+## # Offline Artifacts
+
+Os modelos são treinados offline e serializados:
+
+# salvar artefatos
+
+> **Em produção, a API apenas carrega artefatos e faz ranking.**
+
+---
+
+## # Cloud Deployment (AWS)
+
+### 🎥 Video — AWS Deploy + API Demo
+
+{{< video aws_lambda_api_demo.mp4 >}}
+
+* S3 → armazenamento dos artefatos
+* Lambda → inferência
+* API Gateway → REST
+
+---
+
+## # Conclusion
+
+Este projeto demonstra a construção de um **sistema de recomendação híbrido completo**, indo além da modelagem e abordando desafios reais de produção: dados, arquitetura, avaliação, deploy e custo.

@@ -1,7 +1,3 @@
--- load_data_local.sql
--- Script para importar CSVs gerados para o DB ecommerce_db usando LOAD DATA LOCAL INFILE
--- Ajuste usuário / senha ao executar o cliente mysql (veja instruções no README abaixo)
-
 USE ecommerce_db;
 
 -- 1) Desabilitar checagens de FK temporariamente para facilitar import

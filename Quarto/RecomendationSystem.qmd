@@ -454,7 +454,6 @@ Com base na EDA, foi definida uma arquitetura híbrida onde cada componente reso
 | Item-Item CF      | Personalização baseada em comportamento |
 | Content-Based     | Similaridade semântica e cold start     |
 | Association Rules | Cross-sell contextual                   |
-<br>
 
 O objetivo não é substituir modelos, mas **combinar sinais complementares**.
 
@@ -472,34 +471,114 @@ transactions = pd.read_csv("transactions.csv")
 views = pd.read_csv("product_views.csv")
 ```
 
-
-
-
-
----
+##### Criar dataset de interações (cliente x produto):
 ```{python}
-
+interactions = (
+    transactions[['customer_id', 'product_id']]
+    .drop_duplicates()
+)
+interactions['interaction'] = 1
+interactions.head()
 ```
 <br>
 
+##### Construir a matriz Item x Cliente:
+```{python}
+item_user_matrix = interactions.pivot_table(
+    index='product_id',
+    columns='customer_id',
+    values='interaction',
+    fill_value=0
+)
 
+item_user_matrix.shape
+```
+<br>
 
----
+##### Checar Sparsity:
+```{python}
+density = item_user_matrix.values.sum() / item_user_matrix.size
+sparsity = 1 - density
 
+print(f"Sparsity: {sparsity:.4f}")
+```
+<br>
 
----
+##### Calcular Similaridade Item-Item (Cosine):
+```{python}
+item_similarity = cosine_similarity(item_user_matrix)
 
+item_sim_df = pd.DataFrame(
+    item_similarity,
+    index=item_user_matrix.index,
+    columns=item_user_matrix.index
+)
 
+item_sim_df.iloc[:5, :5]
+```
+<br>
 
-⬇️ **INSIRA O CÓDIGO AQUI (matriz item×user, cosine, shrinkage)**
+##### Co-ocorrência
+```{python}
+cooccurrence = item_user_matrix @ item_user_matrix.T
+```
+<br>
 
----
+##### Shrinkage
+```{python}
+LAMBDA = 10
+shrunk_similarity = item_sim_df * (cooccurrence / (cooccurrence + LAMBDA))
+```
+<br>
 
-## Interpretation — CF
+##### Função de Recomendação (Item-Item CF)
+```{python}
+# Função de Recomendação (Item-Item CF)
+def recommend_item_item(user_id, k=10):
+    # Produtos comprados pelo usuário
+    bought_items = interactions.loc[
+        interactions['customer_id'] == user_id, 'product_id'
+    ].unique()
 
-O score gerado pelo modelo representa **afinidade relativa entre produtos**, não probabilidade absoluta.
+    if len(bought_items) == 0:
+        return pd.Series(dtype=float)
 
-O uso de shrinkage reduz ruído causado por coocorrências raras, tornando o ranking mais confiável.
+    # Score médio de similaridade
+    scores = shrunk_similarity.loc[bought_items].mean(axis=0)
+
+    # Remover itens já comprados
+    scores = scores.drop(bought_items, errors='ignore')
+
+    return scores.sort_values(ascending=False).head(k)
+```
+<br>
+
+##### Teste do modelo
+```{python}
+test_user = interactions['customer_id'].iloc[0]
+recommend_item_item(test_user, k=5)
+```
+<br>
+
+##### Enriquecer com Informações do Produto
+```{python}
+def recommend_with_metadata(user_id, k=10):
+    recs = recommend_item_item(user_id, k)
+    
+    return (
+        recs
+        .reset_index()
+        .merge(products, on='product_id', how='left')
+        .rename(columns={0: 'score'})
+    )
+
+recommend_with_metadata(test_user, k=5)
+```
+<br>
+
+O modelo Item-Item Collaborative Filtering identifica produtos semelhantes a partir de padrões de compra reais, permitindo recomendações personalizadas e escaláveis. A aplicação de shrinkage reduz ruído causado por co-ocorrências raras, tornando o sistema mais confiável em cenários de alta esparsidade, típicos de e-commerce.
+
+O score gerado pelo Item-Item CF representa uma medida relativa de afinidade entre produtos, baseada exclusivamente em padrões históricos de compra. Ele é utilizado para ranquear itens recomendados e não deve ser interpretado como probabilidade absoluta.
 
 ---
 
@@ -507,16 +586,97 @@ O uso de shrinkage reduz ruído causado por coocorrências raras, tornando o ran
 
 Apesar da força do sinal comportamental, o CF apresenta limitações:
 
-* cold start de produtos,
-* baixa explicabilidade semântica.
+| Limitação                | Impacto                          |
+| ------------------------ | -------------------------------- |
+| Cold start de produto    | Produto novo nunca é recomendado |
+| Dependência do histórico | Pouca explicação semântica       |
+| Sparsity alta            | Alguns itens quase não aparecem  |
 
 Para mitigar isso, utilizamos Content-Based Filtering, representando produtos por seus atributos textuais.
 
-⬇️ **INSIRA O CÓDIGO AQUI (TF-IDF + cosine)**
+##### Preparação do texto dos produtos:
+```{python}
+products_cb = products.copy()
 
----
+products_cb['text'] = (
+    products_cb['name'].fillna('') + ' ' +
+    products_cb['category'].fillna('') + ' ' +
+    products_cb['brand'].fillna('')
+)
 
-## Interpretation — CB
+products_cb[['product_id', 'text']].head()
+```
+<br>
+
+##### Vetorização com TF-IDF:
+```{python}
+tfidf = TfidfVectorizer(
+    ngram_range=(1,2),
+    min_df=2
+)
+
+tfidf_matrix = tfidf.fit_transform(products_cb['text'])
+
+tfidf_matrix.shape
+```
+<br>
+
+##### Similaridade entre produtos (Cosine):
+```{python}
+content_similarity = cosine_similarity(tfidf_matrix)
+```
+<br>
+
+##### Criar matriz Produto x Produto:
+```{python}
+content_sim_df = pd.DataFrame(
+    content_similarity,
+    index=products_cb['product_id'],
+    columns=products_cb['product_id']
+)
+
+content_sim_df.iloc[:5, :5]
+```
+<br>
+
+##### Função de recomendação Content-Based:
+```{python}
+def recommend_content_based(user_id, k=10):
+    bought_items = interactions.loc[
+        interactions['customer_id'] == user_id, 'product_id'
+    ].unique()
+
+    if len(bought_items) == 0:
+        return pd.Series(dtype=float)
+
+    scores = content_sim_df.loc[bought_items].mean(axis=0)
+    scores = scores.drop(bought_items, errors='ignore')
+
+    return scores.sort_values(ascending=False).head(k)
+```
+<br>
+
+##### Teste do Content-Based:
+```{python}
+test_user = interactions['customer_id'].iloc[0]
+recommend_content_based(test_user, k=5)
+```
+<br>
+
+##### Enriquecer com informações do produto:
+```{python}
+def recommend_cb_with_metadata(user_id, k=10):
+    recs = recommend_content_based(user_id, k)
+    return (
+        recs
+        .reset_index()
+        .merge(products, on='product_id', how='left')
+        .rename(columns={0: 'score'})
+    )
+
+recommend_cb_with_metadata(test_user, k=5)
+```
+<br>
 
 O modelo baseado em conteúdo recomenda produtos semanticamente similares, ampliando a cobertura do sistema e permitindo recomendações mesmo para itens com pouco histórico.
 
@@ -524,52 +684,561 @@ O modelo baseado em conteúdo recomenda produtos semanticamente similares, ampli
 
 # Offline Evaluation — CF vs CB
 
-Antes da construção do modelo híbrido, os modelos são avaliados separadamente utilizando:
+Antes de combinar os modelos em uma abordagem híbrida, avaliamos separadamente o Item-Item Collaborative Filtering (CF) e o Content-Based Filtering (CB). Essa etapa é fundamental para entender a contribuição individual de cada sinal, identificar suas forças e limitações e evitar que um modelo dominante mas ruidoso prejudique o desempenho final.
 
-* holdout temporal (leave-one-out),
-* métrica Hit Rate@K.
+A avaliação isolada permite comparar desempenho em métricas de ranking, ajustar pesos do modelo híbrido de forma fundamentada e justificar tecnicamente a escolha da arquitetura. Em cenáriosde e-commerce, essa prática é essencial para garantir que o modelo híbrido gere ganho incremental em relação aos baselines individuais, em vez de apenas misturar sinais sem benefício mensurável.
 
-⬇️ **INSIRA O CÓDIGO AQUI (avaliação CF vs CB)**
+##### Cria um split temporal do tipo Leave-Last-Out para avaliação:
+```{python}
+interactions_eval = transactions[['customer_id', 'product_id', 'transaction_date']].copy()
 
-**Conclusão:**
+# Garantir tipo datetime
+interactions_eval['transaction_date'] = pd.to_datetime(
+    interactions_eval['transaction_date']
+)
+
+# Ordenar temporalmente
+interactions_eval = interactions_eval.sort_values(
+    ['customer_id', 'transaction_date', 'product_id']
+)
+
+# Inicializar estruturas
+train_interactions = []
+test_interactions = {}
+
+# Holdout temporal (Last Item)
+for user_id, group in interactions_eval.groupby('customer_id'):
+    items = group['product_id'].tolist()
+
+    if len(items) < 2:
+        continue
+
+    test_item = items[-1]  # último item (mais recente)
+    test_interactions[user_id] = test_item
+
+    for item in items[:-1]:
+        train_interactions.append((user_id, item))
+
+train_df = pd.DataFrame(
+    train_interactions,
+    columns=['customer_id', 'product_id']
+)
+train_df['interaction'] = 1
+```
+<br>
+
+##### Recriar a matriz Item x User para trein:
+```{python}
+item_user_train = train_df.pivot_table(
+    index='product_id',
+    columns='customer_id',
+    values='interaction',
+    fill_value=0
+)
+```
+<br>
+
+#### Recalcular CF treino:
+```{python}
+item_sim_train = cosine_similarity(item_user_train)
+item_sim_train_df = pd.DataFrame(
+    item_sim_train,
+    index=item_user_train.index,
+    columns=item_user_train.index
+)
+```
+<br>
+
+##### Função de recomendação para avaliação (CF)
+```{python}
+def recommend_cf_eval(user_id, k=10):
+    bought_items = train_df.loc[
+        train_df['customer_id'] == user_id, 'product_id'
+    ].unique()
+
+    if len(bought_items) == 0:
+        return []
+
+    scores = item_sim_train_df.loc[bought_items].mean(axis=0)
+    scores = scores.drop(bought_items, errors='ignore')
+
+    return scores.sort_values(ascending=False).head(k).index.tolist()
+```
+<br>
+
+##### Função de recomendação para avaliação:
+```{python}
+def recommend_cb_eval(user_id, k=10):
+    bought_items = train_df.loc[
+        train_df['customer_id'] == user_id, 'product_id'
+    ].unique()
+
+    if len(bought_items) == 0:
+        return []
+
+    scores = content_sim_df.loc[bought_items].mean(axis=0)
+    scores = scores.drop(bought_items, errors='ignore')
+
+    return scores.sort_values(ascending=False).head(k).index.tolist()
+```
+<br>
+
+##### Avaliar Hit Rate @ K:
+```{python}
+def hit_rate(model_func, k=10):
+    hits = 0
+    total = 0
+
+    for user_id in sorted(test_interactions.keys()):
+        true_item = test_interactions[user_id]
+
+        recs = model_func(user_id, k)
+
+        if true_item in recs:
+            hits += 1
+
+        total += 1
+
+    return hits / total
+```
+<br>
+
+##### Resultados — CF vs CB:
+```{python}
+for k in [5, 10]:
+    hr_cf = hit_rate(recommend_cf_eval, k)
+    hr_cb = hit_rate(recommend_cb_eval, k)
+
+    print(f"Hit Rate @ {k}")
+    print(f"  Item-Item CF: {hr_cf:.4f}")
+    print(f"  Content-Based: {hr_cb:.4f}")
+    print("-" * 30)
+```
+<br>
+
+Antes da construção do modelo híbrido, avaliamos separadamente o desempenho do Item-Item Collaborative Filtering e do Content-Based Filtering utilizando uma estratégia Leave-One-Out e a métrica Hit Rate@K.
+
+Os resultados indicam que o modelo colaborativo apresenta maior capacidade preditiva, refletindo a força do sinal comportamental em dados implícitos. O Content-Based, embora com desempenho inferior isoladamente, mostrou-se consistente e adequado para complementar o sistema, especialmente em cenários de cold start e aumento de cobertura.
+
+**Conclusão**:
 O CF apresenta melhor desempenho isolado, enquanto o CB agrega valor incremental — justificando a combinação.
-
----
 
 # Hybrid Model — Weight Tuning
 
 Nesta etapa, testamos diferentes combinações de pesos entre CF e CB para maximizar performance.
 
-⬇️ **INSIRA O CÓDIGO AQUI (tuning de pesos)**
+#### Vamos testar:
 
-O melhor resultado é obtido com predominância do sinal colaborativo, complementado pelo conteúdo.
+| w_cf | w_cb |
+| ---- | ---- |
+| 0.0  | 1.0  |
+| 0.2  | 0.8  |
+| 0.4  | 0.6  |
+| 0.6  | 0.4  |
+| 0.8  | 0.2  |
+| 1.0  | 0.0  |
 
----
+
+Isso inclui:
+* CB puro
+* CF puro
+* Híbridos intermediários
+
+##### Função utilitária de normalização:
+```{python}
+def min_max_normalize(scores: pd.Series):
+    if scores.empty:
+        return scores
+    return (scores - scores.min()) / (scores.max() - scores.min() + 1e-9)
+```
+<br>
+
+##### Função híbrida de recomendação:
+```{python}
+def recommend_hybrid_eval(
+    user_id,
+    k=10,
+    w_cf=0.6,
+    w_cb=0.4
+):
+
+    bought_items = train_df.loc[
+        train_df['customer_id'] == user_id, 'product_id'
+    ].unique()
+
+    if len(bought_items) == 0:
+        return pd.Series(dtype=float)
+
+    # CF
+    scores_cf = item_sim_train_df.loc[bought_items].mean(axis=0)
+    scores_cf = scores_cf.drop(bought_items, errors='ignore')
+    scores_cf = min_max_normalize(scores_cf)
+
+    # CB
+    scores_cb = content_sim_df.loc[bought_items].mean(axis=0)
+    scores_cb = scores_cb.drop(bought_items, errors='ignore')
+    scores_cb = min_max_normalize(scores_cb)
+
+    # Combinação
+    hybrid_scores = (
+        w_cf * scores_cf +
+        w_cb * scores_cb
+    ).dropna()
+
+    return hybrid_scores.sort_values(ascending=False).head(k)
+```
+<br>
+
+##### Função de avaliação do híbrido:
+```{python}
+def evaluate_hybrid(weights, k=10):
+    results = []
+
+    # Ordem fixa de usuários
+    users = sorted(test_interactions.keys())
+
+    for w_cf, w_cb in weights:
+        hits = []
+
+        for user in users:
+            true_item = test_interactions[user]
+
+            recs = recommend_hybrid_eval(
+                user_id=user,
+                k=k,
+                w_cf=w_cf,
+                w_cb=w_cb
+            )
+
+            hits.append(int(true_item in recs.index))
+
+        results.append({
+            'w_cf': w_cf,
+            'w_cb': w_cb,
+            f'hit_rate@{k}': np.mean(hits)
+        })
+
+    return pd.DataFrame(results)
+```
+<br>
+
+##### Rodar o tuning:
+```{python}
+weight_grid = [
+    (0.0, 1.0),
+    (0.2, 0.8),
+    (0.4, 0.6),
+    (0.6, 0.4),
+    (0.8, 0.2),
+    (1.0, 0.0),
+]
+
+df_hybrid_eval = evaluate_hybrid(weight_grid, k=10)
+df_hybrid_eval.sort_values('hit_rate@10', ascending=False)
+```
+<br>
+
+
+A combinação dos modelos colaborativo e baseado em conteúdo resultou em melhoria consistente de desempenho. O melhor resultado foi obtido com pesos w_cf=0.6 e w_cb=0.4, evidenciando que o sinal comportamental deve ser predominante, mas complementado por similaridade semântica.
+
+Esses resultados confirmam que o modelo híbrido captura múltiplas dimensões do comportamento do usuário, reduz limitações individuais dos modelos base e oferece um trade-off mais robusto entre precisão e cobertura.
+
 
 # Association Rules (Apriori)
 
-As regras de associação capturam padrões explícitos de coocorrência em cestas de compra, sendo especialmente úteis para estratégias de cross-sell.
+Além das abordagens colaborativa e baseada em conteúdo, o sistema incorpora Association Rules para capturar padrões explícitos de coocorrência em cestas de compra. Essa técnica permite identificar produtos frequentemente adquiridos juntos, sendo especialmente eficaz para estratégias de cross-sell e aumento do ticket médio.
 
-⬇️ **INSIRA O CÓDIGO AQUI (Apriori + rules)**
+Diferentemente dos modelos centrados no usuário, as regras de associação operam diretamente sobre transações, tornando-se robustas a cenários de cold start de usuários e altamente interpretáveis para stakeholders de negócio. Integradas ao modelo híbrido, essas regras complementam a personalização com recomendações de produtos complementares.
+ 
+Analogia simples
+CF = sugerir outra camisa parecida
+CB = sugerir camisa da mesma marca
+Association Rules = sugerir o cinto que normalmente vai junto com a camisa
 
-**Uso controlado:**
-As regras são aplicadas apenas quando há correspondência real, evitando recomendações artificiais.
+Ou seja, responder a pergunta: O que costuma ser comprado junto?
 
----
+##### Criar as cestas:
+```{python}
+# Garantir que a coluna 'transaction_date' seja do tipo datetime
+transactions['transaction_date'] = pd.to_datetime(transactions['transaction_date'])
+
+# Criar uma coluna de "order_id"
+transactions['order_id'] = (
+    transactions['customer_id'].astype(str) + '_' +
+    transactions['transaction_date'].dt.date.astype(str)
+)
+
+# Agrupar produtos por pedido
+basket = (
+    transactions
+    .groupby('order_id')['product_id']
+    .apply(list)
+)
+
+basket.head()
+```
+<br>
+
+##### One-Hot Encoding das cestas:
+```{python}
+te = TransactionEncoder()
+te_array = te.fit(basket).transform(basket)
+
+basket_df = pd.DataFrame(
+    te_array,
+    columns=te.columns_
+)
+
+basket_df.head()
+```
+<br>
+
+##### Loop por categoria:
+```{python}
+
+```
+<br>
+
+
+```{python}
+rules_all = []
+
+for category in products['category'].unique():
+
+    products_cat = products.loc[
+        products['category'] == category, 'product_id'
+    ].tolist()
+
+    basket_cat = basket.apply(
+        lambda items: [i for i in items if i in products_cat]
+    )
+
+    basket_cat = basket_cat[basket_cat.apply(len) >= 2]
+
+    if len(basket_cat) < 50:
+        continue
+
+    te = TransactionEncoder()
+    te_array = te.fit(basket_cat).transform(basket_cat)
+
+    basket_df_cat = pd.DataFrame(
+        te_array,
+        columns=te.columns_
+    )
+
+    frequent_itemsets = apriori(
+        basket_df_cat,
+        min_support=0.01,
+        use_colnames=True,
+        max_len=2
+    )
+
+    if frequent_itemsets.empty:
+        continue
+
+    rules = association_rules(
+        frequent_itemsets,
+        metric='lift',
+        min_threshold=1.0
+    )
+
+    if rules.empty:
+        continue
+
+    rules['category'] = category
+    rules_all.append(rules)
+```
+<br>
+
+##### Consolidar todas as regras:
+```{python}
+rules_df = pd.concat(rules_all, ignore_index=True)
+rules_df.sort_values('lift', ascending=False).head(10)
+```
+<br>
+
+##### Filtrar regras:
+```{python}
+rules_filtered = rules_df[
+    (rules_df['antecedents'].apply(len) == 1) &
+    (rules_df['consequents'].apply(len) == 1) &
+    (rules_df['confidence'] >= 0.2) &
+    (rules_df['lift'] >= 1.2)
+].sort_values('lift', ascending=False)
+
+rules_filtered.head(10)
+```
+<br>
+
+##### Função de recomendação — Association Rules por categoria:
+```{python}
+def recommend_association_by_category(user_id, k=5):
+
+    bought_items = interactions.loc[
+        interactions['customer_id'] == user_id, 'product_id'
+    ].unique()
+
+    if len(bought_items) == 0:
+        return pd.Series(dtype=float)
+
+    recs = []
+
+    for item in bought_items:
+
+        item_category = products.loc[
+            products['product_id'] == item, 'category'
+        ].values[0]
+
+        matched_rules = rules_filtered[
+            (rules_filtered['category'] == item_category) &
+            (rules_filtered['antecedents'].apply(lambda x: item in x))
+        ]
+
+        for _, row in matched_rules.iterrows():
+            consequent = list(row['consequents'])[0]
+            recs.append((consequent, row['lift']))
+
+    if not recs:
+        return pd.Series(dtype=float)
+
+    recs_df = pd.DataFrame(recs, columns=['product_id', 'score'])
+
+    return (
+        recs_df
+        .groupby('product_id')['score']
+        .max()
+        .sort_values(ascending=False)
+        .head(k)
+    )
+```
+<br>
+
+##### Teste:
+```{python}
+user_items = interactions.loc[
+    interactions['customer_id'] == test_user, 'product_id'
+].unique()
+
+user_items
+```
+<br>
+
+As regras de associação foram aplicadas como um sinal complementar de cross-sell, sendo utilizadas apenas quando o histórico do usuário intersecta os antecedentes das regras extraídas. Em cenários onde não há correspondência, o sistema não força recomendações artificiais, preservando a qualidade do ranking
 
 # Final Hybrid Recommender
 
 O modelo final combina:
 
-* CF (personalização),
-* CB (semântica),
-* AR (contexto de compra).
+| Componente        | Papel no sistema                        |
+| ----------------- | --------------------------------------- |
+| Item-Item CF      | Personalização baseada em comportamento |
+| Content-Based     | Similaridade semântica / cold start     |
+| Association Rules | Cross-sell contextual (checkout)        |
 
-As pontuações são normalizadas e combinadas via soma ponderada.
+O híbrido não substitui, ele combina sinais.
 
-⬇️ **INSIRA O CÓDIGO AQUI (modelo híbrido final)**
+Obs: Cada modelo gera scores em escalas diferentes. Precisamos normalizar antes de somar.
 
----
+##### Função utilitária de normalização:
+```{python}
+def min_max_normalize(scores: pd.Series):
+    if scores.empty:
+        return scores
+    return (scores - scores.min()) / (scores.max() - scores.min() + 1e-9)
+```
+<br>
+
+##### Função de recomendação híbrida:
+```{python}
+def recommend_hybrid(
+    user_id,
+    k=10,
+    w_cf=0.5,
+    w_cb=0.3,
+    w_ar=0.2
+):
+
+    scores_final = pd.Series(dtype=float)
+
+    # ---------- CF ----------
+    scores_cf = recommend_item_item(user_id, k=50)
+    scores_cf = min_max_normalize(scores_cf)
+
+    if not scores_cf.empty:
+        scores_final = scores_final.add(w_cf * scores_cf, fill_value=0)
+
+    # ---------- Content-Based ----------
+    scores_cb = recommend_content_based(user_id, k=50)
+    scores_cb = min_max_normalize(scores_cb)
+
+    if not scores_cb.empty:
+        scores_final = scores_final.add(w_cb * scores_cb, fill_value=0)
+
+    # ---------- Association Rules ----------
+    scores_ar = recommend_association_by_category(user_id, k=50)
+    scores_ar = min_max_normalize(scores_ar)
+
+    if not scores_ar.empty:
+        scores_final = scores_final.add(w_ar * scores_ar, fill_value=0)
+
+    # ---------- Remover itens já comprados ----------
+    bought_items = interactions.loc[
+        interactions['customer_id'] == user_id, 'product_id'
+    ].unique()
+
+    scores_final = scores_final.drop(bought_items, errors='ignore')
+
+    return scores_final.sort_values(ascending=False).head(k)
+```
+<br>
+
+##### Teste do híbrido:
+```{python}
+test_user = interactions['customer_id'].iloc[0]
+recommend_hybrid(test_user, k=10)
+```
+<br>
+
+##### Enriquecer com metadata:
+
+```{python}
+def recommend_hybrid_with_metadata(user_id, k=10):
+
+    recs = recommend_hybrid(user_id, k)
+
+    return (
+        recs
+        .reset_index()
+        .rename(columns={'index': 'product_id', 0: 'score'})
+        .merge(products, on='product_id', how='left')
+    )
+
+recommend_hybrid_with_metadata(test_user, k=10)
+```
+<br>
+
+O sistema final combina três sinais complementares: Item-Item Collaborative Filtering, Content-Based Filtering e Association Rules. Cada componente atua em um aspecto distinto do problema, garantindo personalização, cobertura e capacidade de cross-sell. As pontuações são normalizadas e combinadas por meio de uma soma ponderada, permitindo ajuste fino do impacto de cada sinal. Essa abordagem reflete práticas reais de mercado, onde sistemas híbridos são preferidos por sua robustez e flexibilidade.
+
+O modelo analisa o histórico do cliente, a similaridade entre produtos e padrões recorrentes de compra conjunta para gerar recomendações personalizadas e contextualizadas, equilibrando relevância individual e oportunidades de aumento de ticket médio. Ou seja, em cenários onde não há correspondência, o sistema não força recomendações artificiais, preservando a qualidade do ranking.
+
+# Conclusão
+
+Foi desenvolvido um sistema híbrido de recomendação que combina sinais comportamentais (Item-Item Collaborative Filtering), semânticos (Content-Based Filtering) e contextuais (Association Rules). A arquitetura garante cobertura, personalização e capacidade de cross-sell, respeitando limitações estatísticas dos dados e evitando recomendações artificiais. O modelo reflete práticas reais de produção e foi avaliado de forma incremental, demonstrando ganhos qualitativos em relevância e interpretabilidade.
+
+
+
+
+```{python}
+
+```
+<br>
+
+
+
+
+
+
+
 
 # Offline Artifacts & Deployment Strategy
 

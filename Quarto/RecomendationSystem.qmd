@@ -1,7 +1,7 @@
 ---
-title: "Hotel Matching Project: Data Integration and Enrichment via API"
+title: "Hybrid Recommender System for E-commerce (End-to-End)"
 author: "Gabriel Ferreira"
-date: "2025-10-26"
+date: "2025-12-19"
 format:
   html:
     page-layout: full
@@ -17,555 +17,600 @@ jupyter: python3
 
 # Introduction
 
-This project tackles the challenge of merging two heterogeneous hotel datasets (hotels_A.csv and hotels_B.csv) without shared keys, mimicking real-world data integration in travel platforms (e.g., unifying listings from Booking.com and Expedia for personalized recommendations). The primary goals are: (1) develop a scalable matching algorithm using textual and geographic similarities to identify duplicate entities; and (2) enrich matched records via a simulated RESTful API, adding attributes like star ratings, review scores, and amenities.
+Este projeto apresenta o desenvolvimento de um sistema de recomendação híbrido para e-commerce, cobrindo todo o ciclo de vida de uma solução de Machine Learning aplicada em contexto real de negócio.
 
-The solution employs rule-based heuristics optimized for efficiency: multi-level blocking to prune candidates, Levenshtein distance for string similarity, and Haversine formula for geolocation. A labeled training set (train.csv) enables hyperparameter tuning and validation, achieving a perfect F1-score of 1.0—even on unseen data via 80/20 holdout split—demonstrating strong generalization. This pipeline supports applications like duplicate detection, enhanced search, and improved user experiences in hospitality tech, reducing manual curation costs by up to 90% through automated matching.
+O objetivo central é aumentar conversão e ticket médio por meio de recomendações personalizadas, utilizando múltiplos sinais complementares:
 
-Key innovations include hierarchical blocking (city-country + geo-radius) for computational savings and flexible matching rules to handle noisy real-world data (e.g., address variations). The project is production-ready, with a Jupyter notebook for exploration and a Python script for batch execution.
+* comportamento histórico de compra (Collaborative Filtering),
+* similaridade semântica entre produtos (Content-Based),
+* padrões explícitos de coocorrência em cestas de compra (Association Rules).
+
+O projeto foi desenhado com foco em produção, contemplando:
+
+* modelagem relacional,
+* exploração de dados em SQL,
+* avaliação offline,
+* treinamento offline e deploy em AWS.
+
+---
 
 # Project Structure
 
-The workflow follows an end-to-end data science pipeline: exploratory data analysis (EDA), preprocessing, candidate generation via blocking, similarity computation, threshold optimization with cross-validation, entity matching, API enrichment, and evaluation. Implementation uses Python (Pandas, NumPy, Levenshtein) and is deployable as a standalone script. Dependencies are managed via requirements.txt, with a mock FastAPI for enrichment simulation.
+O pipeline segue uma arquitetura end-to-end típica de sistemas de recomendação modernos:
 
-## Data Sources
+1. Definição do problema de negócio
+2. Geração e ingestão dos dados
+3. Exploração e validação em SQL
+4. Feature Engineering
+5. Modelagem (CF, CB, AR)
+6. Avaliação offline
+7. Construção do modelo híbrido
+8. Preparação de artefatos
+9. Deploy em cloud (AWS)
 
-- hotels_A.csv and hotels_B.csv: Core datasets with 436 and 425 records, respectively, featuring attributes like id, hotel_name, address, city, country, latitude, longitude, rating, and reviews_count (1-1,360).
-- train.csv: Labeled pairs (332 total) for supervised validation, with id_A, id_B, and is_match (0/1).;
-- Mock API (mock_api.py): Simulates external enrichment, returning deterministic attributes (stars: 3-5; score: 7.0-9.7; amenities: e.g., "wifi, pool") based on hashed inputs.
+Essa estrutura garante separação clara entre dados, modelos e inferência, facilitando manutenção e escalabilidade.
+
+---
+
+# Business Objective & KPIs
+
+**Objetivo de negócio:**
+Aumentar a relevância das recomendações para impulsionar:
+
+* AOV (Average Order Value),
+* taxa de conversão,
+* CTR de recomendações,
+* receita incremental.
+
+---
+
+# Data Sources & Modeling Assumptions
+
+Os dados utilizados representam um ambiente transacional típico de e-commerce, com tabelas normalizadas que refletem práticas comuns de armazenamento e análise analítica.
+
+O dataset inclui:
+
+* histórico de transações em nível de item,
+* catálogo de produtos com atributos descritivos,
+* eventos de visualização de produtos,
+* informações demográficas básicas de clientes,
+* registros temporais completos para análise comportamental.
+
+---
+
+# Database Setup & SQL Exploration
+
+Antes de qualquer modelagem em Python, os dados são analisados diretamente no **MySQL**, garantindo integridade e compreensão do comportamento do negócio.
+
+---
 
 ```{python}
 #| include: false
+from getpass import getpass
+import os
 import pandas as pd
 import numpy as np
-import re
-from Levenshtein import ratio as levenshtein_ratio
-import itertools
+from sqlalchemy import create_engine, text
 import matplotlib.pyplot as plt
-import seaborn as sns
-import os
-from sklearn.model_selection import train_test_split
-import warnings
-warnings.filterwarnings('ignore')
-
-# Load datasets
-hotels_A = pd.read_csv('hotels_A.csv')
-hotels_B = pd.read_csv('hotels_B.csv')
-train_truth_df = pd.read_csv('train.csv')
+from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.feature_extraction.text import TfidfVectorizer
+from collections import defaultdict
+import random
+from mlxtend.preprocessing import TransactionEncoder
+from mlxtend.frequent_patterns import apriori
+from mlxtend.frequent_patterns import association_rules
+import pickle
 ```
 
-# Exploratory Data Analysis (EDA)
 
-###### Dataset Info for hotels_A:
+## SQL Connection & Helper Functions
 ```{python}
-hotels_A.info()
+#| include: false
+# Conectar no SQL
+DB_USER = "root"
+DB_HOST = "127.0.0.1"
+DB_PORT = 3306
+DB_NAME = "ecommerce_db"
+DB_PASS = "sqlmala123"
+
+CONN_STR = f"mysql+pymysql://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+engine = create_engine(CONN_STR, echo=False)
+
+# Pra reprodutibilidade
+SEED = 42
+np.random.seed(SEED)
+random.seed(SEED)
 ```
 
-###### Dataset Info for hotels_B:
+##### Função Python para rodar SQL puro no notebook:
 ```{python}
-hotels_B.info()
+def run_sql_pure(sql: str, params: dict = None):
+    """
+    Executa SQL puro (string) e retorna um pandas.DataFrame.
+    Exibe a query (útil para portfólio) e retorna o DataFrame.
+    """
+    print("---- Executing SQL ----")
+    print(sql.strip())
+    print("-----------------------")
+    df = pd.read_sql_query(sql=text(sql), con=engine, params=params)
+    display(df.head(10))
+    return df
+
+# Configuração do matplotlib
+plt.rcParams['figure.figsize'] = (10,5)
+plt.rcParams['grid.linestyle'] = '--'
 ```
 
-###### Count:
+---
+
+## EDA (Exploratory Data Analysis)
+
+O primeiro passo da EDA é validar a integridade estrutural das tabelas.
+
+##### Contagens por tabela:
 ```{python}
-print("Counts:\n", hotels_A.count())
-print("\n", hotels_B.count())
+sql = """
+SELECT 
+  (SELECT COUNT(*) FROM customers) AS n_customers,
+  (SELECT COUNT(*) FROM products)  AS n_products,
+  (SELECT COUNT(*) FROM transactions) AS n_transactions,
+  (SELECT COUNT(*) FROM product_views) AS n_views;
+"""
+df = run_sql_pure(sql)
+vals = df.iloc[0].to_dict()
+names = list(vals.keys()); counts = list(vals.values())
 ```
+<br>
 
-## Data Quality Checks
-
-###### Null and Duplicate Check:
+##### Valores ausentes por tabela
 ```{python}
-print("Nulls in hotels_A:\n", hotels_A.isnull().sum())
-print("\nDuplicates in hotels_A:", hotels_A.duplicated().sum())
-print("\nNulls in hotels_B:\n", hotels_B.isnull().sum())
-print("\nDuplicates in hotels_B:", hotels_B.duplicated().sum())
+# lista de tabelas a verificar
+tables = ['customers', 'products', 'transactions', 'product_views']
+
+results = []
+for t in tables:
+    q_cols = f"""
+    SELECT COLUMN_NAME
+    FROM INFORMATION_SCHEMA.COLUMNS
+    WHERE TABLE_SCHEMA = '{DB_NAME}'
+      AND TABLE_NAME = '{t}'
+    ORDER BY ORDINAL_POSITION;
+    """
+    cols_df = pd.read_sql_query(sql=text(q_cols), con=engine)
+    cols = cols_df['COLUMN_NAME'].tolist()
+    num_cols = len(cols)
+
+    # contar linhas
+    q_rows = f"SELECT COUNT(*) AS n_rows FROM {t};"
+    n_rows = pd.read_sql_query(sql=text(q_rows), con=engine).iloc[0,0]
+
+    if n_rows == 0 or num_cols == 0:
+        null_count = 0
+    else:
+        null_expr = " + ".join([f"SUM(`{c}` IS NULL)" for c in cols])
+        q_nulls = f"SELECT {null_expr} AS null_count FROM {t};"
+        null_count = pd.read_sql_query(sql=text(q_nulls), con=engine).iloc[0,0]
+
+    total_cells = int(n_rows) * int(num_cols)
+    pct_null = (null_count / total_cells * 100) if total_cells > 0 else 0.0
+
+    results.append({
+        "table": t,
+        "n_rows": int(n_rows),
+        "n_cols": int(num_cols),
+        "total_cells": int(total_cells),
+        "null_count": int(null_count),
+        "pct_null": round(pct_null, 4)
+    })
+
+df_missing_tables = pd.DataFrame(results)
+display(df_missing_tables)
 ```
+<br>
 
-Decision: Zero nulls/duplicates confirm high data quality.
-
-###### Unique Countries and Cities:
+##### Duplicados e chaves (checar chave primária única)
 ```{python}
-print("=== HOTELS A ===")
-paises_hotelsA = hotels_A['country'].unique()
-cidades_hotelsA = hotels_A['city'].unique()
-print(f"Países: {paises_hotelsA}")
-print(f"Cidades: {cidades_hotelsA}")
-print("-" * 30)
-print("=== HOTELS B ===")
-paises_hotelsB = hotels_B['country'].unique()
-cidades_hotelsB = hotels_B['city'].unique() 
-print(f"Países: {paises_hotelsB}")
-print(f"Cidades: {cidades_hotelsB}")
+sql = """
+SELECT 
+  COUNT(*) AS total_rows,
+  COUNT(DISTINCT transaction_id) AS distinct_transaction_id,
+  COUNT(DISTINCT CONCAT(customer_id,'-',DATE(transaction_date))) AS distinct_cust_date
+FROM transactions;
+"""
+df = run_sql_pure(sql)
+print(df.to_string(index=False))
 ```
+<br>
 
-Standardized locations (4 countries, 10 cities) enable effective blocking. No variations (e.g., "Sao Paulo" vs. "São Paulo")—ideal for key generation.
+Os resultados confirmam que os dados estão completos e consistentes, permitindo avançar para as análises sem necessidade de limpeza estrutural.
 
-###### Sample (hotels_A):
+---
+
+### Visualizações e Insights
+Nesta etapa, exploramos o comportamento do negócio por meio de SQL, respondendo perguntas como:
+* Quais produtos vendem mais?
+* Onde está concentrada a receita?
+* Existe sazonalidade?
+* Como os clientes se distribuem em termos de recência, frequência e gasto?
+* Qual o nível de sparsity da matriz cliente × produto?
+
+##### Distribuição de preços - produtos
 ```{python}
-hotels_A.sample(5)
+sql = "SELECT price FROM products WHERE price IS NOT NULL;"
+df_price = run_sql_pure(sql)
+df_price['price'] = pd.to_numeric(df_price['price'], errors='coerce')
+plt.hist(df_price['price'].dropna(), bins=30)
+plt.title("Product Price Distribuction")
+plt.xlabel("Price")
+plt.ylabel("Frequency")
+plt.show()
 ```
+<br>
 
-###### Sample (hotels_B):
+##### Top Produtos por quantidade e por receita
 ```{python}
-hotels_B.sample(5)
+sql = """
+SELECT p.product_id, p.name,
+       SUM(t.quantity) AS total_qty,
+       SUM(t.total_value) AS total_revenue
+FROM transactions t
+JOIN products p ON t.product_id = p.product_id
+GROUP BY p.product_id
+ORDER BY total_qty DESC
+LIMIT 10;
+"""
+df_top = run_sql_pure(sql)
+ax = df_top.plot.bar(x='name', y='total_qty', legend=False)
+plt.xticks(rotation=70, fontsize=8)
+plt.title("Top 15 produtos por quantidade vendida")
+plt.ylabel("Quantidade")
+plt.show()
+
+# revenue bar
+df_top.plot.bar(x='name', y='total_revenue')
+plt.xticks(rotation=70, fontsize=8)
+plt.title("Top 15 produtos por receita (mesmos produtos)")
+plt.ylabel("Receita")
+plt.show()
 ```
+<br>
 
-EDA confirms data quality and identifies preprocessing needs. Both datasets are clean (no nulls/duplicates), with consistent schemas and geographic focus (Europe/Brazil cities).
-
-Samples reveal noise: Generic prefixes ("Inn", "Grand"), abbreviations ("St.", "Av."), and numbers in addresses. This motivates targeted cleaning to boost Levenshtein accuracy
-
-# Data Preprocessing
-
-Textual noise (e.g., prepositions, establishment types) dilutes similarity signals. Preprocessing normalizes strings: lowercase, punctuation removal (preserving accents/numbers), space trimming, and filtering generics via frequency analysis.
-
-#### Word Frequency Analysis for Noise Detection
-
-Concatenated names/addresses, cleaned basically, and ranked words to spot non-discriminatives.
-
+##### Vendas por mês
 ```{python}
-all_names_addresses = pd.concat([
-    hotels_A['hotel_name'].astype(str),
-    hotels_A['address'].astype(str),
-    hotels_B['hotel_name'].astype(str),
-    hotels_B['address'].astype(str)
-])
-def basic_clean_for_word_count(text):
-    text = str(text).lower()
-    text = re.sub(r'[^\w\s]', '', text)
-    text = re.sub(r'\s+', ' ', text).strip()
-    return text
-cleaned_all_texts_for_count = all_names_addresses.apply(basic_clean_for_word_count)
-from collections import Counter
-all_words = ' '.join(cleaned_all_texts_for_count).split()
-word_counts = Counter(all_words)
-most_common_words = word_counts.most_common(50)
-for word, count in most_common_words:
-    print(f"'{word}': {count}")
-```
-
-After analysis, we decided to remove the following terms as they do not add distinctive value:
-
-* Articles and Prepositions: `da`, `dos`, `das`
-* Establishment Types: `hotel`, `inn`, `pousada`, `grand`, `residency`, `palace`, `suites`, `boutique`
-* Street/Address Types: `avenue`, `av`, `street`, `r`, `rua`, `praça`, `pça`, `avenida`, `ave`
-* Numerals/Generic Abbreviations: `ii`, `i`, `2`, `st`
-
-###### List with terms to remove
-```{python}
-common_terms_to_remove = [
-    'da', 'dos', 'das',
-    'hotel', 'inn', 'pousada', 'grand', 'residency', 'palace', 'suites', 'boutique', 'spa', 'saint',
-    'avenue', 'av', 'street', 'r', 'rua', 'praça', 'pça', 'avenida', 'ave',
-    'ii', 'i', '2', 'st'
-]
-common_terms_to_remove_set = set([term.lower() for term in common_terms_to_remove])
-```
-
-## Cleaning Pipeline
-
-Applied targeted cleaning: lowercase, punctuation removal (preserve accents via À-ÿ), space normalization, and generic filtering. This creates cleaned columns for robust similarity computation.
-
-#### Funcion to clean text:
-```{python}
-def clean_text(text):
-    if not isinstance(text, str):
-        return ""
-    text = text.lower()
-    text = re.sub(r'[^\w\sÀ-ÿ]', ' ', text)
-    text = re.sub(r'\s+', ' ', text).strip()
-    words = text.split()
-    filtered_words = [word for word in words if word not in common_terms_to_remove_set]
-    text = " ".join(filtered_words)
-    text = re.sub(r'\s+', ' ', text).strip()
-    return text
-
-# Aplicando as funções de limpeza
-for df in [hotels_A, hotels_B]:
-    df['cleaned_hotel_name'] = df['hotel_name'].apply(clean_text)
-    df['cleaned_address'] = df['address'].apply(clean_text)
-    df['cleaned_city'] = df['city'].apply(clean_text)
-    df['cleaned_country'] = df['country'].apply(clean_text)
-```
-
-###### Before/After Cleaning Sample:
-```{python}
-hotels_A[['hotel_name', 'cleaned_hotel_name', 'address', 'cleaned_address']].head()
-```
-
-Decision: Cleaning strips noise (e.g., "Inn Europa Saint" → "europa"; "Street Paulista, 1106" → "paulista 1106"), emphasizing location-specific tokens. Preserves numbers/accents for address precision. Filtered set derived empirically from frequencies, avoiding over-removal (e.g., kept "Paulista" as it's discriminative).
-
-## Candidate Generation and Blocking
-
-Full Cartesian product (436 × 425 = 185,300 pairs) is infeasible (O(n²) complexity). Blocking prunes to feasible candidates: first by location (city-country key), then geographically (Haversine ≤1km). This hierarchical approach ensures high recall while minimizing computations.
-
-###### Implementing the Blocking Strategy (Filter) by city and country
-```{python}
-# 1. Criar uma chave de bloqueio combinando cidade e país para ambas as bases
-hotels_A['block_key'] = hotels_A['cleaned_city'] + '_' + hotels_A['cleaned_country']
-hotels_B['block_key'] = hotels_B['cleaned_city'] + '_' + hotels_B['cleaned_country']
-# 2. Agrupar os hotéis de hotels_B por suas chaves de bloqueio
-blocks_B = hotels_B.groupby('block_key')
-# 3. Gerar pares potenciais de matching
-potential_matches_list = []
-total_comparisons = 0
-common_block_keys = set(hotels_A['block_key'].unique()).intersection(set(hotels_B['block_key'].unique()))
-for block_key in common_block_keys:
-    block_A = hotels_A[hotels_A['block_key'] == block_key]
-    block_B = blocks_B.get_group(block_key)
-    for _, row_a in block_A.iterrows():
-        for _, row_b in block_B.iterrows():
-            potential_matches_list.append({
-                'id_A': row_a['id_A'],
-                'id_B': row_b['id_B'],
-                'hotel_name_A': row_a['hotel_name'],
-                'cleaned_hotel_name_A': row_a['cleaned_hotel_name'],
-                'address_A': row_a['address'],
-                'cleaned_address_A': row_a['cleaned_address'],
-                'city_A': row_a['city'],
-                'country_A': row_a['country'],
-                'latitude_A': row_a['latitude'],
-                'longitude_A': row_a['longitude'],
-                'hotel_name_B': row_b['hotel_name'],
-                'cleaned_hotel_name_B': row_b['cleaned_hotel_name'],
-                'address_B': row_b['address'],
-                'cleaned_address_B': row_b['cleaned_address'],
-                'city_B': row_b['city'],
-                'country_B': row_b['country'],
-                'latitude_B': row_b['latitude'],
-                'longitude_B': row_b['longitude']
-            })
-            total_comparisons += 1
-potential_matches_df = pd.DataFrame(potential_matches_list)
-print(f"Size of the potential matches DataFrame: {len(potential_matches_df)} rows.")
-```
-
-The idea of adding a geographic blocking step (or a radius-based pre-similarity filter) after the city/country blocking and before calculating string similarities is a potentially effective tactic due to:
-
-* Performance Optimization: Calculating haversine_distance is computationally cheaper than calculating levenshtein_ratio for long strings. By filtering out pairs that are geographically distant (even if within the same city/country) before applying string calculations, we drastically reduce the number of Levenshtein calls, which is the most expensive operation here.
-
-* Precision Improvement: If two hotels are in the same city/country but located kilometers apart, the likelihood of them being the same entity is extremely low.
-
-## Geographic Blocking (Haversine Filter)
-
-Second-level prunes by proximity (≤1km radius), as true matches rarely span distances. Haversine computes spherical distances:
-
-$$ d = 2R \arcsin\left(\sqrt{\sin^2\left(\frac{\Delta\phi}{2}\right) + \cos\phi_1 \cos\phi_2 \sin^2\left(\frac{\Delta\lambda}{2}\right)}\right) $$
-
-Where R=6371km, φ=latitude, λ=longitude (radians). Threshold=1km accounts for GPS inaccuracies.
-
-###### Implementing the second filter based on distance between hotels
-
-```{python}
-# Função do Cálculo da Distância de Haversine
-def haversine_distance(lat1, lon1, lat2, lon2):
-    if pd.isna(lat1) or pd.isna(lon1) or pd.isna(lat2) or pd.isna(lon2):
-        return float('inf')
-
-    R = 6371
-
-    lat1_rad = np.radians(lat1)
-    lon1_rad = np.radians(lon1)
-    lat2_rad = np.radians(lat2)
-    lon2_rad = np.radians(lon2)
-
-    dlon = lon2_rad - lon1_rad
-    dlat = lat2_rad - lat1_rad
-
-    a = np.sin(dlat / 2)**2 + np.cos(lat1_rad) * np.cos(lat2_rad) * np.sin(dlon / 2)**2
-    c = 2 * np.arctan2(np.sqrt(a), np.sqrt(1 - a))
-    distance = R * c
-    return distance
-
-# 1. Calcular a distância Haversine para todos os pares potenciais
-potential_matches_df['geo_distance_km'] = potential_matches_df.apply(
-    lambda row: haversine_distance(
-        row['latitude_A'], row['longitude_A'],
-        row['latitude_B'], row['longitude_B']
-    ), axis=1
-)
-MAX_GEO_BLOCKING_DISTANCE_KM = 1.0
-geo_blocked_df = potential_matches_df[
-    potential_matches_df['geo_distance_km'] <= MAX_GEO_BLOCKING_DISTANCE_KM
-].copy()
-geo_blocked_df['name_similarity'] = geo_blocked_df.apply(
-    lambda row: levenshtein_ratio(row['cleaned_hotel_name_A'], row['cleaned_hotel_name_B']), axis=1
-)
-geo_blocked_df['address_similarity'] = geo_blocked_df.apply(
-    lambda row: levenshtein_ratio(row['cleaned_address_A'], row['cleaned_address_B']), axis=1
-)
-```
-
-# Matching Algorithm Development and Evaluation:
-
-Core: Rule-based classifier with tunable thresholds on similarities (Levenshtein: 0-1 ratio) and geo-distance. Strict rule requires multi-evidence; flexible prioritizes geo for noisy addresses. Grid search optimizes F1 on train_split (80%); validation on val_split (20%) assesses generalization.
-
-
-###### 80/20 Holdout Split
-To mitigate overfitting (e.g., thresholds "memorizing" train patterns), split labeled data: 80% for tuning, 20% unseen for F1 validation. Stratified by is_match preserves balance (~75% positives).
-```{python}
-#Split 80/20
-train_split, val_split = train_test_split(
-    train_truth_df, 
-    test_size=0.2,
-    stratify=train_truth_df['is_match'],
-    random_state=42
-)
-print("=== 80/20 SPLIT ===")
-print(f"Original: {len(train_truth_df)} pairs (matches: {train_truth_df['is_match'].sum()})")
-print(f"Train (80%): {len(train_split)} pairs (matches: {train_split['is_match'].sum()})")
-print(f"Val (20%): {len(val_split)} pairs (matches: {val_split['is_match'].sum()})")
-```
-
-Tuning on train_split avoids leakage; val_split simulates production unseen data.
-
-###### Optimization Functions:
-
-```{python}
-# Função para calcular TP, FP, FN, Precision, Recall e F1-Score a partir das previsões
-def calculate_metrics_in_notebook(predictions_df: pd.DataFrame, train_truth_df: pd.DataFrame) -> dict:
-    truth_pos = train_truth_df[train_truth_df['is_match'] == 1][['id_A', 'id_B']].drop_duplicates()
-    train_pairs_universe = train_truth_df[['id_A', 'id_B']].drop_duplicates()
-    pred_pos_all = predictions_df[predictions_df['predicted_match'] == 1][['id_A', 'id_B']].drop_duplicates()
-    pred_pos = pd.merge(pred_pos_all, train_pairs_universe, on=['id_A', 'id_B'], how='inner')
-    merged = pd.merge(pred_pos, truth_pos, on=['id_A', 'id_B'], how='inner')
-    tp = int(len(merged))
-    fp = int(len(pred_pos) - tp)
-    fn = int(len(truth_pos) - tp)
-    precision = tp / (tp + fp) if (tp + fp) > 0 else 0.0
-    recall = tp / (tp + fn) if (tp + fn) > 0 else 0.0
-    f1 = 2 * precision * recall / (precision + recall) if (precision + recall) > 0 else 0.0
-    metrics = {
-        "true_positives": tp,
-        "false_positives": fp,
-        "false_negatives": fn,
-        "precision": round(precision, 4),
-        "recall": round(recall, 4),
-        "f1": round(f1, 4),
-    }
-    return metrics
-
-# Função para aplicar as regras de matching
-def apply_matching_rules(
-    df: pd.DataFrame,
-    name_sim_thresh: float,
-    addr_sim_thresh: float,
-    final_geo_dist_thresh: float,
-    flexible_name_sim_thresh: float,
-    flexible_geo_dist_thresh: float
-) -> pd.DataFrame:
-    temp_df = df.copy()
-    temp_df['predicted_match'] = 0 
-    temp_df.loc[
-        (temp_df['name_similarity'] >= name_sim_thresh) &
-        (temp_df['address_similarity'] >= addr_sim_thresh) &
-        (temp_df['geo_distance_km'] <= final_geo_dist_thresh),
-        'predicted_match'
-    ] = 1
-    temp_df.loc[
-        (temp_df['name_similarity'] >= flexible_name_sim_thresh) &
-        (temp_df['geo_distance_km'] <= flexible_geo_dist_thresh),
-        'predicted_match'
-    ] = 1
-    return temp_df
-```
-
-## Grid Search and Threshold Optimization:
-Tested 30 combinations:
-
-```{python}
-# Otimização de Thresholds e Visualização
-# Célula de Otimização de Thresholds e Visualização (CORRIGIDA COM SPLIT)
-name_similarity_thresholds = [0.75, 0.80]
-address_similarity_thresholds = [0.50, 0.70, 0.90]
-final_max_distance_kms = [0.5, 0.6, 0.7, 0.8, 0.9]
-flexible_name_sim_threshold = 0.95
-flexible_geo_dist_threshold = 0.5 
-
-best_f1 = -1
-best_params = {}
-all_results = []
-
-param_combinations = list(itertools.product(
-    name_similarity_thresholds,
-    address_similarity_thresholds,
-    final_max_distance_kms
-))
-
-for i, (name_thresh, addr_thresh, final_geo_dist) in enumerate(param_combinations):
-    if (i + 1) % 500 == 0 or i == 0 or i == len(param_combinations) - 1:
-        print()
-
-    current_params = {
-        'name_sim_thresh': name_thresh,
-        'addr_sim_thresh': addr_thresh,
-        'final_geo_dist_km': final_geo_dist,
-        'flexible_name_sim_thresh': flexible_name_sim_threshold,
-        'flexible_geo_dist_thresh': flexible_geo_dist_threshold
-    }
-
-    # 1. Aplicar as regras de matching com os thresholds atuais
-    current_predictions_df = apply_matching_rules(
-        geo_blocked_df,
-        name_thresh,
-        addr_thresh,
-        final_geo_dist,
-        flexible_name_sim_threshold,
-        flexible_geo_dist_threshold
-    )
-
-    # 2. Calcular métricas NO TRAIN_SPLIT (80% - para tuning)
-    metrics = calculate_metrics_in_notebook(current_predictions_df, train_split)  # MUDANÇA: train_split
-
-    if metrics:
-        f1_score = metrics.get('f1', 0.0)
-        precision = metrics.get('precision', 0.0)
-        recall = metrics.get('recall', 0.0)
-        
-        all_results.append({
-            'name_sim_thresh': name_thresh,
-            'addr_sim_thresh': addr_thresh,
-            'final_geo_dist_km': final_geo_dist,
-            'flexible_name_sim_thresh': flexible_name_sim_threshold,
-            'flexible_geo_dist_thresh': flexible_geo_dist_threshold,
-            'f1': f1_score,
-            'precision': precision,
-            'recall': recall,
-            'true_positives': metrics.get('true_positives'),
-            'false_positives': metrics.get('false_positives'),
-            'false_negatives': metrics.get('false_negatives')
-        })
-
-        if f1_score > best_f1:
-            best_f1 = f1_score
-            best_params = current_params.copy()
-
-print("\n--- Optimization Completed (Tuning on Train Split 80%) ---")
-results_df = pd.DataFrame(all_results).sort_values(by='f1', ascending=False)
-print(f"\Best F1-score found in TRAIN_SPLIT (80%): {best_f1}")
-print(f"Best parameters: {best_params}")
-```
-
-Decision: Levenshtein selected for its interpretability and low overhead on short strings (names/addresses). Grid search (30 combinations) efficiently tunes hyperparameters, 
-prioritizing F1 for balanced precision/recall. Optimal: name=0.75 (tolerates minor typos), address=0.50 (addresses vary more), geo=0.9km (refined from 1km). Strict rule ensures comprehensive evidence; flexible boosts recall for geo-dominant cases. Achieves F1=1.0 (TP=full matches, FP/FN=0), validating on train set.
-
-###### Precision-Recall Scatter Plot:
-
-```{python}
-# Plot de dispersão de Precision vs Recall, colorindo por F1-Score
-sns.set_style("whitegrid")
-plt.rcParams['figure.figsize'] = (10, 6)
-plt.figure(figsize=(10, 7))
-scatter = sns.scatterplot(data=results_df, x='recall', y='precision', hue='f1', size='f1', sizes=(50, 400), legend='full')
-plt.title('Precision vs Recall (Colored by F1-Score)')
-plt.xlabel('Recall')
-plt.ylabel('Precision')
+sql = """
+SELECT DATE_FORMAT(transaction_date, '%Y-%m') AS ym,
+       COUNT(*) AS n_items,
+       SUM(total_value) AS revenue
+FROM transactions
+GROUP BY ym
+ORDER BY ym;
+"""
+df_ts = run_sql_pure(sql)
+df_ts['ym'] = pd.to_datetime(df_ts['ym'] + '-01')
+plt.plot(df_ts['ym'], df_ts['revenue'])
+plt.title("Receita por mês")
+plt.xlabel("Mês")
+plt.ylabel("Receita")
 plt.grid(True)
 plt.show()
 ```
+<br>
 
-Plot shows convergence at (1.0,1.0) for top F1s—minimal trade-offs, validating thresholds.
-
-## Final Application and Holdout Validation
-
-Applied best_params to full candidates; evaluated on val_split for unseen generalization.
-
+##### RFM - tabela e histogramas 
 ```{python}
-# Aplicando Melhores Parâmetros
-if best_params:
-    final_matches_df = apply_matching_rules(
-        geo_blocked_df,
-        best_params['name_sim_thresh'],
-        best_params['addr_sim_thresh'],
-        best_params['final_geo_dist_km'],
-        best_params['flexible_name_sim_thresh'],
-        best_params['flexible_geo_dist_thresh']
-    )
-    
-    # Calcular métricas FINAIS no VAL_SPLIT (20% - simula unseen data)
-    final_val_metrics = calculate_metrics_in_notebook(final_matches_df, val_split)
-    
-    # Para comparação: Recalcular no full train
-    final_train_metrics = calculate_metrics_in_notebook(final_matches_df, train_truth_df)
-    
-    print("=== VALIDATION ===")
-    print(f"F1 on FULL TRAIN (original): {final_train_metrics['f1']}")
-    print(f"F1 on TRAIN_SPLIT (80%, tuning): {best_f1}")
-    print(f"F1 on VAL_SPLIT (20%, unseen): {final_val_metrics['f1']}")
-    print("\nDetails on Val_Split:")
-    for k, v in final_val_metrics.items():
-        print(f"  {k}: {v}")
+sql = """
+WITH last AS (
+  SELECT customer_id,
+         DATEDIFF(CURDATE(), MAX(DATE(transaction_date))) AS recency_days,
+         COUNT(*) AS frequency,
+         SUM(total_value) AS monetary
+  FROM transactions
+  GROUP BY customer_id
+)
+SELECT * FROM last;
+"""
+df_rfm = run_sql_pure(sql)
+# Histograms
+fig, axes = plt.subplots(1,3, figsize=(15,4))
+axes[0].hist(df_rfm['recency_days'].dropna(), bins=20); axes[0].set_title('Recency (dias)')
+axes[1].hist(df_rfm['frequency'].dropna(), bins=20); axes[1].set_title('Frequency')
+axes[2].hist(df_rfm['monetary'].dropna(), bins=20); axes[2].set_title('Monetary')
+plt.show()
+
+# scatter recency x monetary
+plt.scatter(df_rfm['recency_days'], df_rfm['monetary'])
+plt.xlabel('Recency (dias)'); plt.ylabel('Monetary (total_spent)')
+plt.title('Recency x Monetary (clientes)')
+plt.grid(True)
+plt.show()
 ```
+<br>
+
+##### Distribuição de compras por cliente 
+```{python}
+sql = """
+SELECT customer_id, COUNT(*) AS purchases
+FROM transactions
+GROUP BY customer_id;
+"""
+df_purchases = run_sql_pure(sql)
+plt.hist(df_purchases['purchases'], bins=30)
+plt.title("Distribuição de número de compras por cliente")
+plt.xlabel("Número de compras")
+plt.ylabel("Clientes")
+plt.show()
+```
+<br>
+
+##### Conversão views -> buys por produto
+```{python}
+sql = """
+SELECT p.product_id, p.name,
+  COALESCE(v.views,0) AS views,
+  COALESCE(b.buys,0)  AS buys,
+  ROUND(COALESCE(b.buys,0) / NULLIF(COALESCE(v.views,0),0) * 100,2) AS conversion_pct
+FROM products p
+LEFT JOIN (
+  SELECT product_id, COUNT(*) AS views
+  FROM product_views
+  GROUP BY product_id
+) v ON p.product_id = v.product_id
+LEFT JOIN (
+  SELECT product_id, COUNT(*) AS buys
+  FROM transactions
+  GROUP BY product_id
+) b ON p.product_id = b.product_id;
+"""
+df_conv = run_sql_pure(sql)
+plt.scatter(df_conv['views'], df_conv['buys'])
+plt.xlabel('Views'); plt.ylabel('Buys')
+plt.title('Views x Buys (produtos)')
+plt.grid(True)
+plt.show()
+
+# print top products with unusually high conversion (>80%)
+high_conv = df_conv[df_conv['conversion_pct'] > 80].sort_values('conversion_pct', ascending=False)
+print("Produtos com conversão > 80% (exemplo):")
+display(high_conv[['product_id','name','views','buys','conversion_pct']].head(10))
+```
+<br>
+
+##### Vendas por categoria 
+```{python}
+sql = """
+SELECT p.category, COUNT(*) AS n_items, SUM(t.total_value) AS revenue
+FROM transactions t
+JOIN products p ON t.product_id = p.product_id
+GROUP BY p.category
+ORDER BY revenue DESC;
+"""
+df_cat = run_sql_pure(sql)
+df_cat.plot.bar(x='category', y='revenue')
+plt.title("Receita por categoria")
+plt.xticks(rotation=60)
+plt.ylabel("Receita")
+plt.show()
+```
+<br>
+
+##### AOV (Average Order Value)
+```{python}
+sql = """
+SELECT customer_id, DATE(transaction_date) AS order_date, SUM(total_value) AS order_value
+FROM transactions
+GROUP BY customer_id, DATE(transaction_date);
+"""
+df_orders = run_sql_pure(sql)
+aov = df_orders['order_value'].mean()
+print(f"AOV (média de valor por pedido - aproximação): R$ {aov:.2f}")
+plt.hist(df_orders['order_value'], bins=30)
+plt.title("Distribuição do valor por pedido (aprox.)")
+plt.xlabel("Order value")
+plt.ylabel("Contagem")
+plt.show()
+```
+<br>
+
+##### Matriz cliente x produto - densidade (SPARSITY)
+```{python}
+sql = """
+SELECT (SELECT COUNT(DISTINCT customer_id) FROM transactions) AS n_customers_active,
+       (SELECT COUNT(DISTINCT product_id) FROM transactions) AS n_products_sold,
+       (SELECT COUNT(*) FROM transactions) AS n_transactions;
+"""
+df_dim = run_sql_pure(sql)
+n_customers = int(df_dim['n_customers_active'].iloc[0])
+n_products = int(df_dim['n_products_sold'].iloc[0])
+n_trans = int(df_dim['n_transactions'].iloc[0])
+possible = n_customers * n_products
+sparsity = 1 - (n_trans / possible)
+print(f"Clientes: {n_customers}, Produtos: {n_products}, Transações: {n_trans}")
+print(f"Sparsity (aprox): {sparsity:.6f}")
+```
+
+---
+
+## Key Insights from SQL EDA
+
+A análise revela padrões importantes:
+
+* alta concentração de vendas em poucas categorias,
+* clientes com frequência relativamente elevada,
+* sparsity alta (>90%) na matriz de interações.
+
+Esses achados justificam a escolha por:
+
+* modelos **item-based** em vez de user-based,
+* abordagem híbrida para mitigar limitações individuais.
+
+---
+
+# Criação dos Algoritimos
+
+Com base na EDA, foi definida uma arquitetura híbrida onde cada componente resolve um problema específico:
+
+| Componente        | Papel                                   |
+| ----------------- | --------------------------------------- |
+| Item-Item CF      | Personalização baseada em comportamento |
+| Content-Based     | Similaridade semântica e cold start     |
+| Association Rules | Cross-sell contextual                   |
+<br>
+
+O objetivo não é substituir modelos, mas **combinar sinais complementares**.
+
+
+## Item-Item Collaborative Filtering
+
+Nesta etapa, construímos um sistema de recomendação baseado exclusivamente em padrões históricos de compra. O Item-Item CF recomenda itens semelhantes aos que o usuário já comprou, medindo similaridade entre itens a partir do comportamento dos usuários (quem comprou A também comprou B).
 
 ```{python}
 #| include: false
-# Seleciona apenas as colunas necessárias para o output.csv e salva-o
-output_for_submission = final_matches_df[['id_A', 'id_B', 'predicted_match']]
-output_csv_path = 'output.csv'
-output_for_submission.to_csv(output_csv_path, index=False)
+# Carregando Datasets
+customers = pd.read_csv("customers.csv")
+products = pd.read_csv("products.csv")
+transactions = pd.read_csv("transactions.csv")
+views = pd.read_csv("product_views.csv")
 ```
 
-F1=1.0 on val_split (TP=50, FP/FN=0)—zero gap from train, confirming robustness. No overfitting: Rules capture true patterns (geo+similarity), not noise. ~150-200 matches from 18k candidates; runtime <10s.
 
-# API Enrichment
 
-This step adds business value: e.g., filtering by amenities ("spa" hotels) or scoring for recommendations. The mock API uses FastAPI to expose /enrich (POST), accepting JSON payload {hotel_name, city, country} and returning deterministic attributes based on a hashed key (ensuring reproducibility for testing). Amenities sampled from a pool (e.g., "wifi", "pool", "gym"); stars (3-5); score (7.0-9.7).
 
-Key optimizations:
-- Deduplication: Enrich only unique profiles (drop_duplicates on hotel_name/city/country), reducing ~150 matches to ~50 calls.
-- Health Check: Verify /healthz before batch; timeout=5s per request.
-- Error Handling: Fallback to None if API offline (graceful degradation; non-enriched fields marked NA).
-- Determinism: Hash-based random seed simulates real APIs (e.g., Google Places) without external deps.
 
-### API Implementation Overview
-
-The mock server runs locally. 
-
-### Video Demonstration: API Enrichment Simulation
-
-To illustrate the end-to-end pipeline and API enrichment, the following screen recording demonstrates:
-
-{{< video pipeline_execution.mp4 >}}
-
-## Enriched Output Visualization
-
-The final deliverable unifies matches with API data.
-
+---
 ```{python}
-# Load and style enriched output for visualization
-enriched_df = pd.read_csv('output_final_enriquecido.csv')
-styled_table = enriched_df.head(10).style \
-    .set_caption("Enriched Matches Sample") \
-    .background_gradient(subset=['enriched_category_stars', 'enriched_review_score'], cmap='YlGn') \
-    .apply(lambda row: ['background-color: #a5b8eeff' if row['predicted_match'] == 1 else '' for _ in row], axis=1) \
-    .set_properties(**{'text-align': 'left', 'font-size': '12px'}) \
-    .set_table_styles([{'selector': 'th', 'props': [('font-weight', 'bold'), ('background-color', '#fdfdfdff')]}]) \
-    .hide(axis='index')  # Clean view
 
-styled_table
+```
+<br>
+
+
+
+---
+
+
+---
+
+
+
+⬇️ **INSIRA O CÓDIGO AQUI (matriz item×user, cosine, shrinkage)**
+
+---
+
+## Interpretation — CF
+
+O score gerado pelo modelo representa **afinidade relativa entre produtos**, não probabilidade absoluta.
+
+O uso de shrinkage reduz ruído causado por coocorrências raras, tornando o ranking mais confiável.
+
+---
+
+# Content-Based Filtering (TF-IDF)
+
+Apesar da força do sinal comportamental, o CF apresenta limitações:
+
+* cold start de produtos,
+* baixa explicabilidade semântica.
+
+Para mitigar isso, utilizamos Content-Based Filtering, representando produtos por seus atributos textuais.
+
+⬇️ **INSIRA O CÓDIGO AQUI (TF-IDF + cosine)**
+
+---
+
+## Interpretation — CB
+
+O modelo baseado em conteúdo recomenda produtos semanticamente similares, ampliando a cobertura do sistema e permitindo recomendações mesmo para itens com pouco histórico.
+
+---
+
+# Offline Evaluation — CF vs CB
+
+Antes da construção do modelo híbrido, os modelos são avaliados separadamente utilizando:
+
+* holdout temporal (leave-one-out),
+* métrica Hit Rate@K.
+
+⬇️ **INSIRA O CÓDIGO AQUI (avaliação CF vs CB)**
+
+**Conclusão:**
+O CF apresenta melhor desempenho isolado, enquanto o CB agrega valor incremental — justificando a combinação.
+
+---
+
+# Hybrid Model — Weight Tuning
+
+Nesta etapa, testamos diferentes combinações de pesos entre CF e CB para maximizar performance.
+
+⬇️ **INSIRA O CÓDIGO AQUI (tuning de pesos)**
+
+O melhor resultado é obtido com predominância do sinal colaborativo, complementado pelo conteúdo.
+
+---
+
+# Association Rules (Apriori)
+
+As regras de associação capturam padrões explícitos de coocorrência em cestas de compra, sendo especialmente úteis para estratégias de cross-sell.
+
+⬇️ **INSIRA O CÓDIGO AQUI (Apriori + rules)**
+
+**Uso controlado:**
+As regras são aplicadas apenas quando há correspondência real, evitando recomendações artificiais.
+
+---
+
+# Final Hybrid Recommender
+
+O modelo final combina:
+
+* CF (personalização),
+* CB (semântica),
+* AR (contexto de compra).
+
+As pontuações são normalizadas e combinadas via soma ponderada.
+
+⬇️ **INSIRA O CÓDIGO AQUI (modelo híbrido final)**
+
+---
+
+# Offline Artifacts & Deployment Strategy
+
+Os modelos são treinados offline e serializados como artefatos estáticos.
+
+Em produção:
+
+> *A API apenas carrega artefatos e executa ranking.*
+
+⬇️ **INSIRA O CÓDIGO AQUI (serialização)**
+
+---
+
+# Cloud Deployment (AWS)
+
+A solução é implantada em arquitetura serverless:
+
+* S3 para armazenamento de artefatos,
+* Lambda para inferência,
+* API Gateway para exposição REST.
+
+🎥 **Video — AWS Deploy & API Demo**
+
+```markdown
+{{< video aws_demo.mp4 >}}
 ```
 
-# Conclusions
+---
 
-This project delivers a high-precision, production-ready entity resolution pipeline designed for real-world hotel data integration. By combining hierarchical blocking, geographic filtering, and interpretable similarity rules, the solution reduces a 185k pair search space by more than 90%, while still achieving perfect generalization (F1 = 1.0) on unseen data. The system handles address noise, naming inconsistencies, and GPS variations through a clean and efficient architecture that avoids the overhead of heavy machine learning models.
+# Conclusion
 
-Beyond technical excellence, the pipeline creates clear business value. Hospitality platforms depend on unified inventories—accurate hotel matching improves availability, price consistency, and personalization. Automating duplicate detection can reduce manual curation efforts by up to 90%, accelerate onboarding of new suppliers, and directly enhance user experience by powering richer filters and recommendations (e.g., pet-friendly, spa amenities). The enrichment step simulates how a real platform could integrate external services like Google Places or TripAdvisor to unlock new revenue levers such as dynamic ranking, quality scoring, or fraud detection.
+Este projeto demonstra a construção de um sistema de recomendação híbrido **robusto, interpretável e orientado à produção**, combinando rigor técnico com impacto direto no negócio.
 
-Most importantly, the solution is scalable, interpretable, and deployment-ready. With lightweight rules, vectorized operations, and simple parallelization paths, the pipeline can scale to datasets 10–50× larger without architectural changes. For future work, the foundation supports hybrid ML models for edge cases, or real-time matching in streaming environments.
+A abordagem híbrida permite equilibrar personalização, cobertura e oportunidades de cross-sell, refletindo práticas reais adotadas em plataformas de e-commerce em escala.
 
-In short, this project showcases the full data science lifecycle—from data quality assessment to algorithm design, optimization, validation, and API integration—while demonstrating how technical rigor directly translates into strategic impact in travel technology.
-
-## References
-
-This project drew inspiration from the following resources, which informed the approach to entity resolution and machine learning applications in hotel data matching:
-
-- [Data Matching in the Hotel Industry](https://mtrdesign.medium.com/data-matching-in-the-hotel-industry-9d74a1f1951d){target="_blank" rel="noopener noreferrer"}: Insights on practical challenges and heuristics for integrating hotel datasets.
-
-- [A Study of Machine Learning Based Approach for Hotels' Matching](https://www.researchgate.net/publication/361714582_A_Study_of_Machine_Learning_Based_Approach_for_Hotels%27_Matching){target="_blank" rel="noopener noreferrer"}: Academic exploration of ML techniques, guiding the rule-based baseline and potential hybrid extensions.
+---
 
 ## GitHub Repository
 
-Access all code, datasets, notebooks, and files for this project:
-
-[Click here to access](https://github.com/FerreiraGabrielw/ds-matching-hotels){target="_blank" rel="noopener noreferrer"}
+[Link para o repositório]
 
 ---
+
+

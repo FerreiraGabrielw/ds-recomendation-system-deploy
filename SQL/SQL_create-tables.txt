@@ -1,0 +1,101 @@
+-- =========================================================
+-- Criar banco de dados e selecionar
+-- =========================================================
+CREATE DATABASE IF NOT EXISTS ecommerce_db
+  DEFAULT CHARACTER SET utf8mb4
+  DEFAULT COLLATE utf8mb4_unicode_ci;
+
+USE ecommerce_db;
+
+-- =========================================================
+-- Tabela: customers
+-- =========================================================
+CREATE TABLE IF NOT EXISTS customers (
+    customer_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(150) UNIQUE,
+    gender ENUM('M','F','O') NULL,
+    age TINYINT UNSIGNED NULL,
+    city VARCHAR(100) NULL,
+    state VARCHAR(50) NULL,
+    registration_date DATETIME NOT NULL,
+    PRIMARY KEY (customer_id)
+) ENGINE=InnoDB;
+
+-- =========================================================
+-- Tabela: products
+-- =========================================================
+CREATE TABLE IF NOT EXISTS products (
+    product_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    name VARCHAR(150) NOT NULL,
+    category VARCHAR(100) NOT NULL,
+    brand VARCHAR(100) NULL,
+    price DECIMAL(10,2) NOT NULL,
+    created_at DATETIME NOT NULL,
+    is_active TINYINT(1) NOT NULL DEFAULT 1,
+    PRIMARY KEY (product_id),
+    INDEX idx_products_category (category),
+    INDEX idx_products_brand (brand)
+) ENGINE=InnoDB;
+
+-- =========================================================
+-- Tabela: transactions
+-- =========================================================
+CREATE TABLE IF NOT EXISTS transactions (
+    transaction_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    customer_id INT UNSIGNED NOT NULL,
+    product_id INT UNSIGNED NOT NULL,
+    quantity INT UNSIGNED NOT NULL DEFAULT 1,
+    total_value DECIMAL(10,2) NOT NULL,
+    transaction_date DATETIME NOT NULL,
+    
+    PRIMARY KEY (transaction_id),
+    
+    INDEX idx_transactions_customer (customer_id),
+    INDEX idx_transactions_product (product_id),
+    INDEX idx_transactions_date (transaction_date),
+    
+    CONSTRAINT fk_transactions_customer
+        FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
+        ON DELETE CASCADE,
+        
+    CONSTRAINT fk_transactions_product
+        FOREIGN KEY (product_id) REFERENCES products(product_id)
+        ON DELETE RESTRICT
+) ENGINE=InnoDB;
+
+-- =========================================================
+-- Tabela: product_views
+-- =========================================================
+CREATE TABLE IF NOT EXISTS product_views (
+    view_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    customer_id INT UNSIGNED NOT NULL,
+    product_id INT UNSIGNED NOT NULL,
+    view_datetime DATETIME NOT NULL,
+    session_id VARCHAR(100) NULL,
+    device_type ENUM('desktop','mobile','tablet') NULL,
+    
+    PRIMARY KEY (view_id),
+    
+    INDEX idx_views_customer (customer_id),
+    INDEX idx_views_product (product_id),
+    INDEX idx_views_datetime (view_datetime),
+    
+    CONSTRAINT fk_views_customer
+        FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
+        ON DELETE CASCADE,
+        
+    CONSTRAINT fk_views_product
+        FOREIGN KEY (product_id) REFERENCES products(product_id)
+        ON DELETE RESTRICT
+) ENGINE=InnoDB;
+
+-- =========================================================
+-- Verificação final
+-- =========================================================
+SHOW TABLES;
+
+DESCRIBE customers;
+DESCRIBE products;
+DESCRIBE transactions;
+DESCRIBE product_views;

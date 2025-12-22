@@ -25,13 +25,6 @@ O objetivo central é aumentar conversão e ticket médio por meio de recomenda�
 * similaridade semântica entre produtos (Content-Based),
 * padrões explícitos de coocorrência em cestas de compra (Association Rules).
 
-O projeto foi desenhado com foco em produção, contemplando:
-
-* modelagem relacional,
-* exploração de dados em SQL,
-* avaliação offline,
-* treinamento offline e deploy em AWS.
-
 ---
 
 # Project Structure
@@ -39,22 +32,21 @@ O projeto foi desenhado com foco em produção, contemplando:
 O pipeline segue uma arquitetura end-to-end típica de sistemas de recomendação modernos:
 
 1. Definição do problema de negócio
-2. Geração e ingestão dos dados
+2. Criação do banco e ingestão dos dados
 3. Exploração e validação em SQL
-4. Feature Engineering
-5. Modelagem (CF, CB, AR)
-6. Avaliação offline
-7. Construção do modelo híbrido
+4. Limpeza e Pré Processamento
+5. Feature Engineering e Modelagem (CF, CB, AR)
+6. Construção do modelo híbrido
+7. Avaliação e Interpretação
 8. Preparação de artefatos
-9. Deploy em cloud (AWS)
+9. Deploy (AWS S3, Lambda, API Gateway)
 
-Essa estrutura garante separação clara entre dados, modelos e inferência, facilitando manutenção e escalabilidade.
+Essa estrutura garante separação entre dados, modelos e inferência, facilitando manutenção e escalabilidade.
 
 ---
 
-# Business Objective & KPIs
+# Objetivos de Negócio
 
-**Objetivo de negócio:**
 Aumentar a relevância das recomendações para impulsionar:
 
 * AOV (Average Order Value),
@@ -66,7 +58,7 @@ Aumentar a relevância das recomendações para impulsionar:
 
 # Data Sources & Modeling Assumptions
 
-Os dados utilizados representam um ambiente transacional típico de e-commerce, com tabelas normalizadas que refletem práticas comuns de armazenamento e análise analítica.
+Os dados utilizados representam um ambiente transacional típico de e-commerce, com tabelas normalizadas que refletem práticas de armazenamento e análise analítica.
 
 O dataset inclui:
 
@@ -74,15 +66,45 @@ O dataset inclui:
 * catálogo de produtos com atributos descritivos,
 * eventos de visualização de produtos,
 * informações demográficas básicas de clientes,
-* registros temporais completos para análise comportamental.
+* registros temporais para análise comportamental.
+
+---
+## Database Setup & SQL Exploration
+
+Antes de qualquer etapa de modelagem em Python, os dados passam por um processo de estruturação, ingestão e validação em banco de dados relacional, típicos de um ambiente real de analytics em e-commerce.
+
+### Entity-Relationship (ER) Diagram
+
+O diagrama abaixo ilustra o modelo relacional do banco, destacando entidades centrais como clientes, produtos, transações e visualizações, bem como seus relacionamentos.
+
+
+📌 **Diagrama ER do banco de dados**
+
+```markdown
+![ER Diagram](\ER-diagram.png)
+```
+
+### Data Ingestion & Validation in MySQL
+
+Após a definição do schema, as tabelas são criadas e os dados são carregados diretamente no banco utilizando linha de comando e MySQL Workbench, reproduzindo práticas comuns de ingestão em ambientes analíticos.
+
+
+##### Criação do banco de dados e das tableas:
+```{sql eval=false echo=true code-fold=true code-summary="Show SQL Schema"}
+SELECT * FROM XXX
+```
+
+##### Carregando dados no banco via linha de comando:
+
+{{< video SQL-DB-CREATION.mp4 >}}
+
+##### Execução de queries exploratórias iniciais:
+
+{{< video SQL-QUERIES.mp4 >}}
 
 ---
 
-# Database Setup & SQL Exploration
-
-Antes de qualquer modelagem em Python, os dados são analisados diretamente no **MySQL**, garantindo integridade e compreensão do comportamento do negócio.
-
----
+# EDA (Exploratory Data Analysis)
 
 ```{python}
 #| include: false
@@ -102,8 +124,6 @@ from mlxtend.frequent_patterns import association_rules
 import pickle
 ```
 
-
-## SQL Connection & Helper Functions
 ```{python}
 #| include: false
 # Conectar no SQL
@@ -142,8 +162,6 @@ plt.rcParams['grid.linestyle'] = '--'
 ```
 
 ---
-
-## EDA (Exploratory Data Analysis)
 
 O primeiro passo da EDA é validar a integridade estrutural das tabelas.
 

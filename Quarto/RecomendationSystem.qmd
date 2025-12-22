@@ -78,11 +78,10 @@ Antes de qualquer etapa de modelagem em Python, os dados passam por um processo 
 O diagrama abaixo ilustra o modelo relacional do banco, destacando entidades centrais como clientes, produtos, transações e visualizações, bem como seus relacionamentos.
 
 
-📌 **Diagrama ER do banco de dados**
+**Diagrama ER do banco de dados**
 
-```markdown
-![ER Diagram](\ER-diagram.png)
-```
+![](ER-diagram.png)
+
 
 ### Data Ingestion & Validation in MySQL
 
@@ -544,7 +543,7 @@ print(f"Sparsity (aprox): {sparsity:.6f}")
 
 ---
 
-## Key Insights from SQL EDA
+## Key Insights from EDA
 
 A análise revela padrões importantes:
 
@@ -554,7 +553,7 @@ A análise revela padrões importantes:
 
 Esses achados justificam a escolha por:
 
-* modelos **item-based** em vez de user-based,
+* modelos item-based em vez de user-based,
 * abordagem híbrida para mitigar limitações individuais.
 
 ---
@@ -798,9 +797,9 @@ O modelo baseado em conteúdo recomenda produtos semanticamente similares, ampli
 
 # Offline Evaluation — CF vs CB
 
-Antes de combinar os modelos em uma abordagem híbrida, avaliamos separadamente o Item-Item Collaborative Filtering (CF) e o Content-Based Filtering (CB). Essa etapa é fundamental para entender a contribuição individual de cada sinal, identificar suas forças e limitações e evitar que um modelo dominante mas ruidoso prejudique o desempenho final.
+Antes de combinar os modelos em uma abordagem híbrida, avaliamos separadamente o Item-Item Collaborative Filtering (CF) e o Content-Based Filtering (CB). Essa etapa é necessária para entender a contribuição individual de cada sinal, identificar suas forças e limitações e evitar que um modelo dominante mas ruidoso prejudique o desempenho final.
 
-A avaliação isolada permite comparar desempenho em métricas de ranking, ajustar pesos do modelo híbrido de forma fundamentada e justificar tecnicamente a escolha da arquitetura. Em cenáriosde e-commerce, essa prática é essencial para garantir que o modelo híbrido gere ganho incremental em relação aos baselines individuais, em vez de apenas misturar sinais sem benefício mensurável.
+A avaliação isolada permite comparar desempenho em métricas de ranking, ajustar pesos do modelo híbrido de forma fundamentada e justificar tecnicamente a escolha da arquitetura. Em cenários de e-commerce, essa prática garante que o modelo híbrido gere ganho incremental em relação aos baselines individuais, em vez de apenas misturar sinais sem benefício mensurável.
 
 ##### Cria um split temporal do tipo Leave-Last-Out para avaliação:
 ```{python}
@@ -954,6 +953,7 @@ Nesta etapa, testamos diferentes combinações de pesos entre CF e CB para maxim
 
 
 Isso inclui:
+<br>
 * CB puro
 * CF puro
 * Híbridos intermediários
@@ -1053,7 +1053,7 @@ df_hybrid_eval.sort_values('hit_rate@10', ascending=False)
 <br>
 
 
-A combinação dos modelos colaborativo e baseado em conteúdo resultou em melhoria consistente de desempenho. O melhor resultado foi obtido com pesos w_cf=0.6 e w_cb=0.4, evidenciando que o sinal comportamental deve ser predominante, mas complementado por similaridade semântica.
+A combinação dos modelos colaborativo e baseado em conteúdo resultou em melhoria de desempenho. O melhor resultado foi obtido com pesos w_cf=0.6 e w_cb=0.4, evidenciando que o sinal comportamental deve ser predominante, mas complementado por similaridade semântica.
 
 Esses resultados confirmam que o modelo híbrido captura múltiplas dimensões do comportamento do usuário, reduz limitações individuais dos modelos base e oferece um trade-off mais robusto entre precisão e cobertura.
 
@@ -1065,8 +1065,11 @@ Além das abordagens colaborativa e baseada em conteúdo, o sistema incorpora As
 Diferentemente dos modelos centrados no usuário, as regras de associação operam diretamente sobre transações, tornando-se robustas a cenários de cold start de usuários e altamente interpretáveis para stakeholders de negócio. Integradas ao modelo híbrido, essas regras complementam a personalização com recomendações de produtos complementares.
  
 Analogia simples
-CF = sugerir outra camisa parecida
-CB = sugerir camisa da mesma marca
+<br>
+
+* CF = sugerir outra camisa parecida
+* CB = sugerir camisa da mesma marca
+<br>
 Association Rules = sugerir o cinto que normalmente vai junto com a camisa
 
 Ou seja, responder a pergunta: O que costuma ser comprado junto?
@@ -1237,7 +1240,7 @@ user_items
 ```
 <br>
 
-As regras de associação foram aplicadas como um sinal complementar de cross-sell, sendo utilizadas apenas quando o histórico do usuário intersecta os antecedentes das regras extraídas. Em cenários onde não há correspondência, o sistema não força recomendações artificiais, preservando a qualidade do ranking
+As regras de associação foram aplicadas como um sinal complementar de cross-sell, sendo utilizadas apenas quando o histórico do usuário intersecta os antecedentes das regras extraídas.
 
 # Final Hybrid Recommender
 
@@ -1248,7 +1251,7 @@ O modelo final combina:
 | Item-Item CF      | Personalização baseada em comportamento |
 | Content-Based     | Similaridade semântica / cold start     |
 | Association Rules | Cross-sell contextual (checkout)        |
-
+<br>
 O híbrido não substitui, ele combina sinais.
 
 Obs: Cada modelo gera scores em escalas diferentes. Precisamos normalizar antes de somar.
@@ -1331,7 +1334,7 @@ recommend_hybrid_with_metadata(test_user, k=10)
 ```
 <br>
 
-O sistema final combina três sinais complementares: Item-Item Collaborative Filtering, Content-Based Filtering e Association Rules. Cada componente atua em um aspecto distinto do problema, garantindo personalização, cobertura e capacidade de cross-sell. As pontuações são normalizadas e combinadas por meio de uma soma ponderada, permitindo ajuste fino do impacto de cada sinal. Essa abordagem reflete práticas reais de mercado, onde sistemas híbridos são preferidos por sua robustez e flexibilidade.
+O sistema final combina três sinais complementares: Item-Item Collaborative Filtering, Content-Based Filtering e Association Rules. Cada componente atua em um aspecto distinto do problema, garantindo personalização, cobertura e capacidade de cross-sell. As pontuações são normalizadas e combinadas por meio de uma soma ponderada, permitindo ajuste fino do impacto de cada sinal.
 
 O modelo analisa o histórico do cliente, a similaridade entre produtos e padrões recorrentes de compra conjunta para gerar recomendações personalizadas e contextualizadas, equilibrando relevância individual e oportunidades de aumento de ticket médio. Ou seja, em cenários onde não há correspondência, o sistema não força recomendações artificiais, preservando a qualidade do ranking.
 
@@ -1339,52 +1342,157 @@ O modelo analisa o histórico do cliente, a similaridade entre produtos e padrõ
 
 Foi desenvolvido um sistema híbrido de recomendação que combina sinais comportamentais (Item-Item Collaborative Filtering), semânticos (Content-Based Filtering) e contextuais (Association Rules). A arquitetura garante cobertura, personalização e capacidade de cross-sell, respeitando limitações estatísticas dos dados e evitando recomendações artificiais. O modelo reflete práticas reais de produção e foi avaliado de forma incremental, demonstrando ganhos qualitativos em relevância e interpretabilidade.
 
+## Cloud Deployment (AWS)
 
+Esta etapa final transforma o modelo desenvolvido em um serviço utilizável em produção, seguindo treinamento offline, artefatos versionados, e inferência online via arquitetura serverless.
 
+O deploy foi organizado em duas grandes fases:
 
+## 1️⃣ Offline Artifacts — Preparação do Modelo para Produção
+
+Antes de qualquer interação com a infraestrutura cloud, o sistema de recomendação é congelado em artefatos estáticos, treinados e validados offline.
+
+Essa abordagem segue um padrão amplamente utilizado em sistemas reais de recomendação:
+
+> *O treinamento ocorre offline.
+> Em produção, a API apenas carrega artefatos e executa ranking.*
+
+### O que é salvo como artefato
+
+OS arquivos que representam o estado final do modelo, garantindo:
+
+* Reprodutibilidade
+* Baixo custo computacional em produção
+* Baixa latência de resposta
+* Separação entre treino e inferência
+
+##### Salvar artefatos finais do modelo híbrido construído:
 ```{python}
+# -------------------------
+# Criar diretório de artefatos
+# -------------------------
+ARTIFACTS_DIR = "artifacts"
+os.makedirs(ARTIFACTS_DIR, exist_ok=True)
 
+# -------------------------
+# 1️⃣ CF — Similaridade Item-Item
+# -------------------------
+with open(f"{ARTIFACTS_DIR}/cf_similarity.pkl", "wb") as f:
+    pickle.dump(shrunk_similarity, f)
+
+# -------------------------
+# 2️⃣ Content-Based — Similaridade TF-IDF
+# -------------------------
+with open(f"{ARTIFACTS_DIR}/cb_similarity.pkl", "wb") as f:
+    pickle.dump(content_sim_df, f)
+
+# -------------------------
+# 3️⃣ Association Rules
+# -------------------------
+with open(f"{ARTIFACTS_DIR}/association_rules.pkl", "wb") as f:
+    pickle.dump(rules_filtered, f)
+
+# -------------------------
+# 4️⃣ Products (metadata)
+# -------------------------
+products.to_parquet(f"{ARTIFACTS_DIR}/products.parquet", index=False)
+
+# -------------------------
+# 5️⃣ Interactions (histórico mínimo)
+# -------------------------
+interactions.to_parquet(f"{ARTIFACTS_DIR}/interactions.parquet", index=False)
+
+# -------------------------
+# Versões leves para deploy
+# -------------------------
+products.to_csv(f"{ARTIFACTS_DIR}/products.csv", index=False)
+interactions.to_csv(f"{ARTIFACTS_DIR}/interactions.csv", index=False)
 ```
 <br>
 
+---
 
+## Estratégia de Deploy na AWS
 
+Com os artefatos prontos, o sistema é implantado em uma arquitetura serverless na AWS, composta por três serviços principais:
 
-
-
-
-
-# Offline Artifacts & Deployment Strategy
-
-Os modelos são treinados offline e serializados como artefatos estáticos.
-
-Em produção:
-
-> *A API apenas carrega artefatos e executa ranking.*
-
-⬇️ **INSIRA O CÓDIGO AQUI (serialização)**
+* **Amazon S3** → armazenamento e versionamento dos artefatos
+* **AWS Lambda** → execução da inferência sob demanda
+* **Amazon API Gateway** → exposição do modelo via endpoint REST
 
 ---
 
-# Cloud Deployment (AWS)
+### Amazon S3 — Armazenamento dos Artefatos do Modelo
 
-A solução é implantada em arquitetura serverless:
+Na primeira etapa da implantação cloud, é criado um bucket S3, responsável por armazenar todos os artefatos do modelo.
 
-* S3 para armazenamento de artefatos,
-* Lambda para inferência,
-* API Gateway para exposição REST.
 
-🎥 **Video — AWS Deploy & API Demo**
 
-```markdown
-{{< video aws_demo.mp4 >}}
-```
+O S3 atua como a **camada de armazenamento de modelos**, desacoplada da lógica de inferência.
+
+##### Criação do bucket e upload dos artefatos no S3:
+
+*(Inserir vídeo da tela da AWS aqui)*
+
+---
+
+### AWS Lambda — Servindo o Recomendador
+
+Com os artefatos disponíveis no S3, foi criada uma função AWS Lambda responsável por:
+
+* Carregar os artefatos na inicialização
+* Receber requisições com `user_id`
+* Executar o ranking híbrido (CF + CB + Association Rules)
+* Retornar recomendações em formato JSON
+
+Essa separação garante que a Lambda execute somente inferência, mantendo custo e complexidade controlados.
+
+
+##### Criação e configuração da função Lambda:
+
+*(Inserir vídeo da tela da AWS aqui)*
+
+
+### API Gateway — Exposição do Modelo via API REST
+
+Para tornar o sistema acessível externamente, a função Lambda é integrada ao Amazon API Gateway.
+
+O API Gateway permite:
+
+* Criar endpoints HTTP
+* Definir métodos (`GET` / `POST`)
+* Controlar permissões
+* Integrar diretamente com a Lambda
+
+O resultado é um endpoint REST capaz de retornar recomendações personalizadas sob demanda, pronto para consumo por:
+
+* Frontend web
+* Aplicações mobile
+* Sistemas internos de e-commerce
+
+##### Criação da API no API Gateway e integração com Lambda:
+
+*(Inserir vídeo da tela da AWS aqui)*
+
+---
+
+### Deploy Final e Demonstração End-to-End:
+
+Após a configuração do S3, Lambda e API Gateway, o sistema é implantado e testado de ponta a ponta.
+
+##### Demonstração — Deploy final e chamada da API de recomendação:
+
+*(Inserir vídeo da demo completa aqui)*
+
+---
+
+Essa abordagem permite evoluir o modelo (re-treino, novos pesos, novos sinais) sem impactar a API, bastando substituir os artefatos no S3.
 
 ---
 
 # Conclusion
 
-Este projeto demonstra a construção de um sistema de recomendação híbrido **robusto, interpretável e orientado à produção**, combinando rigor técnico com impacto direto no negócio.
+Este projeto demonstra a construção de um sistema de recomendação híbrido robusto, interpretável e orientado à produção, combinando rigor técnico com impacto direto no negócio.
 
 A abordagem híbrida permite equilibrar personalização, cobertura e oportunidades de cross-sell, refletindo práticas reais adotadas em plataformas de e-commerce em escala.
 

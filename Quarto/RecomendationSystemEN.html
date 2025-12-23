@@ -60,18 +60,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="RecomendationSystem_files/libs/clipboard/clipboard.min.js"></script>
-<script src="RecomendationSystem_files/libs/quarto-html/quarto.js" type="module"></script>
-<script src="RecomendationSystem_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="RecomendationSystem_files/libs/quarto-html/popper.min.js"></script>
-<script src="RecomendationSystem_files/libs/quarto-html/tippy.umd.min.js"></script>
-<link href="RecomendationSystem_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="RecomendationSystem_files/libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="RecomendationSystem_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="RecomendationSystem_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="RecomendationSystem_files/libs/bootstrap/bootstrap-bb462d781dde1847d9e3ccf7736099dd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
-<script src="RecomendationSystem_files/libs/quarto-contrib/videojs/video.min.js"></script>
-<link href="RecomendationSystem_files/libs/quarto-contrib/videojs/video-js.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="RecomendationSystemEN_files/libs/clipboard/clipboard.min.js"></script>
+<script src="RecomendationSystemEN_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="RecomendationSystemEN_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="RecomendationSystemEN_files/libs/quarto-html/popper.min.js"></script>
+<script src="RecomendationSystemEN_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="RecomendationSystemEN_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="RecomendationSystemEN_files/libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="RecomendationSystemEN_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="RecomendationSystemEN_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="RecomendationSystemEN_files/libs/bootstrap/bootstrap-bb462d781dde1847d9e3ccf7736099dd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="RecomendationSystemEN_files/libs/quarto-contrib/videojs/video.min.js"></script>
+<link href="RecomendationSystemEN_files/libs/quarto-contrib/videojs/video-js.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
 
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
@@ -89,17 +89,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
   <li><a href="#project-structure" id="toc-project-structure" class="nav-link" data-scroll-target="#project-structure">Project Structure</a></li>
-  <li><a href="#objetivos-de-negócio" id="toc-objetivos-de-negócio" class="nav-link" data-scroll-target="#objetivos-de-negócio">Objetivos de Negócio</a></li>
-  <li><a href="#data-sources-modeling-assumptions" id="toc-data-sources-modeling-assumptions" class="nav-link" data-scroll-target="#data-sources-modeling-assumptions">Data Sources &amp; Modeling Assumptions</a></li>
+  <li><a href="#business-objectives" id="toc-business-objectives" class="nav-link" data-scroll-target="#business-objectives">Business Objectives</a></li>
+  <li><a href="#data-sources" id="toc-data-sources" class="nav-link" data-scroll-target="#data-sources">Data Sources</a></li>
   <li><a href="#eda-exploratory-data-analysis" id="toc-eda-exploratory-data-analysis" class="nav-link" data-scroll-target="#eda-exploratory-data-analysis">EDA (Exploratory Data Analysis)</a></li>
-  <li><a href="#criação-dos-algoritimos" id="toc-criação-dos-algoritimos" class="nav-link" data-scroll-target="#criação-dos-algoritimos">Criação dos Algoritimos</a></li>
-  <li><a href="#content-based-filtering-tf-idf" id="toc-content-based-filtering-tf-idf" class="nav-link" data-scroll-target="#content-based-filtering-tf-idf">Content-Based Filtering (TF-IDF)</a></li>
-  <li><a href="#offline-evaluation-cf-vs-cb" id="toc-offline-evaluation-cf-vs-cb" class="nav-link" data-scroll-target="#offline-evaluation-cf-vs-cb">Offline Evaluation — CF vs CB</a></li>
-  <li><a href="#hybrid-model-weight-tuning" id="toc-hybrid-model-weight-tuning" class="nav-link" data-scroll-target="#hybrid-model-weight-tuning">Hybrid Model — Weight Tuning</a></li>
-  <li><a href="#association-rules-apriori" id="toc-association-rules-apriori" class="nav-link" data-scroll-target="#association-rules-apriori">Association Rules (Apriori)</a></li>
-  <li><a href="#final-hybrid-recommender" id="toc-final-hybrid-recommender" class="nav-link" data-scroll-target="#final-hybrid-recommender">Final Hybrid Recommender</a></li>
-  <li><a href="#conclusão" id="toc-conclusão" class="nav-link" data-scroll-target="#conclusão">Conclusão</a></li>
-  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  <li><a href="#algorithm-development" id="toc-algorithm-development" class="nav-link" data-scroll-target="#algorithm-development">Algorithm Development</a></li>
+  <li><a href="#final-model" id="toc-final-model" class="nav-link" data-scroll-target="#final-model">Final Model</a></li>
+  <li><a href="#model-conclusion" id="toc-model-conclusion" class="nav-link" data-scroll-target="#model-conclusion">Model Conclusion</a></li>
+  <li><a href="#cloud-deployment-aws" id="toc-cloud-deployment-aws" class="nav-link" data-scroll-target="#cloud-deployment-aws">Cloud Deployment (AWS)</a></li>
+  <li><a href="#project-conclusion" id="toc-project-conclusion" class="nav-link" data-scroll-target="#project-conclusion">Project Conclusion</a></li>
   </ul>
 </nav>
 </div>
@@ -138,69 +135,69 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="introduction" class="level1">
 <h1>Introduction</h1>
-<p>Este projeto apresenta o desenvolvimento de um sistema de recomendação híbrido para e-commerce, cobrindo todo o ciclo de vida de uma solução de Machine Learning aplicada em contexto real de negócio.</p>
-<p>O objetivo central é aumentar conversão e ticket médio por meio de recomendações personalizadas, utilizando múltiplos sinais complementares:</p>
+<p>This project presents the development of a hybrid recommender system for e-commerce, covering the entire lifecycle of a Machine Learning solution applied in a real-world business context.</p>
+<p>The main objective is to increase conversion rate and average order value through personalized recommendations, leveraging multiple complementary signals:</p>
 <ul>
-<li>comportamento histórico de compra (Collaborative Filtering),</li>
-<li>similaridade semântica entre produtos (Content-Based),</li>
-<li>padrões explícitos de coocorrência em cestas de compra (Association Rules).</li>
+<li>historical purchase behavior (Collaborative Filtering),</li>
+<li>semantic similarity between products (Content-Based),</li>
+<li>explicit co-occurrence patterns in shopping baskets (Association Rules).</li>
 </ul>
 <hr>
 </section>
 <section id="project-structure" class="level1">
 <h1>Project Structure</h1>
-<p>O pipeline segue uma arquitetura end-to-end típica de sistemas de recomendação modernos:</p>
+<p>The pipeline follows a typical end-to-end architecture for modern recommender systems:</p>
 <ol type="1">
-<li>Definição do problema de negócio</li>
-<li>Criação do banco e ingestão dos dados</li>
-<li>Exploração e validação em SQL</li>
-<li>Limpeza e Pré Processamento</li>
-<li>Feature Engineering e Modelagem (CF, CB, AR)</li>
-<li>Construção do modelo híbrido</li>
-<li>Avaliação e Interpretação</li>
-<li>Preparação de artefatos</li>
-<li>Deploy (AWS S3, Lambda, API Gateway)</li>
+<li>Business problem definition</li>
+<li>Database creation and data ingestion</li>
+<li>SQL-based exploration and validation</li>
+<li>Data cleaning and preprocessing</li>
+<li>Feature engineering and modeling (CF, CB, AR)</li>
+<li>Hybrid model construction</li>
+<li>Evaluation and interpretation</li>
+<li>Artifact preparation</li>
+<li>Deployment (AWS S3, Lambda, API Gateway)</li>
 </ol>
-<p>Essa estrutura garante separação entre dados, modelos e inferência, facilitando manutenção e escalabilidade.</p>
+<p>This structure ensures a clear separation between data, models, and inference, facilitating maintenance and scalability.</p>
 <hr>
 </section>
-<section id="objetivos-de-negócio" class="level1">
-<h1>Objetivos de Negócio</h1>
-<p>Aumentar a relevância das recomendações para impulsionar:</p>
+<section id="business-objectives" class="level1">
+<h1>Business Objectives</h1>
+<p>Increase recommendation relevance to drive:</p>
 <ul>
 <li>AOV (Average Order Value),</li>
-<li>taxa de conversão,</li>
-<li>CTR de recomendações,</li>
-<li>receita incremental.</li>
+<li>conversion rate,</li>
+<li>recommendation CTR,</li>
+<li>incremental revenue.</li>
 </ul>
 <hr>
 </section>
-<section id="data-sources-modeling-assumptions" class="level1">
-<h1>Data Sources &amp; Modeling Assumptions</h1>
-<p>Os dados utilizados representam um ambiente transacional típico de e-commerce, com tabelas normalizadas que refletem práticas de armazenamento e análise analítica.</p>
-<p>O dataset inclui:</p>
+<section id="data-sources" class="level1">
+<h1>Data Sources</h1>
+<p>The data represents a typical transactional e-commerce environment, with normalized tables reflecting standard practices for analytical storage and processing.</p>
+<p>The dataset includes:</p>
 <ul>
-<li>histórico de transações em nível de item,</li>
-<li>catálogo de produtos com atributos descritivos,</li>
-<li>eventos de visualização de produtos,</li>
-<li>informações demográficas básicas de clientes,</li>
-<li>registros temporais para análise comportamental.</li>
+<li>item-level transaction history,</li>
+<li>product catalog with descriptive attributes,</li>
+<li>product view events,</li>
+<li>basic customer demographic information,</li>
+<li>temporal records for behavioral analysis.</li>
 </ul>
 <hr>
 <section id="database-setup-sql-exploration" class="level2">
 <h2 data-anchor-id="database-setup-sql-exploration">Database Setup &amp; SQL Exploration</h2>
-<p>Antes de qualquer etapa de modelagem em Python, os dados passam por um processo de estruturação, ingestão e validação em banco de dados relacional, típicos de um ambiente real de analytics em e-commerce.</p>
+<p>Before any modeling step in Python, the data undergoes a structuring, ingestion, and validation process in a relational database, typical of real-world analytics environments in e-commerce.</p>
 <section id="entity-relationship-er-diagram" class="level3">
 <h3 data-anchor-id="entity-relationship-er-diagram">Entity-Relationship (ER) Diagram</h3>
-<p>O diagrama abaixo ilustra o modelo relacional do banco, destacando entidades centrais como clientes, produtos, transações e visualizações, bem como seus relacionamentos.</p>
-<p><strong>Diagrama ER do banco de dados</strong></p>
+<p>The diagram below illustrates the relational database model, highlighting core entities such as customers, products, transactions, and views, as well as their relationships.</p>
+<p><strong>Database ER Diagram</strong></p>
 <p><img src="ER-diagram.png" class="img-fluid"></p>
 </section>
 <section id="data-ingestion-validation-in-mysql" class="level3">
 <h3 data-anchor-id="data-ingestion-validation-in-mysql">Data Ingestion &amp; Validation in MySQL</h3>
-<p>Após a definição do schema, as tabelas são criadas e os dados são carregados diretamente no banco utilizando linha de comando e MySQL Workbench, reproduzindo práticas comuns de ingestão em ambientes analíticos.</p>
-<section id="criação-do-banco-de-dados-e-das-tableas" class="level5">
-<h5 data-anchor-id="criação-do-banco-de-dados-e-das-tableas">Criação do banco de dados e das tableas:</h5>
+<p>After defining the schema, the tables are created and data is loaded directly into the database using command-line tools and MySQL Workbench, reproducing common ingestion practices in analytical environments.</p>
+<section id="database-and-table-creation" class="level5">
+<h5 data-anchor-id="database-and-table-creation">Database and table creation:</h5>
 <details>
 <summary>
 <strong>Show SQL Schema</strong>
@@ -309,12 +306,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </details>
 <hr>
 </section>
-<section id="carregando-dados-no-banco-via-linha-de-comando" class="level5">
-<h5 data-anchor-id="carregando-dados-no-banco-via-linha-de-comando">Carregando dados no banco via linha de comando:</h5>
+<section id="loading-data-into-the-database-via-command-line" class="level5">
+<h5 data-anchor-id="loading-data-into-the-database-via-command-line">Loading data into the database via command line:</h5>
 <div class="quarto-video"><video id="video_shortcode_videojs_video1" class="video-js vjs-default-skin vjs-fluid" controls="" preload="auto" data-setup="{}" title=""><source src="SQL-DB-CREATION.mp4"></video></div>
 </section>
-<section id="execução-de-queries-exploratórias-iniciais" class="level5">
-<h5 data-anchor-id="execução-de-queries-exploratórias-iniciais">Execução de queries exploratórias iniciais:</h5>
+<section id="execution-of-initial-exploratory-queries" class="level5">
+<h5 data-anchor-id="execution-of-initial-exploratory-queries">Execution of initial exploratory queries:</h5>
 <div class="quarto-video"><video id="video_shortcode_videojs_video2" class="video-js vjs-default-skin vjs-fluid" controls="" preload="auto" data-setup="{}" title=""><source src="SQL-QUERIES.mp4"></video></div>
 <hr>
 </section>
@@ -323,15 +320,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="eda-exploratory-data-analysis" class="level1">
 <h1>EDA (Exploratory Data Analysis)</h1>
-<section id="função-python-para-rodar-sql-puro-no-notebook" class="level5">
-<h5 data-anchor-id="função-python-para-rodar-sql-puro-no-notebook">Função Python para rodar SQL puro no notebook:</h5>
-<div id="3e723993" class="cell" data-execution_count="3">
+<section id="python-function-to-run-pure-sql-on-notebook" class="level5">
+<h5 data-anchor-id="python-function-to-run-pure-sql-on-notebook">Python Function to run pure SQL on notebook:</h5>
+<div id="752e781d" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> run_sql_pure(sql: <span class="bu">str</span>, params: <span class="bu">dict</span> <span class="op">=</span> <span class="va">None</span>):</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Executa SQL puro (string) e retorna um pandas.DataFrame.</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">    Exibe a query (útil para portfólio) e retorna o DataFrame.</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">    Exibe a query e retorna o DataFrame.</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"---- Executing SQL ----"</span>)</span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(sql.strip())</span>
@@ -348,9 +345,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <hr>
 <p>O primeiro passo da EDA é validar a integridade estrutural das tabelas.</p>
 </section>
-<section id="contagens-por-tabela" class="level5">
-<h5 data-anchor-id="contagens-por-tabela">Contagens por tabela:</h5>
-<div id="f6d37251" class="cell" data-execution_count="4">
+<section id="record-counts-per-table" class="level5">
+<h5 data-anchor-id="record-counts-per-table">Record counts per table:</h5>
+<div id="34277fd1" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>sql <span class="op">=</span> <span class="st">"""</span></span>
@@ -403,9 +400,9 @@ SELECT
 </div>
 <p><br></p>
 </section>
-<section id="valores-ausentes-por-tabela" class="level5">
-<h5 data-anchor-id="valores-ausentes-por-tabela">Valores ausentes por tabela</h5>
-<div id="33a5bc1a" class="cell" data-execution_count="5">
+<section id="missing-values-per-table" class="level5">
+<h5 data-anchor-id="missing-values-per-table">Missing values per table:</h5>
+<div id="e20e5eeb" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># lista de tabelas a verificar</span></span>
@@ -511,9 +508,9 @@ SELECT
 </div>
 <p><br></p>
 </section>
-<section id="duplicados-e-chaves-checar-chave-primária-única" class="level5">
-<h5 data-anchor-id="duplicados-e-chaves-checar-chave-primária-única">Duplicados e chaves (checar chave primária única)</h5>
-<div id="994dceb6" class="cell" data-execution_count="6">
+<section id="duplicates-and-keys-primary-key-uniqueness-check" class="level5">
+<h5 data-anchor-id="duplicates-and-keys-primary-key-uniqueness-check">Duplicates and keys (primary key uniqueness check):</h5>
+<div id="b0d74e2f" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>sql <span class="op">=</span> <span class="st">"""</span></span>
@@ -566,15 +563,15 @@ FROM transactions;
 </div>
 </div>
 <p><br></p>
-<p>Os resultados confirmam que os dados estão completos e consistentes, permitindo avançar para as análises sem necessidade de limpeza estrutural.</p>
+<p>The results confirm that the data is complete and consistent, allowing the analysis to proceed without the need for structural data cleaning.</p>
 <hr>
 </section>
-<section id="visualizações-e-insights" class="level3">
-<h3 data-anchor-id="visualizações-e-insights">Visualizações e Insights</h3>
-<p>Nesta etapa, exploramos o comportamento do negócio por meio de SQL.</p>
-<section id="distribuição-de-preços---produtos" class="level5">
-<h5 data-anchor-id="distribuição-de-preços---produtos">Distribuição de preços - produtos</h5>
-<div id="b662137c" class="cell" data-execution_count="7">
+<section id="visualizations-and-insights" class="level3">
+<h3 data-anchor-id="visualizations-and-insights">Visualizations and Insights</h3>
+<p>At this stage, we explore business behavior using SQL-based analyses.</p>
+<section id="product-price-distribution" class="level5">
+<h5 data-anchor-id="product-price-distribution">Product price distribution:</h5>
+<div id="62869587" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>sql <span class="op">=</span> <span class="st">"SELECT price FROM products WHERE price IS NOT NULL;"</span></span>
@@ -651,16 +648,16 @@ SELECT price FROM products WHERE price IS NOT NULL;
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="RecomendationSystem_files/figure-html/cell-8-output-3.png" width="808" height="449" class="figure-img"></p>
+<p><img src="RecomendationSystemEN_files/figure-html/cell-8-output-3.png" width="808" height="449" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 <p><br></p>
 </section>
-<section id="top-produtos-por-quantidade-e-por-receita" class="level5">
-<h5 data-anchor-id="top-produtos-por-quantidade-e-por-receita">Top Produtos por quantidade e por receita</h5>
-<div id="64be9a9c" class="cell" data-execution_count="8">
+<section id="top-products-by-quantity-sold-and-by-revenue" class="level5">
+<h5 data-anchor-id="top-products-by-quantity-sold-and-by-revenue">Top products by quantity sold and by revenue:</h5>
+<div id="14f4d4a5" class="cell" data-execution_count="8">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>sql <span class="op">=</span> <span class="st">"""</span></span>
@@ -792,23 +789,23 @@ LIMIT 10;
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="RecomendationSystem_files/figure-html/cell-9-output-3.png" width="816" height="603" class="figure-img"></p>
+<p><img src="RecomendationSystemEN_files/figure-html/cell-9-output-3.png" width="816" height="603" class="figure-img"></p>
 </figure>
 </div>
 </div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="RecomendationSystem_files/figure-html/cell-9-output-4.png" width="842" height="603" class="figure-img"></p>
+<p><img src="RecomendationSystemEN_files/figure-html/cell-9-output-4.png" width="842" height="603" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 <p><br></p>
 </section>
-<section id="vendas-por-mês" class="level5">
-<h5 data-anchor-id="vendas-por-mês">Vendas por mês</h5>
-<div id="c2e47beb" class="cell" data-execution_count="9">
+<section id="monthly-sales" class="level5">
+<h5 data-anchor-id="monthly-sales">Monthly sales:</h5>
+<div id="0f192ab7" class="cell" data-execution_count="9">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>sql <span class="op">=</span> <span class="st">"""</span></span>
@@ -920,16 +917,16 @@ ORDER BY ym;
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="RecomendationSystem_files/figure-html/cell-10-output-3.png" width="812" height="450" class="figure-img"></p>
+<p><img src="RecomendationSystemEN_files/figure-html/cell-10-output-3.png" width="812" height="450" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 <p><br></p>
 </section>
-<section id="rfm---tabela-e-histogramas" class="level5">
-<h5 data-anchor-id="rfm---tabela-e-histogramas">RFM - tabela e histogramas</h5>
-<div id="63fe0f27" class="cell" data-execution_count="10">
+<section id="rfm-table-and-histograms" class="level5">
+<h5 data-anchor-id="rfm-table-and-histograms">RFM — table and histograms:</h5>
+<div id="93e2eae6" class="cell" data-execution_count="10">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>sql <span class="op">=</span> <span class="st">"""</span></span>
@@ -1064,23 +1061,23 @@ SELECT * FROM last;
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="RecomendationSystem_files/figure-html/cell-11-output-3.png" width="1170" height="357" class="figure-img"></p>
+<p><img src="RecomendationSystemEN_files/figure-html/cell-11-output-3.png" width="1170" height="357" class="figure-img"></p>
 </figure>
 </div>
 </div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="RecomendationSystem_files/figure-html/cell-11-output-4.png" width="833" height="449" class="figure-img"></p>
+<p><img src="RecomendationSystemEN_files/figure-html/cell-11-output-4.png" width="833" height="449" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 <p><br></p>
 </section>
-<section id="distribuição-de-compras-por-cliente" class="level5">
-<h5 data-anchor-id="distribuição-de-compras-por-cliente">Distribuição de compras por cliente</h5>
-<div id="183821fb" class="cell" data-execution_count="11">
+<section id="distribution-of-purchases-per-customer" class="level5">
+<h5 data-anchor-id="distribution-of-purchases-per-customer">Distribution of purchases per customer:</h5>
+<div id="48c6db12" class="cell" data-execution_count="11">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>sql <span class="op">=</span> <span class="st">"""</span></span>
@@ -1173,16 +1170,16 @@ GROUP BY customer_id;
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="RecomendationSystem_files/figure-html/cell-12-output-3.png" width="822" height="451" class="figure-img"></p>
+<p><img src="RecomendationSystemEN_files/figure-html/cell-12-output-3.png" width="822" height="451" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 <p><br></p>
 </section>
-<section id="conversão-views---buys-por-produto" class="level5">
-<h5 data-anchor-id="conversão-views---buys-por-produto">Conversão views -&gt; buys por produto</h5>
-<div id="67c3d154" class="cell" data-execution_count="12">
+<section id="view-to-purchase-conversion-by-product" class="level5">
+<h5 data-anchor-id="view-to-purchase-conversion-by-product">View-to-purchase conversion by product</h5>
+<div id="142ceae2" class="cell" data-execution_count="12">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>sql <span class="op">=</span> <span class="st">"""</span></span>
@@ -1332,16 +1329,16 @@ LEFT JOIN (
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="RecomendationSystem_files/figure-html/cell-13-output-3.png" width="816" height="449" class="figure-img"></p>
+<p><img src="RecomendationSystemEN_files/figure-html/cell-13-output-3.png" width="816" height="449" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 <p><br></p>
 </section>
-<section id="vendas-por-categoria" class="level5">
-<h5 data-anchor-id="vendas-por-categoria">Vendas por categoria</h5>
-<div id="827d28e3" class="cell" data-execution_count="13">
+<section id="sales-by-category" class="level5">
+<h5 data-anchor-id="sales-by-category">Sales by category:</h5>
+<div id="287308fb" class="cell" data-execution_count="13">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>sql <span class="op">=</span> <span class="st">"""</span></span>
@@ -1419,7 +1416,7 @@ ORDER BY revenue DESC;
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="RecomendationSystem_files/figure-html/cell-14-output-3.png" width="799" height="507" class="figure-img"></p>
+<p><img src="RecomendationSystemEN_files/figure-html/cell-14-output-3.png" width="799" height="507" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -1427,8 +1424,8 @@ ORDER BY revenue DESC;
 <p><br></p>
 </section>
 <section id="aov-average-order-value" class="level5">
-<h5 data-anchor-id="aov-average-order-value">AOV (Average Order Value)</h5>
-<div id="26966918" class="cell" data-execution_count="14">
+<h5 data-anchor-id="aov-average-order-value">AOV (Average Order Value):</h5>
+<div id="564ad278" class="cell" data-execution_count="14">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>sql <span class="op">=</span> <span class="st">"""</span></span>
@@ -1537,16 +1534,16 @@ GROUP BY customer_id, DATE(transaction_date);
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="RecomendationSystem_files/figure-html/cell-15-output-4.png" width="825" height="450" class="figure-img"></p>
+<p><img src="RecomendationSystemEN_files/figure-html/cell-15-output-4.png" width="825" height="450" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 <p><br></p>
 </section>
-<section id="matriz-cliente-x-produto---densidade-sparsity" class="level5">
-<h5 data-anchor-id="matriz-cliente-x-produto---densidade-sparsity">Matriz cliente x produto - densidade (SPARSITY)</h5>
-<div id="e512d00d" class="cell" data-execution_count="15">
+<section id="customer-product-matrix-density-sparsity" class="level5">
+<h5 data-anchor-id="customer-product-matrix-density-sparsity">Customer × product matrix — density (SPARSITY)</h5>
+<div id="f8bd83d5" class="cell" data-execution_count="15">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>sql <span class="op">=</span> <span class="st">"""</span></span>
@@ -1605,52 +1602,52 @@ Sparsity (aprox): 0.929590</code></pre>
 </section>
 <section id="key-insights-from-eda" class="level2">
 <h2 data-anchor-id="key-insights-from-eda">Key Insights from EDA</h2>
-<p>A análise revela padrões importantes:</p>
+<p>The analysis reveals important patterns:</p>
 <ul>
-<li>alta concentração de vendas em poucas categorias,</li>
-<li>clientes com frequência relativamente elevada,</li>
-<li>sparsity alta (&gt;90%) na matriz de interações.</li>
+<li>high concentration of sales in a few categories,</li>
+<li>customers with relatively high purchase frequency,</li>
+<li>high sparsity (&gt;90%) in the interaction matrix.</li>
 </ul>
-<p>Esses achados justificam a escolha por:</p>
+<p>These findings justify the choice of:</p>
 <ul>
-<li>modelos item-based em vez de user-based,</li>
-<li>abordagem híbrida para mitigar limitações individuais.</li>
+<li>item-based models instead of user-based,</li>
+<li>a hybrid approach to mitigate individual model limitations.</li>
 </ul>
 <hr>
 </section>
 </section>
-<section id="criação-dos-algoritimos" class="level1">
-<h1>Criação dos Algoritimos</h1>
-<p>Com base na EDA, foi definida uma arquitetura híbrida onde cada componente resolve um problema específico:</p>
+<section id="algorithm-development" class="level1">
+<h1>Algorithm Development</h1>
+<p>Based on the EDA, a hybrid architecture was defined where each component addresses a specific problem:</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
-<th>Componente</th>
-<th>Papel</th>
+<th>Component</th>
+<th>Role</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td>Item-Item CF</td>
-<td>Personalização baseada em comportamento</td>
+<td>Behavior-based personalization</td>
 </tr>
 <tr class="even">
 <td>Content-Based</td>
-<td>Similaridade semântica e cold start</td>
+<td>Semantic similarity and cold start</td>
 </tr>
 <tr class="odd">
 <td>Association Rules</td>
-<td>Cross-sell contextual</td>
+<td>Contextual cross-sell</td>
 </tr>
 </tbody>
 </table>
-<p>O objetivo não é substituir modelos, mas <strong>combinar sinais complementares</strong>.</p>
+<p>The goal is not to replace models, but to <strong>combine complementary signals</strong>.</p>
 <section id="item-item-collaborative-filtering" class="level2">
 <h2 data-anchor-id="item-item-collaborative-filtering">Item-Item Collaborative Filtering</h2>
-<p>Nesta etapa, construímos um sistema de recomendação baseado exclusivamente em padrões históricos de compra. O Item-Item CF recomenda itens semelhantes aos que o usuário já comprou, medindo similaridade entre itens a partir do comportamento dos usuários (quem comprou A também comprou B).</p>
-<section id="criar-dataset-de-interações-cliente-x-produto" class="level5">
-<h5 data-anchor-id="criar-dataset-de-interações-cliente-x-produto">Criar dataset de interações (cliente x produto):</h5>
-<div id="91796063" class="cell" data-execution_count="17">
+<p>At this stage, we build a recommender system based exclusively on historical purchase patterns. Item-Item CF recommends items similar to those already purchased by the user, measuring similarity between items based on user behavior (users who bought A also bought B).</p>
+<section id="create-the-interaction-dataset-customer-product" class="level5">
+<h5 data-anchor-id="create-the-interaction-dataset-customer-product">Create the interaction dataset (customer × product):</h5>
+<div id="a2678f22" class="cell" data-execution_count="17">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>interactions <span class="op">=</span> (</span>
@@ -1660,7 +1657,7 @@ Sparsity (aprox): 0.929590</code></pre>
 <span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>interactions[<span class="st">'interaction'</span>] <span class="op">=</span> <span class="dv">1</span></span>
 <span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>interactions.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="73">
+<div class="cell-output cell-output-display" data-execution_count="182">
 <div>
 
 
@@ -1712,9 +1709,9 @@ Sparsity (aprox): 0.929590</code></pre>
 </div>
 <p><br></p>
 </section>
-<section id="construir-a-matriz-item-x-cliente" class="level5">
-<h5 data-anchor-id="construir-a-matriz-item-x-cliente">Construir a matriz Item x Cliente:</h5>
-<div id="11def454" class="cell" data-execution_count="18">
+<section id="build-the-item-customer-matrix" class="level5">
+<h5 data-anchor-id="build-the-item-customer-matrix">Build the Item × Customer matrix:</h5>
+<div id="a91ad332" class="cell" data-execution_count="18">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>item_user_matrix <span class="op">=</span> interactions.pivot_table(</span>
@@ -1726,15 +1723,15 @@ Sparsity (aprox): 0.929590</code></pre>
 <span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>item_user_matrix.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="74">
+<div class="cell-output cell-output-display" data-execution_count="183">
 <pre><code>(300, 1000)</code></pre>
 </div>
 </div>
 <p><br></p>
 </section>
-<section id="checar-sparsity" class="level5">
-<h5 data-anchor-id="checar-sparsity">Checar Sparsity:</h5>
-<div id="1a7ed605" class="cell" data-execution_count="19">
+<section id="check-sparsity" class="level5">
+<h5 data-anchor-id="check-sparsity">Check sparsity:</h5>
+<div id="644901d8" class="cell" data-execution_count="19">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>density <span class="op">=</span> item_user_matrix.values.<span class="bu">sum</span>() <span class="op">/</span> item_user_matrix.size</span>
@@ -1748,9 +1745,9 @@ Sparsity (aprox): 0.929590</code></pre>
 </div>
 <p><br></p>
 </section>
-<section id="calcular-similaridade-item-item-cosine" class="level5">
-<h5 data-anchor-id="calcular-similaridade-item-item-cosine">Calcular Similaridade Item-Item (Cosine):</h5>
-<div id="5f76cdb2" class="cell" data-execution_count="20">
+<section id="compute-item-item-similarity-cosine" class="level5">
+<h5 data-anchor-id="compute-item-item-similarity-cosine">Compute Item-Item similarity (Cosine):</h5>
+<div id="fd9c2509" class="cell" data-execution_count="20">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>item_similarity <span class="op">=</span> cosine_similarity(item_user_matrix)</span>
@@ -1763,7 +1760,7 @@ Sparsity (aprox): 0.929590</code></pre>
 <span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>item_sim_df.iloc[:<span class="dv">5</span>, :<span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="76">
+<div class="cell-output cell-output-display" data-execution_count="185">
 <div>
 
 
@@ -1835,9 +1832,9 @@ Sparsity (aprox): 0.929590</code></pre>
 </div>
 <p><br></p>
 </section>
-<section id="co-ocorrência" class="level5">
-<h5 data-anchor-id="co-ocorrência">Co-ocorrência</h5>
-<div id="724e268e" class="cell" data-execution_count="21">
+<section id="co-occurrence" class="level5">
+<h5 data-anchor-id="co-occurrence">Co-occurrence</h5>
+<div id="0c6c4c46" class="cell" data-execution_count="21">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>cooccurrence <span class="op">=</span> item_user_matrix <span class="op">@</span> item_user_matrix.T</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1847,7 +1844,7 @@ Sparsity (aprox): 0.929590</code></pre>
 </section>
 <section id="shrinkage" class="level5">
 <h5 data-anchor-id="shrinkage">Shrinkage</h5>
-<div id="1a5ccdda" class="cell" data-execution_count="22">
+<div id="2714caf2" class="cell" data-execution_count="22">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>LAMBDA <span class="op">=</span> <span class="dv">10</span></span>
@@ -1856,9 +1853,9 @@ Sparsity (aprox): 0.929590</code></pre>
 </div>
 <p><br></p>
 </section>
-<section id="função-de-recomendação-item-item-cf" class="level5">
-<h5 data-anchor-id="função-de-recomendação-item-item-cf">Função de Recomendação (Item-Item CF)</h5>
-<div id="e7596737" class="cell" data-execution_count="23">
+<section id="recommendation-function-item-item-cf" class="level5">
+<h5 data-anchor-id="recommendation-function-item-item-cf">Recommendation function (Item-Item CF)</h5>
+<div id="7e42ce3d" class="cell" data-execution_count="23">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Função de Recomendação (Item-Item CF)</span></span>
@@ -1882,15 +1879,15 @@ Sparsity (aprox): 0.929590</code></pre>
 </div>
 <p><br></p>
 </section>
-<section id="teste-do-modelo" class="level5">
-<h5 data-anchor-id="teste-do-modelo">Teste do modelo</h5>
-<div id="a3363443" class="cell" data-execution_count="24">
+<section id="model-testing" class="level5">
+<h5 data-anchor-id="model-testing">Model testing</h5>
+<div id="fe357b4e" class="cell" data-execution_count="24">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>test_user <span class="op">=</span> interactions[<span class="st">'customer_id'</span>].iloc[<span class="dv">0</span>]</span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>recommend_item_item(test_user, k<span class="op">=</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="80">
+<div class="cell-output cell-output-display" data-execution_count="189">
 <pre><code>product_id
 226    0.049454
 115    0.049118
@@ -1902,9 +1899,9 @@ dtype: float64</code></pre>
 </div>
 <p><br></p>
 </section>
-<section id="enriquecer-com-informações-do-produto" class="level5">
-<h5 data-anchor-id="enriquecer-com-informações-do-produto">Enriquecer com Informações do Produto</h5>
-<div id="90657b0f" class="cell" data-execution_count="25">
+<section id="enrich-recommendations-with-product-information" class="level5">
+<h5 data-anchor-id="enrich-recommendations-with-product-information">Enrich recommendations with product information</h5>
+<div id="283f2771" class="cell" data-execution_count="25">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> recommend_with_metadata(user_id, k<span class="op">=</span><span class="dv">10</span>):</span>
@@ -1919,7 +1916,7 @@ dtype: float64</code></pre>
 <span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>recommend_with_metadata(test_user, k<span class="op">=</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="81">
+<div class="cell-output cell-output-display" data-execution_count="190">
 <div>
 
 
@@ -2000,41 +1997,40 @@ dtype: float64</code></pre>
 </div>
 </div>
 <p><br></p>
-<p>O modelo Item-Item Collaborative Filtering identifica produtos semelhantes a partir de padrões de compra reais, permitindo recomendações personalizadas e escaláveis. A aplicação de shrinkage reduz ruído causado por co-ocorrências raras, tornando o sistema mais confiável em cenários de alta esparsidade, típicos de e-commerce.</p>
-<p>O score gerado pelo Item-Item CF representa uma medida relativa de afinidade entre produtos, baseada exclusivamente em padrões históricos de compra. Ele é utilizado para ranquear itens recomendados e não deve ser interpretado como probabilidade absoluta.</p>
+<p>The Item-Item Collaborative Filtering model identifies similar products based on real purchase patterns, enabling scalable and personalized recommendations. The application of shrinkage reduces noise caused by rare co-occurrences, making the system more reliable in high-sparsity scenarios typical of e-commerce.</p>
+<p>The score generated by the Item-Item CF represents a relative affinity measure between products, based exclusively on historical purchase patterns. It is used to rank recommended items and should not be interpreted as an absolute probability.</p>
 <hr>
 </section>
 </section>
-</section>
-<section id="content-based-filtering-tf-idf" class="level1">
-<h1>Content-Based Filtering (TF-IDF)</h1>
-<p>Apesar da força do sinal comportamental, o CF apresenta limitações:</p>
+<section id="content-based-filtering-tf-idf" class="level2">
+<h2 data-anchor-id="content-based-filtering-tf-idf">Content-Based Filtering (TF-IDF)</h2>
+<p>Despite the strength of behavioral signals, CF presents limitations:</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
-<th>Limitação</th>
-<th>Impacto</th>
+<th>Limitation</th>
+<th>Impact</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Cold start de produto</td>
-<td>Produto novo nunca é recomendado</td>
+<td>Product cold start</td>
+<td>New products are never recommended</td>
 </tr>
 <tr class="even">
-<td>Dependência do histórico</td>
-<td>Pouca explicação semântica</td>
+<td>Historical dependency</td>
+<td>Limited semantic explanation</td>
 </tr>
 <tr class="odd">
-<td>Sparsity alta</td>
-<td>Alguns itens quase não aparecem</td>
+<td>High sparsity</td>
+<td>Some items rarely appear</td>
 </tr>
 </tbody>
 </table>
-<p>Para mitigar isso, utilizamos Content-Based Filtering, representando produtos por seus atributos textuais.</p>
-<section id="preparação-do-texto-dos-produtos" class="level5">
-<h5 data-anchor-id="preparação-do-texto-dos-produtos">Preparação do texto dos produtos:</h5>
-<div id="2ce8448d" class="cell" data-execution_count="26">
+<p>To mitigate these issues, Content-Based Filtering is used by representing products through their textual attributes.</p>
+<section id="product-text-preparation" class="level5">
+<h5 data-anchor-id="product-text-preparation">Product text preparation:</h5>
+<div id="af4dbb00" class="cell" data-execution_count="26">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>products_cb <span class="op">=</span> products.copy()</span>
@@ -2047,7 +2043,7 @@ dtype: float64</code></pre>
 <span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>products_cb[[<span class="st">'product_id'</span>, <span class="st">'text'</span>]].head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="82">
+<div class="cell-output cell-output-display" data-execution_count="191">
 <div>
 
 
@@ -2093,9 +2089,9 @@ dtype: float64</code></pre>
 </div>
 <p><br></p>
 </section>
-<section id="vetorização-com-tf-idf" class="level5">
-<h5 data-anchor-id="vetorização-com-tf-idf">Vetorização com TF-IDF:</h5>
-<div id="e6cbc9f7" class="cell" data-execution_count="27">
+<section id="tf-idf-vectorization" class="level5">
+<h5 data-anchor-id="tf-idf-vectorization">TF-IDF vectorization:</h5>
+<div id="e057f65b" class="cell" data-execution_count="27">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>tfidf <span class="op">=</span> TfidfVectorizer(</span>
@@ -2107,15 +2103,15 @@ dtype: float64</code></pre>
 <span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>tfidf_matrix.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="83">
+<div class="cell-output cell-output-display" data-execution_count="192">
 <pre><code>(300, 178)</code></pre>
 </div>
 </div>
 <p><br></p>
 </section>
-<section id="similaridade-entre-produtos-cosine" class="level5">
-<h5 data-anchor-id="similaridade-entre-produtos-cosine">Similaridade entre produtos (Cosine):</h5>
-<div id="288f9b4a" class="cell" data-execution_count="28">
+<section id="product-similarity-cosine" class="level5">
+<h5 data-anchor-id="product-similarity-cosine">Product similarity (Cosine):</h5>
+<div id="59f78f17" class="cell" data-execution_count="28">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>content_similarity <span class="op">=</span> cosine_similarity(tfidf_matrix)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -2123,9 +2119,9 @@ dtype: float64</code></pre>
 </div>
 <p><br></p>
 </section>
-<section id="criar-matriz-produto-x-produto" class="level5">
-<h5 data-anchor-id="criar-matriz-produto-x-produto">Criar matriz Produto x Produto:</h5>
-<div id="b0247c99" class="cell" data-execution_count="29">
+<section id="build-the-product-product-matrix" class="level5">
+<h5 data-anchor-id="build-the-product-product-matrix">Build the Product × Product matrix:</h5>
+<div id="09939ef6" class="cell" data-execution_count="29">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>content_sim_df <span class="op">=</span> pd.DataFrame(</span>
@@ -2136,7 +2132,7 @@ dtype: float64</code></pre>
 <span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>content_sim_df.iloc[:<span class="dv">5</span>, :<span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="85">
+<div class="cell-output cell-output-display" data-execution_count="194">
 <div>
 
 
@@ -2208,9 +2204,9 @@ dtype: float64</code></pre>
 </div>
 <p><br></p>
 </section>
-<section id="função-de-recomendação-content-based" class="level5">
-<h5 data-anchor-id="função-de-recomendação-content-based">Função de recomendação Content-Based:</h5>
-<div id="b70e2361" class="cell" data-execution_count="30">
+<section id="content-based-recommendation-function" class="level5">
+<h5 data-anchor-id="content-based-recommendation-function">Content-Based recommendation function:</h5>
+<div id="39e9f1a7" class="cell" data-execution_count="30">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> recommend_content_based(user_id, k<span class="op">=</span><span class="dv">10</span>):</span>
@@ -2229,15 +2225,15 @@ dtype: float64</code></pre>
 </div>
 <p><br></p>
 </section>
-<section id="teste-do-content-based" class="level5">
-<h5 data-anchor-id="teste-do-content-based">Teste do Content-Based:</h5>
-<div id="29d31e61" class="cell" data-execution_count="31">
+<section id="content-based-model-testing" class="level5">
+<h5 data-anchor-id="content-based-model-testing">Content-Based model testing:</h5>
+<div id="7c4a0e20" class="cell" data-execution_count="31">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>test_user <span class="op">=</span> interactions[<span class="st">'customer_id'</span>].iloc[<span class="dv">0</span>]</span>
 <span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>recommend_content_based(test_user, k<span class="op">=</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="87">
+<div class="cell-output cell-output-display" data-execution_count="196">
 <pre><code>product_id
 273    0.261552
 48     0.261552
@@ -2249,9 +2245,9 @@ dtype: float64</code></pre>
 </div>
 <p><br></p>
 </section>
-<section id="enriquecer-com-informações-do-produto-1" class="level5">
-<h5 data-anchor-id="enriquecer-com-informações-do-produto-1">Enriquecer com informações do produto:</h5>
-<div id="fdb6fb63" class="cell" data-execution_count="32">
+<section id="enrich-recommendations-with-product-information-1" class="level5">
+<h5 data-anchor-id="enrich-recommendations-with-product-information-1">Enrich recommendations with product information:</h5>
+<div id="df38b821" class="cell" data-execution_count="32">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> recommend_cb_with_metadata(user_id, k<span class="op">=</span><span class="dv">10</span>):</span>
@@ -2265,7 +2261,7 @@ dtype: float64</code></pre>
 <span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a>recommend_cb_with_metadata(test_user, k<span class="op">=</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="88">
+<div class="cell-output cell-output-display" data-execution_count="197">
 <div>
 
 
@@ -2346,17 +2342,17 @@ dtype: float64</code></pre>
 </div>
 </div>
 <p><br></p>
-<p>O modelo baseado em conteúdo recomenda produtos semanticamente similares, ampliando a cobertura do sistema e permitindo recomendações mesmo para itens com pouco histórico.</p>
+<p>The content-based model recommends semantically similar products, increasing system coverage and enabling recommendations even for items with limited historical data.</p>
 <hr>
 </section>
 </section>
-<section id="offline-evaluation-cf-vs-cb" class="level1">
-<h1>Offline Evaluation — CF vs CB</h1>
-<p>Antes de combinar os modelos em uma abordagem híbrida, avaliamos separadamente o Item-Item Collaborative Filtering (CF) e o Content-Based Filtering (CB). Essa etapa é necessária para entender a contribuição individual de cada sinal, identificar suas forças e limitações e evitar que um modelo dominante mas ruidoso prejudique o desempenho final.</p>
-<p>A avaliação isolada permite comparar desempenho em métricas de ranking, ajustar pesos do modelo híbrido de forma fundamentada e justificar tecnicamente a escolha da arquitetura. Em cenários de e-commerce, essa prática garante que o modelo híbrido gere ganho incremental em relação aos baselines individuais, em vez de apenas misturar sinais sem benefício mensurável.</p>
-<section id="cria-um-split-temporal-do-tipo-leave-last-out-para-avaliação" class="level5">
-<h5 data-anchor-id="cria-um-split-temporal-do-tipo-leave-last-out-para-avaliação">Cria um split temporal do tipo Leave-Last-Out para avaliação:</h5>
-<div id="297b0d90" class="cell" data-execution_count="33">
+<section id="offline-evaluation-cf-vs-cb" class="level2">
+<h2 data-anchor-id="offline-evaluation-cf-vs-cb">Offline Evaluation — CF vs CB</h2>
+<p>Before combining the models into a hybrid approach, Item-Item Collaborative Filtering (CF) and Content-Based Filtering (CB) were evaluated separately. This step is required to understand the individual contribution of each signal, identify their strengths and limitations, and prevent a dominant but noisy model from degrading overall performance.</p>
+<p>Isolated evaluation allows comparison using ranking metrics, informed tuning of hybrid model weights, and technical justification of the chosen architecture. In e-commerce scenarios, this practice ensures that the hybrid model delivers incremental gains over individual baselines rather than merely combining signals without measurable benefit.</p>
+<section id="create-a-leave-last-out-temporal-split-for-evaluation" class="level5">
+<h5 data-anchor-id="create-a-leave-last-out-temporal-split-for-evaluation">Create a Leave-Last-Out temporal split for evaluation:</h5>
+<div id="ab207e8a" class="cell" data-execution_count="33">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>interactions_eval <span class="op">=</span> transactions[[<span class="st">'customer_id'</span>, <span class="st">'product_id'</span>, <span class="st">'transaction_date'</span>]].copy()</span>
@@ -2397,9 +2393,9 @@ dtype: float64</code></pre>
 </div>
 <p><br></p>
 </section>
-<section id="recriar-a-matriz-item-x-user-para-trein" class="level5">
-<h5 data-anchor-id="recriar-a-matriz-item-x-user-para-trein">Recriar a matriz Item x User para trein:</h5>
-<div id="680efcb4" class="cell" data-execution_count="34">
+<section id="rebuild-the-item-user-matrix-for-training" class="level5">
+<h5 data-anchor-id="rebuild-the-item-user-matrix-for-training">Rebuild the Item × User matrix for training:</h5>
+<div id="51567a9d" class="cell" data-execution_count="34">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>item_user_train <span class="op">=</span> train_df.pivot_table(</span>
@@ -2412,9 +2408,9 @@ dtype: float64</code></pre>
 </div>
 <p><br></p>
 </section>
-<section id="recalcular-cf-treino" class="level4">
-<h4 data-anchor-id="recalcular-cf-treino">Recalcular CF treino:</h4>
-<div id="90054654" class="cell" data-execution_count="35">
+<section id="recompute-cf-on-the-training-set" class="level4">
+<h4 data-anchor-id="recompute-cf-on-the-training-set">Recompute CF on the training set:</h4>
+<div id="d84f489a" class="cell" data-execution_count="35">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>item_sim_train <span class="op">=</span> cosine_similarity(item_user_train)</span>
@@ -2426,9 +2422,9 @@ dtype: float64</code></pre>
 </details>
 </div>
 <p><br></p>
-<section id="função-de-recomendação-para-avaliação-cf" class="level5">
-<h5 data-anchor-id="função-de-recomendação-para-avaliação-cf">Função de recomendação para avaliação (CF)</h5>
-<div id="1c4865e9" class="cell" data-execution_count="36">
+<section id="recommendation-function-for-evaluation-cf" class="level5">
+<h5 data-anchor-id="recommendation-function-for-evaluation-cf">Recommendation function for evaluation (CF):</h5>
+<div id="9d91f79e" class="cell" data-execution_count="36">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> recommend_cf_eval(user_id, k<span class="op">=</span><span class="dv">10</span>):</span>
@@ -2447,9 +2443,9 @@ dtype: float64</code></pre>
 </div>
 <p><br></p>
 </section>
-<section id="função-de-recomendação-para-avaliação" class="level5">
-<h5 data-anchor-id="função-de-recomendação-para-avaliação">Função de recomendação para avaliação:</h5>
-<div id="bcd84d8a" class="cell" data-execution_count="37">
+<section id="recommendation-function-for-evaluation-cb" class="level5">
+<h5 data-anchor-id="recommendation-function-for-evaluation-cb">Recommendation function for evaluation (CB):</h5>
+<div id="646082e7" class="cell" data-execution_count="37">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> recommend_cb_eval(user_id, k<span class="op">=</span><span class="dv">10</span>):</span>
@@ -2468,9 +2464,9 @@ dtype: float64</code></pre>
 </div>
 <p><br></p>
 </section>
-<section id="avaliar-hit-rate-k" class="level5">
-<h5 data-anchor-id="avaliar-hit-rate-k">Avaliar Hit Rate @ K:</h5>
-<div id="2abf8d56" class="cell" data-execution_count="38">
+<section id="evaluate-hit-rate-k" class="level5">
+<h5 data-anchor-id="evaluate-hit-rate-k">Evaluate Hit Rate @ K:</h5>
+<div id="8b85771f" class="cell" data-execution_count="38">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> hit_rate(model_func, k<span class="op">=</span><span class="dv">10</span>):</span>
@@ -2492,9 +2488,9 @@ dtype: float64</code></pre>
 </div>
 <p><br></p>
 </section>
-<section id="resultados-cf-vs-cb" class="level5">
-<h5 data-anchor-id="resultados-cf-vs-cb">Resultados — CF vs CB:</h5>
-<div id="ace24fc5" class="cell" data-execution_count="39">
+<section id="results-cf-vs-cb" class="level5">
+<h5 data-anchor-id="results-cf-vs-cb">Results — CF vs CB:</h5>
+<div id="d08b6ed3" class="cell" data-execution_count="39">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k <span class="kw">in</span> [<span class="dv">5</span>, <span class="dv">10</span>]:</span>
@@ -2518,17 +2514,17 @@ Hit Rate @ 10
 </div>
 </div>
 <p><br></p>
-<p>Antes da construção do modelo híbrido, avaliamos separadamente o desempenho do Item-Item Collaborative Filtering e do Content-Based Filtering utilizando uma estratégia Leave-One-Out e a métrica Hit Rate@K.</p>
-<p>Os resultados indicam que o modelo colaborativo apresenta maior capacidade preditiva, refletindo a força do sinal comportamental em dados implícitos. O Content-Based, embora com desempenho inferior isoladamente, mostrou-se consistente e adequado para complementar o sistema, especialmente em cenários de cold start e aumento de cobertura.</p>
-<p><strong>Conclusão</strong>: O CF apresenta melhor desempenho isolado, enquanto o CB agrega valor incremental — justificando a combinação.</p>
+<p>Before building the hybrid model, we evaluated the performance of Item-Item Collaborative Filtering and Content-Based Filtering separately using a Leave-One-Out strategy and the Hit Rate@K metric.</p>
+<p>The results indicate that the collaborative model exhibits stronger predictive capability, reflecting the strength of behavioral signals in implicit feedback data. Although the Content-Based model shows lower standalone performance, it remains consistent and suitable for complementing the system, particularly in cold start scenarios and for improving coverage.</p>
+<p><em>Conclusion:</em> CF achieves better standalone performance, while CB provides incremental value — justifying their combination.</p>
 </section>
 </section>
 </section>
-<section id="hybrid-model-weight-tuning" class="level1">
-<h1>Hybrid Model — Weight Tuning</h1>
-<p>Nesta etapa, testamos diferentes combinações de pesos entre CF e CB para maximizar performance.</p>
-<section id="vamos-testar" class="level4">
-<h4 data-anchor-id="vamos-testar">Vamos testar:</h4>
+<section id="hybrid-model-weight-tuning" class="level2">
+<h2 data-anchor-id="hybrid-model-weight-tuning">Hybrid Model — Weight Tuning</h2>
+<p>At this stage, we test different weight combinations between CF and CB to maximize performance.</p>
+<section id="we-test-the-following-configurations" class="level4">
+<h4 data-anchor-id="we-test-the-following-configurations">We test the following configurations::</h4>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -2563,10 +2559,10 @@ Hit Rate @ 10
 </tr>
 </tbody>
 </table>
-<p>Isso inclui: <br> * CB puro * CF puro * Híbridos intermediários</p>
-<section id="função-utilitária-de-normalização" class="level5">
-<h5 data-anchor-id="função-utilitária-de-normalização">Função utilitária de normalização:</h5>
-<div id="9e379fba" class="cell" data-execution_count="40">
+<p>Isso inclui: <br> * pure CB * pure CF * intermediate hybrid configurations</p>
+<section id="utility-normalization-function" class="level5">
+<h5 data-anchor-id="utility-normalization-function">Utility normalization function:</h5>
+<div id="152da0bf" class="cell" data-execution_count="40">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb58"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> min_max_normalize(scores: pd.Series):</span>
@@ -2577,9 +2573,9 @@ Hit Rate @ 10
 </div>
 <p><br></p>
 </section>
-<section id="função-híbrida-de-recomendação" class="level5">
-<h5 data-anchor-id="função-híbrida-de-recomendação">Função híbrida de recomendação:</h5>
-<div id="15e7f552" class="cell" data-execution_count="41">
+<section id="hybrid-recommendation-function" class="level5">
+<h5 data-anchor-id="hybrid-recommendation-function">Hybrid recommendation function:</h5>
+<div id="70eba1b9" class="cell" data-execution_count="41">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> recommend_hybrid_eval(</span>
@@ -2617,9 +2613,9 @@ Hit Rate @ 10
 </div>
 <p><br></p>
 </section>
-<section id="função-de-avaliação-do-híbrido" class="level5">
-<h5 data-anchor-id="função-de-avaliação-do-híbrido">Função de avaliação do híbrido:</h5>
-<div id="650672fd" class="cell" data-execution_count="42">
+<section id="hybrid-evaluation-function" class="level5">
+<h5 data-anchor-id="hybrid-evaluation-function">Hybrid evaluation function:</h5>
+<div id="c9ef18c7" class="cell" data-execution_count="42">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb60"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> evaluate_hybrid(weights, k<span class="op">=</span><span class="dv">10</span>):</span>
@@ -2654,9 +2650,9 @@ Hit Rate @ 10
 </div>
 <p><br></p>
 </section>
-<section id="rodar-o-tuning" class="level5">
-<h5 data-anchor-id="rodar-o-tuning">Rodar o tuning:</h5>
-<div id="5c92a33a" class="cell" data-execution_count="43">
+<section id="run-weight-tuning" class="level5">
+<h5 data-anchor-id="run-weight-tuning">Run weight tuning:</h5>
+<div id="2feea63a" class="cell" data-execution_count="43">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb61"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>weight_grid <span class="op">=</span> [</span>
@@ -2671,7 +2667,7 @@ Hit Rate @ 10
 <span id="cb61-10"><a href="#cb61-10" aria-hidden="true" tabindex="-1"></a>df_hybrid_eval <span class="op">=</span> evaluate_hybrid(weight_grid, k<span class="op">=</span><span class="dv">10</span>)</span>
 <span id="cb61-11"><a href="#cb61-11" aria-hidden="true" tabindex="-1"></a>df_hybrid_eval.sort_values(<span class="st">'hit_rate@10'</span>, ascending<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="99">
+<div class="cell-output cell-output-display" data-execution_count="208">
 <div>
 
 
@@ -2728,24 +2724,24 @@ Hit Rate @ 10
 </div>
 </div>
 <p><br></p>
-<p>A combinação dos modelos colaborativo e baseado em conteúdo resultou em melhoria de desempenho. O melhor resultado foi obtido com pesos w_cf=0.6 e w_cb=0.4, evidenciando que o sinal comportamental deve ser predominante, mas complementado por similaridade semântica.</p>
-<p>Esses resultados confirmam que o modelo híbrido captura múltiplas dimensões do comportamento do usuário, reduz limitações individuais dos modelos base e oferece um trade-off mais robusto entre precisão e cobertura.</p>
+<p>The combination of collaborative and content-based models resulted in improved performance. The best result was obtained with weights w_cf=0.6 and w_cb=0.4, indicating that behavioral signals should be predominant while being complemented by semantic similarity.</p>
+<p>These results confirm that the hybrid model captures multiple dimensions of user behavior, reduces the individual limitations of the base models, and provides a more robust trade-off between precision and coverage.</p>
 </section>
 </section>
 </section>
-<section id="association-rules-apriori" class="level1">
-<h1>Association Rules (Apriori)</h1>
-<p>Além das abordagens colaborativa e baseada em conteúdo, o sistema incorpora Association Rules para capturar padrões explícitos de coocorrência em cestas de compra. Essa técnica permite identificar produtos frequentemente adquiridos juntos, sendo especialmente eficaz para estratégias de cross-sell e aumento do ticket médio.</p>
-<p>Diferentemente dos modelos centrados no usuário, as regras de associação operam diretamente sobre transações, tornando-se robustas a cenários de cold start de usuários e altamente interpretáveis para stakeholders de negócio. Integradas ao modelo híbrido, essas regras complementam a personalização com recomendações de produtos complementares.</p>
-<p>Analogia simples <br></p>
+<section id="association-rules-apriori" class="level2">
+<h2 data-anchor-id="association-rules-apriori">Association Rules (Apriori)</h2>
+<p>In addition to collaborative and content-based approaches, the system incorporates Association Rules to capture explicit co-occurrence patterns in shopping baskets. This technique enables the identification of products frequently purchased together and is particularly effective for cross-sell strategies and increasing average order value.</p>
+<p>Unlike user-centric models, association rules operate directly on transactions, making them robust to user cold start scenarios and highly interpretable for business stakeholders. When integrated into the hybrid model, these rules complement personalization with recommendations of complementary products.</p>
+<p>Simple analogy <br></p>
 <ul>
-<li>CF = sugerir outra camisa parecida</li>
-<li>CB = sugerir camisa da mesma marca <br> Association Rules = sugerir o cinto que normalmente vai junto com a camisa</li>
+<li>CF = suggest a similar shirt</li>
+<li>CB = suggest a shirt from the same brand <br> Association Rules = suggest the belt that usually goes with the shirt</li>
 </ul>
-<p>Ou seja, responder a pergunta: O que costuma ser comprado junto?</p>
-<section id="criar-as-cestas" class="level5">
-<h5 data-anchor-id="criar-as-cestas">Criar as cestas:</h5>
-<div id="4ae3faff" class="cell" data-execution_count="44">
+<p>In other words, answering the question: What is usually bought together?</p>
+<section id="build-shopping-baskets" class="level5">
+<h5 data-anchor-id="build-shopping-baskets">Build shopping baskets:</h5>
+<div id="c23ceb9a" class="cell" data-execution_count="44">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb62"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Garantir que a coluna 'transaction_date' seja do tipo datetime</span></span>
@@ -2766,7 +2762,7 @@ Hit Rate @ 10
 <span id="cb62-16"><a href="#cb62-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb62-17"><a href="#cb62-17" aria-hidden="true" tabindex="-1"></a>basket.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="100">
+<div class="cell-output cell-output-display" data-execution_count="209">
 <pre><code>order_id
 1000_2025-01-28    [5, 3, 179]
 1000_2025-04-01       [50, 82]
@@ -2778,9 +2774,9 @@ Name: product_id, dtype: object</code></pre>
 </div>
 <p><br></p>
 </section>
-<section id="one-hot-encoding-das-cestas" class="level5">
-<h5 data-anchor-id="one-hot-encoding-das-cestas">One-Hot Encoding das cestas:</h5>
-<div id="957ed26b" class="cell" data-execution_count="45">
+<section id="one-hot-encoding-of-baskets" class="level5">
+<h5 data-anchor-id="one-hot-encoding-of-baskets">One-hot encoding of baskets:</h5>
+<div id="6a827788" class="cell" data-execution_count="45">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb64"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>te <span class="op">=</span> TransactionEncoder()</span>
@@ -2793,7 +2789,7 @@ Name: product_id, dtype: object</code></pre>
 <span id="cb64-8"><a href="#cb64-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb64-9"><a href="#cb64-9" aria-hidden="true" tabindex="-1"></a>basket_df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="101">
+<div class="cell-output cell-output-display" data-execution_count="210">
 <div>
 
 
@@ -2954,9 +2950,9 @@ Name: product_id, dtype: object</code></pre>
 </div>
 <p><br></p>
 </section>
-<section id="loop-por-categoria" class="level5">
-<h5 data-anchor-id="loop-por-categoria">Loop por categoria:</h5>
-<div id="701ada34" class="cell" data-execution_count="46">
+<section id="loop-by-category" class="level5">
+<h5 data-anchor-id="loop-by-category">Loop by category:</h5>
+<div id="58c8b007" class="cell" data-execution_count="46">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb65"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Loop por categoria</span></span>
@@ -3010,15 +3006,15 @@ Name: product_id, dtype: object</code></pre>
 </div>
 <p><br></p>
 </section>
-<section id="consolidar-todas-as-regras" class="level5">
-<h5 data-anchor-id="consolidar-todas-as-regras">Consolidar todas as regras:</h5>
-<div id="0dceff44" class="cell" data-execution_count="47">
+<section id="consolidate-all-rules" class="level5">
+<h5 data-anchor-id="consolidate-all-rules">Consolidate all rules:</h5>
+<div id="da5a58c9" class="cell" data-execution_count="47">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb66"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>rules_df <span class="op">=</span> pd.concat(rules_all, ignore_index<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>rules_df.sort_values(<span class="st">'lift'</span>, ascending<span class="op">=</span><span class="va">False</span>).head(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="103">
+<div class="cell-output cell-output-display" data-execution_count="212">
 <div>
 
 
@@ -3232,9 +3228,9 @@ Name: product_id, dtype: object</code></pre>
 </div>
 <p><br></p>
 </section>
-<section id="filtrar-regras" class="level5">
-<h5 data-anchor-id="filtrar-regras">Filtrar regras:</h5>
-<div id="250afc38" class="cell" data-execution_count="48">
+<section id="filter-rules" class="level5">
+<h5 data-anchor-id="filter-rules">Filter rules:</h5>
+<div id="30fdb192" class="cell" data-execution_count="48">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb67"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>rules_filtered <span class="op">=</span> rules_df[</span>
@@ -3246,7 +3242,7 @@ Name: product_id, dtype: object</code></pre>
 <span id="cb67-7"><a href="#cb67-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb67-8"><a href="#cb67-8" aria-hidden="true" tabindex="-1"></a>rules_filtered.head(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="104">
+<div class="cell-output cell-output-display" data-execution_count="213">
 <div>
 
 
@@ -3424,9 +3420,9 @@ Name: product_id, dtype: object</code></pre>
 </div>
 <p><br></p>
 </section>
-<section id="função-de-recomendação-association-rules-por-categoria" class="level5">
-<h5 data-anchor-id="função-de-recomendação-association-rules-por-categoria">Função de recomendação — Association Rules por categoria:</h5>
-<div id="e3e56ca3" class="cell" data-execution_count="49">
+<section id="recommendation-function-association-rules-by-category" class="level5">
+<h5 data-anchor-id="recommendation-function-association-rules-by-category">Recommendation function — Association Rules by category:</h5>
+<div id="e2e9d688" class="cell" data-execution_count="49">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb68"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> recommend_association_by_category(user_id, k<span class="op">=</span><span class="dv">5</span>):</span>
@@ -3471,9 +3467,9 @@ Name: product_id, dtype: object</code></pre>
 </div>
 <p><br></p>
 </section>
-<section id="teste" class="level5">
-<h5 data-anchor-id="teste">Teste:</h5>
-<div id="34f4d135" class="cell" data-execution_count="50">
+<section id="testing" class="level5">
+<h5 data-anchor-id="testing">Testing:</h5>
+<div id="a627d0dc" class="cell" data-execution_count="50">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb69"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>user_items <span class="op">=</span> interactions.loc[</span>
@@ -3482,45 +3478,47 @@ Name: product_id, dtype: object</code></pre>
 <span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb69-5"><a href="#cb69-5" aria-hidden="true" tabindex="-1"></a>user_items</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="106">
+<div class="cell-output cell-output-display" data-execution_count="215">
 <pre><code>array([207, 228,  70,   1, 287,  32, 158, 144, 206, 224, 180,  12, 165,
         56,  74, 202,  65])</code></pre>
 </div>
 </div>
 <p><br></p>
-<p>As regras de associação foram aplicadas como um sinal complementar de cross-sell, sendo utilizadas apenas quando o histórico do usuário intersecta os antecedentes das regras extraídas.</p>
+<p>Association rules were applied as a complementary cross-sell signal and are only used when the user’s purchase history intersects with the antecedents of the extracted rules.</p>
 </section>
 </section>
-<section id="final-hybrid-recommender" class="level1">
-<h1>Final Hybrid Recommender</h1>
-<p>O modelo final combina:</p>
+</section>
+<section id="final-model" class="level1">
+<h1>Final Model</h1>
+<p>The final model combines:</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
-<th>Componente</th>
-<th>Papel no sistema</th>
+<th>Component</th>
+<th>Role in the system</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td>Item-Item CF</td>
-<td>Personalização baseada em comportamento</td>
+<td>Behavior-based personalization</td>
 </tr>
 <tr class="even">
 <td>Content-Based</td>
-<td>Similaridade semântica / cold start</td>
+<td>Semantic similarity / cold start</td>
 </tr>
 <tr class="odd">
 <td>Association Rules</td>
-<td>Cross-sell contextual (checkout)</td>
+<td>Contextual cross-sell (checkout)</td>
 </tr>
 </tbody>
 </table>
-<p><br> O híbrido não substitui, ele combina sinais.</p>
-<p>Obs: Cada modelo gera scores em escalas diferentes. Precisamos normalizar antes de somar.</p>
-<section id="função-utilitária-de-normalização-1" class="level5">
-<h5 data-anchor-id="função-utilitária-de-normalização-1">Função utilitária de normalização:</h5>
-<div id="7a493429" class="cell" data-execution_count="51">
+<p><br></p>
+<p>The hybrid model does not replace individual approaches — it combines signals.</p>
+<p><strong>Note:</strong> Each model produces scores on different scales. Therefore, scores must be normalized before aggregation.</p>
+<section id="utility-normalization-function-1" class="level5">
+<h5 data-anchor-id="utility-normalization-function-1">Utility normalization function:</h5>
+<div id="f6dd8a6a" class="cell" data-execution_count="51">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb71"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> min_max_normalize(scores: pd.Series):</span>
@@ -3531,9 +3529,9 @@ Name: product_id, dtype: object</code></pre>
 </div>
 <p><br></p>
 </section>
-<section id="função-de-recomendação-híbrida" class="level5">
-<h5 data-anchor-id="função-de-recomendação-híbrida">Função de recomendação híbrida:</h5>
-<div id="3c5a04fb" class="cell" data-execution_count="52">
+<section id="hybrid-recommendation-function-1" class="level5">
+<h5 data-anchor-id="hybrid-recommendation-function-1">Hybrid recommendation function:</h5>
+<div id="2630d6e3" class="cell" data-execution_count="52">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb72"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> recommend_hybrid(</span>
@@ -3579,15 +3577,15 @@ Name: product_id, dtype: object</code></pre>
 </div>
 <p><br></p>
 </section>
-<section id="teste-do-híbrido" class="level5">
-<h5 data-anchor-id="teste-do-híbrido">Teste do híbrido:</h5>
-<div id="219b62e7" class="cell" data-execution_count="53">
+<section id="hybrid-model-testing" class="level5">
+<h5 data-anchor-id="hybrid-model-testing">Hybrid model testing:</h5>
+<div id="12e7e932" class="cell" data-execution_count="53">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb73"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>test_user <span class="op">=</span> interactions[<span class="st">'customer_id'</span>].iloc[<span class="dv">0</span>]</span>
 <span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a>recommend_hybrid(test_user, k<span class="op">=</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="109">
+<div class="cell-output cell-output-display" data-execution_count="218">
 <pre><code>product_id
 226    0.699470
 48     0.566488
@@ -3604,9 +3602,9 @@ dtype: float64</code></pre>
 </div>
 <p><br></p>
 </section>
-<section id="enriquecer-com-metadata" class="level5">
-<h5 data-anchor-id="enriquecer-com-metadata">Enriquecer com metadata:</h5>
-<div id="7feb3287" class="cell" data-execution_count="54">
+<section id="enrich-recommendations-with-metadata" class="level5">
+<h5 data-anchor-id="enrich-recommendations-with-metadata">Enrich recommendations with metadata:</h5>
+<div id="52fd3d9c" class="cell" data-execution_count="54">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb75"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> recommend_hybrid_with_metadata(user_id, k<span class="op">=</span><span class="dv">10</span>):</span>
@@ -3622,7 +3620,7 @@ dtype: float64</code></pre>
 <span id="cb75-11"><a href="#cb75-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb75-12"><a href="#cb75-12" aria-hidden="true" tabindex="-1"></a>recommend_hybrid_with_metadata(test_user, k<span class="op">=</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="110">
+<div class="cell-output cell-output-display" data-execution_count="219">
 <div>
 
 
@@ -3758,37 +3756,37 @@ dtype: float64</code></pre>
 </div>
 </div>
 <p><br></p>
-<p>O sistema final combina três sinais complementares: Item-Item Collaborative Filtering, Content-Based Filtering e Association Rules. Cada componente atua em um aspecto distinto do problema, garantindo personalização, cobertura e capacidade de cross-sell. As pontuações são normalizadas e combinadas por meio de uma soma ponderada, permitindo ajuste fino do impacto de cada sinal.</p>
-<p>O modelo analisa o histórico do cliente, a similaridade entre produtos e padrões recorrentes de compra conjunta para gerar recomendações personalizadas e contextualizadas, equilibrando relevância individual e oportunidades de aumento de ticket médio. Ou seja, em cenários onde não há correspondência, o sistema não força recomendações artificiais, preservando a qualidade do ranking.</p>
+<p>The final system combines three complementary signals: Item-Item Collaborative Filtering, Content-Based Filtering, and Association Rules. Each component addresses a distinct aspect of the problem, ensuring personalization, coverage, and cross-sell capability. Scores are normalized and combined through a weighted sum, allowing fine-grained control over the impact of each signal.</p>
+<p>The model analyzes customer history, product similarity, and recurring co-purchase patterns to generate personalized and contextualized recommendations, balancing individual relevance with opportunities to increase average order value. In scenarios where no strong signal exists, the system avoids forcing artificial recommendations, preserving ranking quality.</p>
 </section>
 </section>
-<section id="conclusão" class="level1">
-<h1>Conclusão</h1>
-<p>Foi desenvolvido um sistema híbrido de recomendação que combina sinais comportamentais (Item-Item Collaborative Filtering), semânticos (Content-Based Filtering) e contextuais (Association Rules). A arquitetura garante cobertura, personalização e capacidade de cross-sell, respeitando limitações estatísticas dos dados e evitando recomendações artificiais. O modelo reflete práticas reais de produção e foi avaliado de forma incremental, demonstrando ganhos qualitativos em relevância e interpretabilidade.</p>
-<section id="cloud-deployment-aws" class="level2">
-<h2 data-anchor-id="cloud-deployment-aws">Cloud Deployment (AWS)</h2>
-<p>Esta etapa final transforma o modelo desenvolvido em um serviço utilizável em produção, seguindo treinamento offline, artefatos versionados, e inferência online via arquitetura serverless.</p>
-<p>O deploy foi organizado em duas grandes fases:</p>
+<section id="model-conclusion" class="level1">
+<h1>Model Conclusion</h1>
+<p>A hybrid recommender system was developed by combining behavioral (Item-Item Collaborative Filtering), semantic (Content-Based Filtering), and contextual (Association Rules) signals. The architecture ensures coverage, personalization, and cross-sell capability while respecting statistical data limitations and avoiding artificial recommendations. The model reflects real-world production practices and was incrementally evaluated, demonstrating qualitative gains in relevance and interpretability.</p>
 </section>
-<section id="offline-artifacts-preparação-do-modelo-para-produção" class="level2">
-<h2 data-anchor-id="offline-artifacts-preparação-do-modelo-para-produção">1️. Offline Artifacts — Preparação do Modelo para Produção</h2>
-<p>Antes de qualquer interação com a infraestrutura cloud, o sistema de recomendação é congelado em artefatos estáticos, treinados e validados offline.</p>
-<p>Essa abordagem segue um padrão amplamente utilizado em sistemas reais de recomendação:</p>
+<section id="cloud-deployment-aws" class="level1">
+<h1>Cloud Deployment (AWS)</h1>
+<p>This final stage transforms the developed model into a production-ready service, following offline training, versioned artifacts, and online inference via a serverless architecture.</p>
+<p>The deployment was organized into two main phases:</p>
+<section id="offline-artifacts-model-preparation-for-production" class="level2">
+<h2 data-anchor-id="offline-artifacts-model-preparation-for-production">1️. Offline Artifacts — Model Preparation for Production</h2>
+<p>Before any interaction with cloud infrastructure, the recommender system is frozen into static artifacts, trained and validated offline.</p>
+<p>This approach follows a pattern widely adopted in real-world recommender systems:</p>
 <blockquote class="blockquote">
-<p><em>O treinamento ocorre offline. Em produção, a API apenas carrega artefatos e executa ranking.</em></p>
+<p><em>Training happens offline. In production, the API only loads artifacts and executes ranking.</em></p>
 </blockquote>
-<section id="o-que-é-salvo-como-artefato" class="level3">
-<h3 data-anchor-id="o-que-é-salvo-como-artefato">O que é salvo como artefato</h3>
-<p>OS arquivos que representam o estado final do modelo, garantindo:</p>
+<section id="what-is-saved-as-artifacts" class="level3">
+<h3 data-anchor-id="what-is-saved-as-artifacts">What is saved as artifacts</h3>
+<p>Files that represent the final state of the model, ensuring:</p>
 <ul>
-<li>Reprodutibilidade</li>
-<li>Baixo custo computacional em produção</li>
-<li>Baixa latência de resposta</li>
-<li>Separação entre treino e inferência</li>
+<li>Reproducibility</li>
+<li>Low computational cost in production</li>
+<li>Low response latency</li>
+<li>Clear separation between training and inference</li>
 </ul>
-<section id="salvar-artefatos-finais-do-modelo-híbrido-construído" class="level5">
-<h5 data-anchor-id="salvar-artefatos-finais-do-modelo-híbrido-construído">Salvar artefatos finais do modelo híbrido construído:</h5>
-<div id="7396a775" class="cell" data-execution_count="55">
+<section id="save-final-artifacts-of-the-built-hybrid-model" class="level5">
+<h5 data-anchor-id="save-final-artifacts-of-the-built-hybrid-model">Save final artifacts of the built hybrid model:</h5>
+<div id="f015ae3f" class="cell" data-execution_count="55">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb76"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="co"># -------------------------</span></span>
@@ -3836,88 +3834,97 @@ dtype: float64</code></pre>
 </section>
 </section>
 </section>
-<section id="deploy-na-aws" class="level2">
-<h2 data-anchor-id="deploy-na-aws">2. Deploy na AWS</h2>
-<p>Com os artefatos prontos, o sistema é implantado em uma arquitetura serverless na AWS, composta por três serviços principais:</p>
+<section id="aws-deployment" class="level2">
+<h2 data-anchor-id="aws-deployment">2. AWS Deployment</h2>
+<p>With the artifacts ready, the system is deployed using a serverless architecture on AWS, composed of three main services:</p>
 <ul>
-<li><strong>Amazon S3</strong> → armazenamento e versionamento dos artefatos</li>
-<li><strong>AWS Lambda</strong> → execução da inferência sob demanda</li>
-<li><strong>Amazon API Gateway</strong> → exposição do modelo via endpoint REST</li>
+<li><strong>Amazon S3</strong> → artifact storage and versioning</li>
+<li><strong>AWS Lambda</strong> → on-demand inference execution</li>
+<li><strong>Amazon API Gateway</strong> → model exposure via a REST endpoint</li>
 </ul>
 <hr>
-<section id="amazon-s3-armazenamento-dos-artefatos-do-modelo" class="level3">
-<h3 data-anchor-id="amazon-s3-armazenamento-dos-artefatos-do-modelo">Amazon S3 — Armazenamento dos Artefatos do Modelo</h3>
-<p>Na primeira etapa da implantação cloud, é criado um bucket S3, responsável por armazenar todos os artefatos do modelo.</p>
-<p>O S3 atua como a <strong>camada de armazenamento de modelos</strong>, desacoplada da lógica de inferência.</p>
-<section id="criação-do-bucket-e-upload-dos-artefatos-no-s3" class="level5">
-<h5 data-anchor-id="criação-do-bucket-e-upload-dos-artefatos-no-s3">Criação do bucket e upload dos artefatos no S3:</h5>
+<section id="amazon-s3-model-artifact-storage" class="level3">
+<h3 data-anchor-id="amazon-s3-model-artifact-storage">Amazon S3 — Model Artifact Storage</h3>
+<p>In the first cloud deployment step, an S3 bucket is created to store all model artifacts.</p>
+<p>S3 acts as the model storage layer, decoupled from inference logic</p>
+<section id="s3-bucket-creation-and-artifact-upload" class="level5">
+<h5 data-anchor-id="s3-bucket-creation-and-artifact-upload">S3 bucket creation and artifact upload:</h5>
 <div class="quarto-video"><video id="video_shortcode_videojs_video3" class="video-js vjs-default-skin vjs-fluid" controls="" preload="auto" data-setup="{}" title=""><source src="AWS1-S3-bucket-creation.mp4"></video></div>
 <hr>
 </section>
 </section>
-<section id="aws-lambda-servindo-o-recomendador" class="level3">
-<h3 data-anchor-id="aws-lambda-servindo-o-recomendador">AWS Lambda — Servindo o Recomendador</h3>
-<p>Com os artefatos disponíveis no S3, foi criada uma função AWS Lambda responsável por:</p>
+<section id="aws-lambda-serving-the-recommender" class="level3">
+<h3 data-anchor-id="aws-lambda-serving-the-recommender">AWS Lambda — Serving the Recommender</h3>
+<p>With the artifacts available in S3, an AWS Lambda function is created with the responsibility to:</p>
 <ul>
-<li>Carregar os artefatos na inicialização</li>
-<li>Receber requisições com <code>user_id</code></li>
-<li>Executar o ranking híbrido (CF + CB + Association Rules)</li>
-<li>Retornar recomendações em formato JSON</li>
+<li>Load artifacts during initialization</li>
+<li>Receive requests containing user_id</li>
+<li>Execute hybrid ranking (CF + CB + Association Rules)</li>
+<li>Return recommendations in JSON format</li>
 </ul>
-<p>Essa separação garante que a Lambda execute somente inferência, mantendo custo e complexidade controlados.</p>
-<section id="criação-e-configuração-da-função-lambda" class="level5">
-<h5 data-anchor-id="criação-e-configuração-da-função-lambda">Criação e configuração da função Lambda:</h5>
+<p>This separation ensures that Lambda performs inference only, keeping cost and operational complexity under control.</p>
+<section id="lambda-function-creation-and-configuration" class="level5">
+<h5 data-anchor-id="lambda-function-creation-and-configuration">Lambda function creation and configuration:</h5>
 <div class="quarto-video"><video id="video_shortcode_videojs_video4" class="video-js vjs-default-skin vjs-fluid" controls="" preload="auto" data-setup="{}" title=""><source src="AWS2_FuncaoLambda.mp4"></video></div>
 </section>
-<section id="configuração-da-layer" class="level5">
-<h5 data-anchor-id="configuração-da-layer">Configuração da Layer:</h5>
+<section id="layer-configuration" class="level5">
+<h5 data-anchor-id="layer-configuration">Layer configuration:</h5>
 <div class="quarto-video"><video id="video_shortcode_videojs_video5" class="video-js vjs-default-skin vjs-fluid" controls="" preload="auto" data-setup="{}" title=""><source src="AWS3_Layer.mp4"></video></div>
 </section>
-<section id="teste-da-função" class="level4">
-<h4 data-anchor-id="teste-da-função">Teste da Função:</h4>
+<section id="function-testing" class="level4">
+<h4 data-anchor-id="function-testing">Function testing:</h4>
 <div class="quarto-video"><video id="video_shortcode_videojs_video6" class="video-js vjs-default-skin vjs-fluid" controls="" preload="auto" data-setup="{}" title=""><source src="AWS4-TesteFuncao.mp4"></video></div>
 </section>
 </section>
-<section id="api-gateway-exposição-do-modelo-via-api-rest" class="level3">
-<h3 data-anchor-id="api-gateway-exposição-do-modelo-via-api-rest">API Gateway — Exposição do Modelo via API REST</h3>
-<p>Para tornar o sistema acessível externamente, a função Lambda é integrada ao Amazon API Gateway.</p>
-<p>O resultado é um endpoint REST capaz de retornar recomendações personalizadas sob demanda, pronto para consumo por:</p>
+<section id="api-gateway-rest-api-exposure" class="level3">
+<h3 data-anchor-id="api-gateway-rest-api-exposure">API Gateway — REST API Exposure</h3>
+<p>To make the system externally accessible, the Lambda function is integrated with Amazon API Gateway.</p>
+<p>The result is a REST endpoint capable of returning personalized recommendations on demand, ready to be consumed by:</p>
 <ul>
-<li>Frontend web</li>
-<li>Aplicações mobile</li>
-<li>Sistemas internos de e-commerce</li>
+<li>Web frontends</li>
+<li>Mobile applications</li>
+<li>Internal e-commerce systems</li>
 </ul>
-<section id="criação-da-api-no-api-gateway-e-integração-com-lambda" class="level5">
-<h5 data-anchor-id="criação-da-api-no-api-gateway-e-integração-com-lambda">Criação da API no API Gateway e integração com Lambda:</h5>
+<section id="api-gateway-creation-and-lambda-integration" class="level5">
+<h5 data-anchor-id="api-gateway-creation-and-lambda-integration">API Gateway creation and Lambda integration:</h5>
 <div class="quarto-video"><video id="video_shortcode_videojs_video7" class="video-js vjs-default-skin vjs-fluid" controls="" preload="auto" data-setup="{}" title=""><source src="AWS5-API-Gateway.mp4"></video></div>
 <hr>
 </section>
 </section>
-<section id="deploy-final-e-demonstração-end-to-end" class="level3">
-<h3 data-anchor-id="deploy-final-e-demonstração-end-to-end">Deploy Final e Demonstração End-to-End:</h3>
-<p>Após a configuração do S3, Lambda e API Gateway, o sistema é implantado e testado de ponta a ponta.</p>
-<section id="criação-do-bucket-para-ui-demo" class="level5">
-<h5 data-anchor-id="criação-do-bucket-para-ui-demo">Criação do bucket para UI demo:</h5>
+<section id="final-deployment-and-end-to-end-demonstration" class="level3">
+<h3 data-anchor-id="final-deployment-and-end-to-end-demonstration">Final Deployment and End-to-End Demonstration:</h3>
+<p>After configuring S3, Lambda, and API Gateway, the system is deployed and tested end-to-end.</p>
+<section id="ui-demo-bucket-creation" class="level5">
+<h5 data-anchor-id="ui-demo-bucket-creation">UI demo bucket creation:</h5>
 <div class="quarto-video"><video id="video_shortcode_videojs_video8" class="video-js vjs-default-skin vjs-fluid" controls="" preload="auto" data-setup="{}" title=""><source src="AWS6-BucketUI-DEMO.mp4"></video></div>
 </section>
-<section id="demonstração-deploy-final-e-chamada-da-api-de-recomendação" class="level5">
-<h5 data-anchor-id="demonstração-deploy-final-e-chamada-da-api-de-recomendação">Demonstração — Deploy final e chamada da API de recomendação:</h5>
+<section id="demonstration-final-deployment-and-recommendation-api-call" class="level5">
+<h5 data-anchor-id="demonstration-final-deployment-and-recommendation-api-call">Demonstration — final deployment and recommendation API call:</h5>
 <div class="quarto-video"><video id="video_shortcode_videojs_video9" class="video-js vjs-default-skin vjs-fluid" controls="" preload="auto" data-setup="{}" title=""><source src="AWS7-FINAL-DMEO.mp4"></video></div>
 <hr>
-<p>Essa abordagem permite evoluir o modelo (re-treino, novos pesos, novos sinais) sem impactar a API, bastando substituir os artefatos no S3.</p>
+<p>This approach allows the model to evolve (retraining, new weights, new signals) without impacting the API, simply by replacing artifacts stored in S3.</p>
 <hr>
 </section>
 </section>
 </section>
 </section>
-<section id="conclusion" class="level1">
-<h1>Conclusion</h1>
-<p>Este projeto demonstra a construção de um sistema de recomendação híbrido, interpretável e orientado à produção, combinando rigor técnico com impacto direto no negócio.</p>
-<p>A abordagem híbrida permite equilibrar personalização, cobertura e oportunidades de cross-sell, refletindo práticas reais adotadas em plataformas de e-commerce em escala.</p>
+<section id="project-conclusion" class="level1">
+<h1>Project Conclusion</h1>
+<p>This project demonstrates the construction of a hybrid recommender system that is interpretable and production-oriented, combining technical rigor with direct business impact.</p>
+<p>The hybrid approach balances personalization, coverage, and cross-sell opportunities, reflecting real-world practices adopted by large-scale e-commerce platforms.</p>
 <hr>
+<section id="references" class="level2">
+<h2 data-anchor-id="references">References</h2>
+<p>This project was also inspired by the following published articles and resources on recommender systems:</p>
+<p><strong>Design and Implementation of a Product Recommendation System with Association and Clustering Algorithms</strong> <a href="https://medium.com/data-science/mastering-customer-segmentation-using-credit-card-transaction-data-dc39a8465766">https://medium.com/data-science/mastering-customer-segmentation-using-credit-card-transaction-data-dc39a8465766</a></p>
+<p><strong>Mastering Customer Segmentation using Credit Card Transaction Data</strong> <a href="https://www.sciencedirect.com/science/article/pii/S1877050923003289">https://www.sciencedirect.com/science/article/pii/S1877050923003289</a></p>
+<p><strong>E-Commerce Product Recommendation System based on ML Algorithms</strong> <a href="https://arxiv.org/abs/2407.21026">https://arxiv.org/abs/2407.21026</a></p>
+<p><strong>Mastering E-commerce Product Recommendations in Python</strong> <a href="https://medium.com/datafabrica/mastering-e-commerce-product-recommendations-in-python-7c12a4bf0c2c">https://medium.com/datafabrica/mastering-e-commerce-product-recommendations-in-python-7c12a4bf0c2c</a></p>
+</section>
 <section id="github-repository" class="level2">
 <h2 data-anchor-id="github-repository">GitHub Repository</h2>
-<p>[Link para o repositório]</p>
+<p>Access all code, datasets, notebooks, and files for this project:</p>
+<p><a href="https://github.com/FerreiraGabrielw/ds-recomendation-system-deploy" target="_blank" rel="noopener noreferrer">Click here to access</a></p>
 <hr>
 </section>
 </section>

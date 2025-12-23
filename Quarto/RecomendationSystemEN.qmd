@@ -17,79 +17,79 @@ jupyter: python3
 
 # Introduction
 
-Este projeto apresenta o desenvolvimento de um sistema de recomendação híbrido para e-commerce, cobrindo todo o ciclo de vida de uma solução de Machine Learning aplicada em contexto real de negócio.
+This project presents the development of a hybrid recommender system for e-commerce, covering the entire lifecycle of a Machine Learning solution applied in a real-world business context.
 
-O objetivo central é aumentar conversão e ticket médio por meio de recomendações personalizadas, utilizando múltiplos sinais complementares:
+The main objective is to increase conversion rate and average order value through personalized recommendations, leveraging multiple complementary signals:
 
-* comportamento histórico de compra (Collaborative Filtering),
-* similaridade semântica entre produtos (Content-Based),
-* padrões explícitos de coocorrência em cestas de compra (Association Rules).
+* historical purchase behavior (Collaborative Filtering),
+* semantic similarity between products (Content-Based),
+* explicit co-occurrence patterns in shopping baskets (Association Rules).
 
 ---
 
 # Project Structure
 
-O pipeline segue uma arquitetura end-to-end típica de sistemas de recomendação modernos:
+The pipeline follows a typical end-to-end architecture for modern recommender systems:
 
-1. Definição do problema de negócio
-2. Criação do banco e ingestão dos dados
-3. Exploração e validação em SQL
-4. Limpeza e Pré Processamento
-5. Feature Engineering e Modelagem (CF, CB, AR)
-6. Construção do modelo híbrido
-7. Avaliação e Interpretação
-8. Preparação de artefatos
-9. Deploy (AWS S3, Lambda, API Gateway)
+1. Business problem definition
+2. Database creation and data ingestion
+3. SQL-based exploration and validation
+4. Data cleaning and preprocessing
+5. Feature engineering and modeling (CF, CB, AR)
+6. Hybrid model construction
+7. Evaluation and interpretation
+8. Artifact preparation
+9. Deployment (AWS S3, Lambda, API Gateway)
 
-Essa estrutura garante separação entre dados, modelos e inferência, facilitando manutenção e escalabilidade.
+This structure ensures a clear separation between data, models, and inference, facilitating maintenance and scalability.
 
 ---
 
-# Objetivos de Negócio
+# Business Objectives
 
-Aumentar a relevância das recomendações para impulsionar:
+Increase recommendation relevance to drive:
 
 * AOV (Average Order Value),
-* taxa de conversão,
-* CTR de recomendações,
-* receita incremental.
+* conversion rate,
+* recommendation CTR,
+* incremental revenue.
 
 ---
 
-# Data Sources & Modeling Assumptions
+# Data Sources
 
-Os dados utilizados representam um ambiente transacional típico de e-commerce, com tabelas normalizadas que refletem práticas de armazenamento e análise analítica.
+The data represents a typical transactional e-commerce environment, with normalized tables reflecting standard practices for analytical storage and processing.
 
-O dataset inclui:
+The dataset includes:
 
-* histórico de transações em nível de item,
-* catálogo de produtos com atributos descritivos,
-* eventos de visualização de produtos,
-* informações demográficas básicas de clientes,
-* registros temporais para análise comportamental.
+* item-level transaction history,
+* product catalog with descriptive attributes,
+* product view events,
+* basic customer demographic information,
+* temporal records for behavioral analysis.
 
 ---
 
 ## Database Setup & SQL Exploration
 
-Antes de qualquer etapa de modelagem em Python, os dados passam por um processo de estruturação, ingestão e validação em banco de dados relacional, típicos de um ambiente real de analytics em e-commerce.
+Before any modeling step in Python, the data undergoes a structuring, ingestion, and validation process in a relational database, typical of real-world analytics environments in e-commerce.
 
 ### Entity-Relationship (ER) Diagram
 
-O diagrama abaixo ilustra o modelo relacional do banco, destacando entidades centrais como clientes, produtos, transações e visualizações, bem como seus relacionamentos.
+The diagram below illustrates the relational database model, highlighting core entities such as customers, products, transactions, and views, as well as their relationships.
 
 
-**Diagrama ER do banco de dados**
+**Database ER Diagram**
 
 ![](ER-diagram.png)
 
 
 ### Data Ingestion & Validation in MySQL
 
-Após a definição do schema, as tabelas são criadas e os dados são carregados diretamente no banco utilizando linha de comando e MySQL Workbench, reproduzindo práticas comuns de ingestão em ambientes analíticos.
+After defining the schema, the tables are created and data is loaded directly into the database using command-line tools and MySQL Workbench, reproducing common ingestion practices in analytical environments.
 
 
-##### Criação do banco de dados e das tableas:
+##### Database and table creation:
 <details>
 <summary><strong>Show SQL Schema</strong></summary>
 
@@ -200,11 +200,11 @@ DESCRIBE product_views;
 
 ---
 
-##### Carregando dados no banco via linha de comando:
+##### Loading data into the database via command line:
 
 {{< video SQL-DB-CREATION.mp4 >}}
 
-##### Execução de queries exploratórias iniciais:
+##### Execution of initial exploratory queries:
 
 {{< video SQL-QUERIES.mp4 >}}
 
@@ -248,12 +248,12 @@ np.random.seed(SEED)
 random.seed(SEED)
 ```
 
-##### Função Python para rodar SQL puro no notebook:
+##### Python Function to run pure SQL on notebook:
 ```{python}
 def run_sql_pure(sql: str, params: dict = None):
     """
     Executa SQL puro (string) e retorna um pandas.DataFrame.
-    Exibe a query (útil para portfólio) e retorna o DataFrame.
+    Exibe a query e retorna o DataFrame.
     """
     print("---- Executing SQL ----")
     print(sql.strip())
@@ -271,7 +271,7 @@ plt.rcParams['grid.linestyle'] = '--'
 
 O primeiro passo da EDA é validar a integridade estrutural das tabelas.
 
-##### Contagens por tabela:
+##### Record counts per table:
 ```{python}
 sql = """
 SELECT 
@@ -286,7 +286,7 @@ names = list(vals.keys()); counts = list(vals.values())
 ```
 <br>
 
-##### Valores ausentes por tabela
+##### Missing values per table:
 ```{python}
 # lista de tabelas a verificar
 tables = ['customers', 'products', 'transactions', 'product_views']
@@ -332,7 +332,7 @@ display(df_missing_tables)
 ```
 <br>
 
-##### Duplicados e chaves (checar chave primária única)
+##### Duplicates and keys (primary key uniqueness check):
 ```{python}
 sql = """
 SELECT 
@@ -346,14 +346,14 @@ print(df.to_string(index=False))
 ```
 <br>
 
-Os resultados confirmam que os dados estão completos e consistentes, permitindo avançar para as análises sem necessidade de limpeza estrutural.
+The results confirm that the data is complete and consistent, allowing the analysis to proceed without the need for structural data cleaning.
 
 ---
 
-### Visualizações e Insights
-Nesta etapa, exploramos o comportamento do negócio por meio de SQL.
+### Visualizations and Insights
+At this stage, we explore business behavior using SQL-based analyses.
 
-##### Distribuição de preços - produtos
+##### Product price distribution:
 ```{python}
 sql = "SELECT price FROM products WHERE price IS NOT NULL;"
 df_price = run_sql_pure(sql)
@@ -366,7 +366,7 @@ plt.show()
 ```
 <br>
 
-##### Top Produtos por quantidade e por receita
+##### Top products by quantity sold and by revenue:
 ```{python}
 sql = """
 SELECT p.product_id, p.name,
@@ -394,7 +394,7 @@ plt.show()
 ```
 <br>
 
-##### Vendas por mês
+##### Monthly sales:
 ```{python}
 sql = """
 SELECT DATE_FORMAT(transaction_date, '%Y-%m') AS ym,
@@ -415,7 +415,7 @@ plt.show()
 ```
 <br>
 
-##### RFM - tabela e histogramas 
+##### RFM — table and histograms:
 ```{python}
 sql = """
 WITH last AS (
@@ -445,7 +445,7 @@ plt.show()
 ```
 <br>
 
-##### Distribuição de compras por cliente 
+##### Distribution of purchases per customer:
 ```{python}
 sql = """
 SELECT customer_id, COUNT(*) AS purchases
@@ -461,7 +461,7 @@ plt.show()
 ```
 <br>
 
-##### Conversão views -> buys por produto
+##### View-to-purchase conversion by product
 ```{python}
 sql = """
 SELECT p.product_id, p.name,
@@ -489,7 +489,7 @@ plt.show()
 ```
 <br>
 
-##### Vendas por categoria 
+##### Sales by category:
 ```{python}
 sql = """
 SELECT p.category, COUNT(*) AS n_items, SUM(t.total_value) AS revenue
@@ -507,7 +507,7 @@ plt.show()
 ```
 <br>
 
-##### AOV (Average Order Value)
+##### AOV (Average Order Value):
 ```{python}
 sql = """
 SELECT customer_id, DATE(transaction_date) AS order_date, SUM(total_value) AS order_value
@@ -525,7 +525,7 @@ plt.show()
 ```
 <br>
 
-##### Matriz cliente x produto - densidade (SPARSITY)
+##### Customer × product matrix — density (SPARSITY)
 ```{python}
 sql = """
 SELECT (SELECT COUNT(DISTINCT customer_id) FROM transactions) AS n_customers_active,
@@ -546,35 +546,34 @@ print(f"Sparsity (aprox): {sparsity:.6f}")
 
 ## Key Insights from EDA
 
-A análise revela padrões importantes:
+The analysis reveals important patterns:
 
-* alta concentração de vendas em poucas categorias,
-* clientes com frequência relativamente elevada,
-* sparsity alta (>90%) na matriz de interações.
+* high concentration of sales in a few categories,
+* customers with relatively high purchase frequency,
+* high sparsity (>90%) in the interaction matrix.
 
-Esses achados justificam a escolha por:
+These findings justify the choice of:
 
-* modelos item-based em vez de user-based,
-* abordagem híbrida para mitigar limitações individuais.
+* item-based models instead of user-based,
+* a hybrid approach to mitigate individual model limitations.
 
 ---
 
-# Criação dos Algoritimos
+# Algorithm Development
 
-Com base na EDA, foi definida uma arquitetura híbrida onde cada componente resolve um problema específico:
+Based on the EDA, a hybrid architecture was defined where each component addresses a specific problem:
 
-| Componente        | Papel                                   |
-| ----------------- | --------------------------------------- |
-| Item-Item CF      | Personalização baseada em comportamento |
-| Content-Based     | Similaridade semântica e cold start     |
-| Association Rules | Cross-sell contextual                   |
+| Component         | Role                               |
+| ----------------- | ---------------------------------- |
+| Item-Item CF      | Behavior-based personalization     |
+| Content-Based     | Semantic similarity and cold start |
+| Association Rules | Contextual cross-sell              |
 
-O objetivo não é substituir modelos, mas **combinar sinais complementares**.
-
+The goal is not to replace models, but to **combine complementary signals**.
 
 ## Item-Item Collaborative Filtering
 
-Nesta etapa, construímos um sistema de recomendação baseado exclusivamente em padrões históricos de compra. O Item-Item CF recomenda itens semelhantes aos que o usuário já comprou, medindo similaridade entre itens a partir do comportamento dos usuários (quem comprou A também comprou B).
+At this stage, we build a recommender system based exclusively on historical purchase patterns. Item-Item CF recommends items similar to those already purchased by the user, measuring similarity between items based on user behavior (users who bought A also bought B).
 
 ```{python}
 #| include: false
@@ -585,7 +584,7 @@ transactions = pd.read_csv("transactions.csv")
 views = pd.read_csv("product_views.csv")
 ```
 
-##### Criar dataset de interações (cliente x produto):
+##### Create the interaction dataset (customer × product):
 ```{python}
 interactions = (
     transactions[['customer_id', 'product_id']]
@@ -596,7 +595,7 @@ interactions.head()
 ```
 <br>
 
-##### Construir a matriz Item x Cliente:
+##### Build the Item × Customer matrix:
 ```{python}
 item_user_matrix = interactions.pivot_table(
     index='product_id',
@@ -609,7 +608,7 @@ item_user_matrix.shape
 ```
 <br>
 
-##### Checar Sparsity:
+##### Check sparsity:
 ```{python}
 density = item_user_matrix.values.sum() / item_user_matrix.size
 sparsity = 1 - density
@@ -618,7 +617,7 @@ print(f"Sparsity: {sparsity:.4f}")
 ```
 <br>
 
-##### Calcular Similaridade Item-Item (Cosine):
+##### Compute Item-Item similarity (Cosine):
 ```{python}
 item_similarity = cosine_similarity(item_user_matrix)
 
@@ -632,7 +631,7 @@ item_sim_df.iloc[:5, :5]
 ```
 <br>
 
-##### Co-ocorrência
+##### Co-occurrence
 ```{python}
 cooccurrence = item_user_matrix @ item_user_matrix.T
 ```
@@ -645,7 +644,7 @@ shrunk_similarity = item_sim_df * (cooccurrence / (cooccurrence + LAMBDA))
 ```
 <br>
 
-##### Função de Recomendação (Item-Item CF)
+##### Recommendation function (Item-Item CF)
 ```{python}
 # Função de Recomendação (Item-Item CF)
 def recommend_item_item(user_id, k=10):
@@ -667,14 +666,14 @@ def recommend_item_item(user_id, k=10):
 ```
 <br>
 
-##### Teste do modelo
+##### Model testing
 ```{python}
 test_user = interactions['customer_id'].iloc[0]
 recommend_item_item(test_user, k=5)
 ```
 <br>
 
-##### Enriquecer com Informações do Produto
+##### Enrich recommendations with product information
 ```{python}
 def recommend_with_metadata(user_id, k=10):
     recs = recommend_item_item(user_id, k)
@@ -690,25 +689,25 @@ recommend_with_metadata(test_user, k=5)
 ```
 <br>
 
-O modelo Item-Item Collaborative Filtering identifica produtos semelhantes a partir de padrões de compra reais, permitindo recomendações personalizadas e escaláveis. A aplicação de shrinkage reduz ruído causado por co-ocorrências raras, tornando o sistema mais confiável em cenários de alta esparsidade, típicos de e-commerce.
+The Item-Item Collaborative Filtering model identifies similar products based on real purchase patterns, enabling scalable and personalized recommendations. The application of shrinkage reduces noise caused by rare co-occurrences, making the system more reliable in high-sparsity scenarios typical of e-commerce.
 
-O score gerado pelo Item-Item CF representa uma medida relativa de afinidade entre produtos, baseada exclusivamente em padrões históricos de compra. Ele é utilizado para ranquear itens recomendados e não deve ser interpretado como probabilidade absoluta.
+The score generated by the Item-Item CF represents a relative affinity measure between products, based exclusively on historical purchase patterns. It is used to rank recommended items and should not be interpreted as an absolute probability.
 
 ---
 
-# Content-Based Filtering (TF-IDF)
+## Content-Based Filtering (TF-IDF)
 
-Apesar da força do sinal comportamental, o CF apresenta limitações:
+Despite the strength of behavioral signals, CF presents limitations:
 
-| Limitação                | Impacto                          |
-| ------------------------ | -------------------------------- |
-| Cold start de produto    | Produto novo nunca é recomendado |
-| Dependência do histórico | Pouca explicação semântica       |
-| Sparsity alta            | Alguns itens quase não aparecem  |
+| Limitation            | Impact                             |
+| --------------------- | ---------------------------------- |
+| Product cold start    | New products are never recommended |
+| Historical dependency | Limited semantic explanation       |
+| High sparsity         | Some items rarely appear           |
 
-Para mitigar isso, utilizamos Content-Based Filtering, representando produtos por seus atributos textuais.
+To mitigate these issues, Content-Based Filtering is used by representing products through their textual attributes.
 
-##### Preparação do texto dos produtos:
+##### Product text preparation:
 ```{python}
 products_cb = products.copy()
 
@@ -722,7 +721,7 @@ products_cb[['product_id', 'text']].head()
 ```
 <br>
 
-##### Vetorização com TF-IDF:
+##### TF-IDF vectorization:
 ```{python}
 tfidf = TfidfVectorizer(
     ngram_range=(1,2),
@@ -735,13 +734,13 @@ tfidf_matrix.shape
 ```
 <br>
 
-##### Similaridade entre produtos (Cosine):
+##### Product similarity (Cosine):
 ```{python}
 content_similarity = cosine_similarity(tfidf_matrix)
 ```
 <br>
 
-##### Criar matriz Produto x Produto:
+##### Build the Product × Product matrix:
 ```{python}
 content_sim_df = pd.DataFrame(
     content_similarity,
@@ -753,7 +752,7 @@ content_sim_df.iloc[:5, :5]
 ```
 <br>
 
-##### Função de recomendação Content-Based:
+##### Content-Based recommendation function:
 ```{python}
 def recommend_content_based(user_id, k=10):
     bought_items = interactions.loc[
@@ -770,14 +769,14 @@ def recommend_content_based(user_id, k=10):
 ```
 <br>
 
-##### Teste do Content-Based:
+##### Content-Based model testing:
 ```{python}
 test_user = interactions['customer_id'].iloc[0]
 recommend_content_based(test_user, k=5)
 ```
 <br>
 
-##### Enriquecer com informações do produto:
+##### Enrich recommendations with product information:
 ```{python}
 def recommend_cb_with_metadata(user_id, k=10):
     recs = recommend_content_based(user_id, k)
@@ -792,17 +791,17 @@ recommend_cb_with_metadata(test_user, k=5)
 ```
 <br>
 
-O modelo baseado em conteúdo recomenda produtos semanticamente similares, ampliando a cobertura do sistema e permitindo recomendações mesmo para itens com pouco histórico.
+The content-based model recommends semantically similar products, increasing system coverage and enabling recommendations even for items with limited historical data.
 
 ---
 
-# Offline Evaluation — CF vs CB
+## Offline Evaluation — CF vs CB
 
-Antes de combinar os modelos em uma abordagem híbrida, avaliamos separadamente o Item-Item Collaborative Filtering (CF) e o Content-Based Filtering (CB). Essa etapa é necessária para entender a contribuição individual de cada sinal, identificar suas forças e limitações e evitar que um modelo dominante mas ruidoso prejudique o desempenho final.
+Before combining the models into a hybrid approach, Item-Item Collaborative Filtering (CF) and Content-Based Filtering (CB) were evaluated separately. This step is required to understand the individual contribution of each signal, identify their strengths and limitations, and prevent a dominant but noisy model from degrading overall performance.
 
-A avaliação isolada permite comparar desempenho em métricas de ranking, ajustar pesos do modelo híbrido de forma fundamentada e justificar tecnicamente a escolha da arquitetura. Em cenários de e-commerce, essa prática garante que o modelo híbrido gere ganho incremental em relação aos baselines individuais, em vez de apenas misturar sinais sem benefício mensurável.
+Isolated evaluation allows comparison using ranking metrics, informed tuning of hybrid model weights, and technical justification of the chosen architecture. In e-commerce scenarios, this practice ensures that the hybrid model delivers incremental gains over individual baselines rather than merely combining signals without measurable benefit.
 
-##### Cria um split temporal do tipo Leave-Last-Out para avaliação:
+##### Create a Leave-Last-Out temporal split for evaluation:
 ```{python}
 interactions_eval = transactions[['customer_id', 'product_id', 'transaction_date']].copy()
 
@@ -841,7 +840,7 @@ train_df['interaction'] = 1
 ```
 <br>
 
-##### Recriar a matriz Item x User para trein:
+##### Rebuild the Item × User matrix for training:
 ```{python}
 item_user_train = train_df.pivot_table(
     index='product_id',
@@ -852,7 +851,7 @@ item_user_train = train_df.pivot_table(
 ```
 <br>
 
-#### Recalcular CF treino:
+#### Recompute CF on the training set:
 ```{python}
 item_sim_train = cosine_similarity(item_user_train)
 item_sim_train_df = pd.DataFrame(
@@ -863,7 +862,7 @@ item_sim_train_df = pd.DataFrame(
 ```
 <br>
 
-##### Função de recomendação para avaliação (CF)
+##### Recommendation function for evaluation (CF):
 ```{python}
 def recommend_cf_eval(user_id, k=10):
     bought_items = train_df.loc[
@@ -880,7 +879,7 @@ def recommend_cf_eval(user_id, k=10):
 ```
 <br>
 
-##### Função de recomendação para avaliação:
+##### Recommendation function for evaluation (CB):
 ```{python}
 def recommend_cb_eval(user_id, k=10):
     bought_items = train_df.loc[
@@ -897,7 +896,7 @@ def recommend_cb_eval(user_id, k=10):
 ```
 <br>
 
-##### Avaliar Hit Rate @ K:
+##### Evaluate Hit Rate @ K:
 ```{python}
 def hit_rate(model_func, k=10):
     hits = 0
@@ -917,7 +916,7 @@ def hit_rate(model_func, k=10):
 ```
 <br>
 
-##### Resultados — CF vs CB:
+##### Results — CF vs CB:
 ```{python}
 for k in [5, 10]:
     hr_cf = hit_rate(recommend_cf_eval, k)
@@ -930,18 +929,18 @@ for k in [5, 10]:
 ```
 <br>
 
-Antes da construção do modelo híbrido, avaliamos separadamente o desempenho do Item-Item Collaborative Filtering e do Content-Based Filtering utilizando uma estratégia Leave-One-Out e a métrica Hit Rate@K.
+Before building the hybrid model, we evaluated the performance of Item-Item Collaborative Filtering and Content-Based Filtering separately using a Leave-One-Out strategy and the Hit Rate@K metric.
 
-Os resultados indicam que o modelo colaborativo apresenta maior capacidade preditiva, refletindo a força do sinal comportamental em dados implícitos. O Content-Based, embora com desempenho inferior isoladamente, mostrou-se consistente e adequado para complementar o sistema, especialmente em cenários de cold start e aumento de cobertura.
+The results indicate that the collaborative model exhibits stronger predictive capability, reflecting the strength of behavioral signals in implicit feedback data. Although the Content-Based model shows lower standalone performance, it remains consistent and suitable for complementing the system, particularly in cold start scenarios and for improving coverage.
 
-**Conclusão**:
-O CF apresenta melhor desempenho isolado, enquanto o CB agrega valor incremental — justificando a combinação.
+*Conclusion:*
+CF achieves better standalone performance, while CB provides incremental value — justifying their combination.
 
-# Hybrid Model — Weight Tuning
+## Hybrid Model — Weight Tuning
 
-Nesta etapa, testamos diferentes combinações de pesos entre CF e CB para maximizar performance.
+At this stage, we test different weight combinations between CF and CB to maximize performance.
 
-#### Vamos testar:
+#### We test the following configurations::
 
 | w_cf | w_cb |
 | ---- | ---- |
@@ -955,11 +954,11 @@ Nesta etapa, testamos diferentes combinações de pesos entre CF e CB para maxim
 
 Isso inclui:
 <br>
-* CB puro
-* CF puro
-* Híbridos intermediários
+* pure CB
+* pure CF
+* intermediate hybrid configurations
 
-##### Função utilitária de normalização:
+##### Utility normalization function:
 ```{python}
 def min_max_normalize(scores: pd.Series):
     if scores.empty:
@@ -968,7 +967,7 @@ def min_max_normalize(scores: pd.Series):
 ```
 <br>
 
-##### Função híbrida de recomendação:
+##### Hybrid recommendation function:
 ```{python}
 def recommend_hybrid_eval(
     user_id,
@@ -1004,7 +1003,7 @@ def recommend_hybrid_eval(
 ```
 <br>
 
-##### Função de avaliação do híbrido:
+##### Hybrid evaluation function:
 ```{python}
 def evaluate_hybrid(weights, k=10):
     results = []
@@ -1037,7 +1036,7 @@ def evaluate_hybrid(weights, k=10):
 ```
 <br>
 
-##### Rodar o tuning:
+##### Run weight tuning:
 ```{python}
 weight_grid = [
     (0.0, 1.0),
@@ -1053,29 +1052,27 @@ df_hybrid_eval.sort_values('hit_rate@10', ascending=False)
 ```
 <br>
 
+The combination of collaborative and content-based models resulted in improved performance. The best result was obtained with weights w_cf=0.6 and w_cb=0.4, indicating that behavioral signals should be predominant while being complemented by semantic similarity.
 
-A combinação dos modelos colaborativo e baseado em conteúdo resultou em melhoria de desempenho. O melhor resultado foi obtido com pesos w_cf=0.6 e w_cb=0.4, evidenciando que o sinal comportamental deve ser predominante, mas complementado por similaridade semântica.
+These results confirm that the hybrid model captures multiple dimensions of user behavior, reduces the individual limitations of the base models, and provides a more robust trade-off between precision and coverage.
 
-Esses resultados confirmam que o modelo híbrido captura múltiplas dimensões do comportamento do usuário, reduz limitações individuais dos modelos base e oferece um trade-off mais robusto entre precisão e cobertura.
+## Association Rules (Apriori)
 
+In addition to collaborative and content-based approaches, the system incorporates Association Rules to capture explicit co-occurrence patterns in shopping baskets. This technique enables the identification of products frequently purchased together and is particularly effective for cross-sell strategies and increasing average order value.
 
-# Association Rules (Apriori)
+Unlike user-centric models, association rules operate directly on transactions, making them robust to user cold start scenarios and highly interpretable for business stakeholders. When integrated into the hybrid model, these rules complement personalization with recommendations of complementary products.
 
-Além das abordagens colaborativa e baseada em conteúdo, o sistema incorpora Association Rules para capturar padrões explícitos de coocorrência em cestas de compra. Essa técnica permite identificar produtos frequentemente adquiridos juntos, sendo especialmente eficaz para estratégias de cross-sell e aumento do ticket médio.
-
-Diferentemente dos modelos centrados no usuário, as regras de associação operam diretamente sobre transações, tornando-se robustas a cenários de cold start de usuários e altamente interpretáveis para stakeholders de negócio. Integradas ao modelo híbrido, essas regras complementam a personalização com recomendações de produtos complementares.
- 
-Analogia simples
+Simple analogy
 <br>
 
-* CF = sugerir outra camisa parecida
-* CB = sugerir camisa da mesma marca
+* CF = suggest a similar shirt
+* CB = suggest a shirt from the same brand
 <br>
-Association Rules = sugerir o cinto que normalmente vai junto com a camisa
+Association Rules = suggest the belt that usually goes with the shirt
 
-Ou seja, responder a pergunta: O que costuma ser comprado junto?
+In other words, answering the question: What is usually bought together?
 
-##### Criar as cestas:
+##### Build shopping baskets:
 ```{python}
 # Garantir que a coluna 'transaction_date' seja do tipo datetime
 transactions['transaction_date'] = pd.to_datetime(transactions['transaction_date'])
@@ -1097,7 +1094,7 @@ basket.head()
 ```
 <br>
 
-##### One-Hot Encoding das cestas:
+##### One-hot encoding of baskets:
 ```{python}
 te = TransactionEncoder()
 te_array = te.fit(basket).transform(basket)
@@ -1111,14 +1108,9 @@ basket_df.head()
 ```
 <br>
 
-##### Loop por categoria:
+##### Loop by category:
 ```{python}
-
-```
-<br>
-
-
-```{python}
+# Loop por categoria
 rules_all = []
 
 for category in products['category'].unique():
@@ -1168,14 +1160,14 @@ for category in products['category'].unique():
 ```
 <br>
 
-##### Consolidar todas as regras:
+##### Consolidate all rules:
 ```{python}
 rules_df = pd.concat(rules_all, ignore_index=True)
 rules_df.sort_values('lift', ascending=False).head(10)
 ```
 <br>
 
-##### Filtrar regras:
+##### Filter rules:
 ```{python}
 rules_filtered = rules_df[
     (rules_df['antecedents'].apply(len) == 1) &
@@ -1188,7 +1180,7 @@ rules_filtered.head(10)
 ```
 <br>
 
-##### Função de recomendação — Association Rules por categoria:
+##### Recommendation function — Association Rules by category:
 ```{python}
 def recommend_association_by_category(user_id, k=5):
 
@@ -1231,7 +1223,7 @@ def recommend_association_by_category(user_id, k=5):
 ```
 <br>
 
-##### Teste:
+##### Testing:
 ```{python}
 user_items = interactions.loc[
     interactions['customer_id'] == test_user, 'product_id'
@@ -1241,23 +1233,25 @@ user_items
 ```
 <br>
 
-As regras de associação foram aplicadas como um sinal complementar de cross-sell, sendo utilizadas apenas quando o histórico do usuário intersecta os antecedentes das regras extraídas.
+Association rules were applied as a complementary cross-sell signal and are only used when the user’s purchase history intersects with the antecedents of the extracted rules.
 
-# Final Hybrid Recommender
+# Final Model
 
-O modelo final combina:
+The final model combines:
 
-| Componente        | Papel no sistema                        |
-| ----------------- | --------------------------------------- |
-| Item-Item CF      | Personalização baseada em comportamento |
-| Content-Based     | Similaridade semântica / cold start     |
-| Association Rules | Cross-sell contextual (checkout)        |
+| Component         | Role in the system               |
+| ----------------- | -------------------------------- |
+| Item-Item CF      | Behavior-based personalization   |
+| Content-Based     | Semantic similarity / cold start |
+| Association Rules | Contextual cross-sell (checkout) |
+
 <br>
-O híbrido não substitui, ele combina sinais.
 
-Obs: Cada modelo gera scores em escalas diferentes. Precisamos normalizar antes de somar.
+The hybrid model does not replace individual approaches — it combines signals.
 
-##### Função utilitária de normalização:
+**Note:** Each model produces scores on different scales. Therefore, scores must be normalized before aggregation.
+
+##### Utility normalization function:
 ```{python}
 def min_max_normalize(scores: pd.Series):
     if scores.empty:
@@ -1266,7 +1260,7 @@ def min_max_normalize(scores: pd.Series):
 ```
 <br>
 
-##### Função de recomendação híbrida:
+##### Hybrid recommendation function:
 ```{python}
 def recommend_hybrid(
     user_id,
@@ -1310,14 +1304,14 @@ def recommend_hybrid(
 ```
 <br>
 
-##### Teste do híbrido:
+##### Hybrid model testing:
 ```{python}
 test_user = interactions['customer_id'].iloc[0]
 recommend_hybrid(test_user, k=10)
 ```
 <br>
 
-##### Enriquecer com metadata:
+##### Enrich recommendations with metadata:
 
 ```{python}
 def recommend_hybrid_with_metadata(user_id, k=10):
@@ -1335,39 +1329,39 @@ recommend_hybrid_with_metadata(test_user, k=10)
 ```
 <br>
 
-O sistema final combina três sinais complementares: Item-Item Collaborative Filtering, Content-Based Filtering e Association Rules. Cada componente atua em um aspecto distinto do problema, garantindo personalização, cobertura e capacidade de cross-sell. As pontuações são normalizadas e combinadas por meio de uma soma ponderada, permitindo ajuste fino do impacto de cada sinal.
+The final system combines three complementary signals: Item-Item Collaborative Filtering, Content-Based Filtering, and Association Rules. Each component addresses a distinct aspect of the problem, ensuring personalization, coverage, and cross-sell capability. Scores are normalized and combined through a weighted sum, allowing fine-grained control over the impact of each signal.
 
-O modelo analisa o histórico do cliente, a similaridade entre produtos e padrões recorrentes de compra conjunta para gerar recomendações personalizadas e contextualizadas, equilibrando relevância individual e oportunidades de aumento de ticket médio. Ou seja, em cenários onde não há correspondência, o sistema não força recomendações artificiais, preservando a qualidade do ranking.
+The model analyzes customer history, product similarity, and recurring co-purchase patterns to generate personalized and contextualized recommendations, balancing individual relevance with opportunities to increase average order value. In scenarios where no strong signal exists, the system avoids forcing artificial recommendations, preserving ranking quality.
 
-# Conclusão
+# Model Conclusion
 
-Foi desenvolvido um sistema híbrido de recomendação que combina sinais comportamentais (Item-Item Collaborative Filtering), semânticos (Content-Based Filtering) e contextuais (Association Rules). A arquitetura garante cobertura, personalização e capacidade de cross-sell, respeitando limitações estatísticas dos dados e evitando recomendações artificiais. O modelo reflete práticas reais de produção e foi avaliado de forma incremental, demonstrando ganhos qualitativos em relevância e interpretabilidade.
+A hybrid recommender system was developed by combining behavioral (Item-Item Collaborative Filtering), semantic (Content-Based Filtering), and contextual (Association Rules) signals. The architecture ensures coverage, personalization, and cross-sell capability while respecting statistical data limitations and avoiding artificial recommendations. The model reflects real-world production practices and was incrementally evaluated, demonstrating qualitative gains in relevance and interpretability.
 
-## Cloud Deployment (AWS)
+# Cloud Deployment (AWS)
 
-Esta etapa final transforma o modelo desenvolvido em um serviço utilizável em produção, seguindo treinamento offline, artefatos versionados, e inferência online via arquitetura serverless.
+This final stage transforms the developed model into a production-ready service, following offline training, versioned artifacts, and online inference via a serverless architecture.
 
-O deploy foi organizado em duas grandes fases:
+The deployment was organized into two main phases:
 
-## 1️. Offline Artifacts — Preparação do Modelo para Produção
+## 1️. Offline Artifacts — Model Preparation for Production
 
-Antes de qualquer interação com a infraestrutura cloud, o sistema de recomendação é congelado em artefatos estáticos, treinados e validados offline.
+Before any interaction with cloud infrastructure, the recommender system is frozen into static artifacts, trained and validated offline.
 
-Essa abordagem segue um padrão amplamente utilizado em sistemas reais de recomendação:
+This approach follows a pattern widely adopted in real-world recommender systems:
 
-> *O treinamento ocorre offline.
-> Em produção, a API apenas carrega artefatos e executa ranking.*
+> *Training happens offline.
+> In production, the API only loads artifacts and executes ranking.*
 
-### O que é salvo como artefato
+### What is saved as artifacts
 
-OS arquivos que representam o estado final do modelo, garantindo:
+Files that represent the final state of the model, ensuring:
 
-* Reprodutibilidade
-* Baixo custo computacional em produção
-* Baixa latência de resposta
-* Separação entre treino e inferência
+* Reproducibility
+* Low computational cost in production
+* Low response latency
+* Clear separation between training and inference
 
-##### Salvar artefatos finais do modelo híbrido construído:
+##### Save final artifacts of the built hybrid model:
 ```{python}
 # -------------------------
 # Criar diretório de artefatos
@@ -1412,100 +1406,113 @@ interactions.to_csv(f"{ARTIFACTS_DIR}/interactions.csv", index=False)
 
 ---
 
-## 2. Deploy na AWS
+## 2. AWS Deployment
 
-Com os artefatos prontos, o sistema é implantado em uma arquitetura serverless na AWS, composta por três serviços principais:
+With the artifacts ready, the system is deployed using a serverless architecture on AWS, composed of three main services:
 
-* **Amazon S3** → armazenamento e versionamento dos artefatos
-* **AWS Lambda** → execução da inferência sob demanda
-* **Amazon API Gateway** → exposição do modelo via endpoint REST
+* **Amazon S3** → artifact storage and versioning
+* **AWS Lambda** → on-demand inference execution
+* **Amazon API Gateway** → model exposure via a REST endpoint
 
 ---
 
-### Amazon S3 — Armazenamento dos Artefatos do Modelo
+### Amazon S3 — Model Artifact Storage
 
-Na primeira etapa da implantação cloud, é criado um bucket S3, responsável por armazenar todos os artefatos do modelo.
+In the first cloud deployment step, an S3 bucket is created to store all model artifacts.
 
+S3 acts as the model storage layer, decoupled from inference logic
 
-
-O S3 atua como a **camada de armazenamento de modelos**, desacoplada da lógica de inferência.
-
-##### Criação do bucket e upload dos artefatos no S3:
+##### S3 bucket creation and artifact upload:
 
 {{< video AWS1-S3-bucket-creation.mp4 >}}
 
 ---
 
-### AWS Lambda — Servindo o Recomendador
+### AWS Lambda — Serving the Recommender
 
-Com os artefatos disponíveis no S3, foi criada uma função AWS Lambda responsável por:
+With the artifacts available in S3, an AWS Lambda function is created with the responsibility to:
 
-* Carregar os artefatos na inicialização
-* Receber requisições com `user_id`
-* Executar o ranking híbrido (CF + CB + Association Rules)
-* Retornar recomendações em formato JSON
+* Load artifacts during initialization
+* Receive requests containing user_id
+* Execute hybrid ranking (CF + CB + Association Rules)
+* Return recommendations in JSON format
 
-Essa separação garante que a Lambda execute somente inferência, mantendo custo e complexidade controlados.
+This separation ensures that Lambda performs inference only, keeping cost and operational complexity under control.
 
-
-##### Criação e configuração da função Lambda:
+##### Lambda function creation and configuration:
 
 {{< video AWS2_FuncaoLambda.mp4 >}}
 
-##### Configuração da Layer:
+##### Layer configuration:
 
 {{< video AWS3_Layer.mp4 >}}
 
-#### Teste da Função:
+#### Function testing:
 
 {{< video AWS4-TesteFuncao.mp4 >}}
 
-### API Gateway — Exposição do Modelo via API REST
+### API Gateway — REST API Exposure
 
-Para tornar o sistema acessível externamente, a função Lambda é integrada ao Amazon API Gateway.
+To make the system externally accessible, the Lambda function is integrated with Amazon API Gateway.
 
-O resultado é um endpoint REST capaz de retornar recomendações personalizadas sob demanda, pronto para consumo por:
+The result is a REST endpoint capable of returning personalized recommendations on demand, ready to be consumed by:
 
-* Frontend web
-* Aplicações mobile
-* Sistemas internos de e-commerce
+* Web frontends
+* Mobile applications
+* Internal e-commerce systems
 
-##### Criação da API no API Gateway e integração com Lambda:
+##### API Gateway creation and Lambda integration:
 
 {{< video AWS5-API-Gateway.mp4 >}}
 
 ---
 
-### Deploy Final e Demonstração End-to-End:
+### Final Deployment and End-to-End Demonstration:
 
-Após a configuração do S3, Lambda e API Gateway, o sistema é implantado e testado de ponta a ponta.
+After configuring S3, Lambda, and API Gateway, the system is deployed and tested end-to-end.
 
-##### Criação do bucket para UI demo:
+##### UI demo bucket creation:
 
 {{< video AWS6-BucketUI-DEMO.mp4 >}}
 
-##### Demonstração — Deploy final e chamada da API de recomendação:
+##### Demonstration — final deployment and recommendation API call:
 
 {{< video AWS7-FINAL-DMEO.mp4 >}}
 
 ---
 
-Essa abordagem permite evoluir o modelo (re-treino, novos pesos, novos sinais) sem impactar a API, bastando substituir os artefatos no S3.
+This approach allows the model to evolve (retraining, new weights, new signals) without impacting the API, simply by replacing artifacts stored in S3.
 
 ---
 
-# Conclusion
+# Project Conclusion
 
-Este projeto demonstra a construção de um sistema de recomendação híbrido, interpretável e orientado à produção, combinando rigor técnico com impacto direto no negócio.
+This project demonstrates the construction of a hybrid recommender system that is interpretable and production-oriented, combining technical rigor with direct business impact.
 
-A abordagem híbrida permite equilibrar personalização, cobertura e oportunidades de cross-sell, refletindo práticas reais adotadas em plataformas de e-commerce em escala.
+The hybrid approach balances personalization, coverage, and cross-sell opportunities, reflecting real-world practices adopted by large-scale e-commerce platforms.
 
 ---
+
+## References
+
+This project was also inspired by the following published articles and resources on recommender systems:
+
+**Design and Implementation of a Product Recommendation System with Association and Clustering Algorithms**
+[https://medium.com/data-science/mastering-customer-segmentation-using-credit-card-transaction-data-dc39a8465766](https://medium.com/data-science/mastering-customer-segmentation-using-credit-card-transaction-data-dc39a8465766)
+
+**Mastering Customer Segmentation using Credit Card Transaction Data**
+[https://www.sciencedirect.com/science/article/pii/S1877050923003289](https://www.sciencedirect.com/science/article/pii/S1877050923003289)
+
+**E-Commerce Product Recommendation System based on ML Algorithms**
+[https://arxiv.org/abs/2407.21026](https://arxiv.org/abs/2407.21026)
+
+**Mastering E-commerce Product Recommendations in Python**
+[https://medium.com/datafabrica/mastering-e-commerce-product-recommendations-in-python-7c12a4bf0c2c](https://medium.com/datafabrica/mastering-e-commerce-product-recommendations-in-python-7c12a4bf0c2c)
 
 ## GitHub Repository
 
-[Link para o repositório]
+Access all code, datasets, notebooks, and files for this project:
+
+[Click here to access](https://github.com/FerreiraGabrielw/ds-recomendation-system-deploy){target="_blank" rel="noopener noreferrer"}
 
 ---
-
-

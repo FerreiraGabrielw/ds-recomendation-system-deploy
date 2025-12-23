@@ -1113,12 +1113,7 @@ basket_df.head()
 
 ##### Loop por categoria:
 ```{python}
-
-```
-<br>
-
-
-```{python}
+# Loop por categoria
 rules_all = []
 
 for category in products['category'].unique():

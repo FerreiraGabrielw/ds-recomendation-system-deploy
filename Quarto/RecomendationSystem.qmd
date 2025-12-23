@@ -69,6 +69,7 @@ O dataset inclui:
 * registros temporais para análise comportamental.
 
 ---
+
 ## Database Setup & SQL Exploration
 
 Antes de qualquer etapa de modelagem em Python, os dados passam por um processo de estruturação, ingestão e validação em banco de dados relacional, típicos de um ambiente real de analytics em e-commerce.
@@ -1348,7 +1349,7 @@ Esta etapa final transforma o modelo desenvolvido em um serviço utilizável em 
 
 O deploy foi organizado em duas grandes fases:
 
-## 1️⃣ Offline Artifacts — Preparação do Modelo para Produção
+## 1️. Offline Artifacts — Preparação do Modelo para Produção
 
 Antes de qualquer interação com a infraestrutura cloud, o sistema de recomendação é congelado em artefatos estáticos, treinados e validados offline.
 
@@ -1403,16 +1404,15 @@ products.to_parquet(f"{ARTIFACTS_DIR}/products.parquet", index=False)
 interactions.to_parquet(f"{ARTIFACTS_DIR}/interactions.parquet", index=False)
 
 # -------------------------
-# Versões leves para deploy
+# Versões para deploy
 # -------------------------
 products.to_csv(f"{ARTIFACTS_DIR}/products.csv", index=False)
 interactions.to_csv(f"{ARTIFACTS_DIR}/interactions.csv", index=False)
 ```
-<br>
 
 ---
 
-## Estratégia de Deploy na AWS
+## 2. Deploy na AWS
 
 Com os artefatos prontos, o sistema é implantado em uma arquitetura serverless na AWS, composta por três serviços principais:
 
@@ -1432,7 +1432,7 @@ O S3 atua como a **camada de armazenamento de modelos**, desacoplada da lógica 
 
 ##### Criação do bucket e upload dos artefatos no S3:
 
-*(Inserir vídeo da tela da AWS aqui)*
+{{< video AWS1-S3-bucket-creation.mp4 >}}
 
 ---
 
@@ -1450,19 +1450,19 @@ Essa separação garante que a Lambda execute somente inferência, mantendo cust
 
 ##### Criação e configuração da função Lambda:
 
-*(Inserir vídeo da tela da AWS aqui)*
+{{< video AWS2_FuncaoLambda.mp4 >}}
 
+##### Configuração da Layer:
+
+{{< video AWS3_Layer.mp4 >}}
+
+#### Teste da Função:
+
+{{< video AWS4-TesteFuncao.mp4 >}}
 
 ### API Gateway — Exposição do Modelo via API REST
 
 Para tornar o sistema acessível externamente, a função Lambda é integrada ao Amazon API Gateway.
-
-O API Gateway permite:
-
-* Criar endpoints HTTP
-* Definir métodos (`GET` / `POST`)
-* Controlar permissões
-* Integrar diretamente com a Lambda
 
 O resultado é um endpoint REST capaz de retornar recomendações personalizadas sob demanda, pronto para consumo por:
 
@@ -1472,7 +1472,7 @@ O resultado é um endpoint REST capaz de retornar recomendações personalizadas
 
 ##### Criação da API no API Gateway e integração com Lambda:
 
-*(Inserir vídeo da tela da AWS aqui)*
+{{< video AWS5-API-Gateway.mp4 >}}
 
 ---
 
@@ -1480,9 +1480,13 @@ O resultado é um endpoint REST capaz de retornar recomendações personalizadas
 
 Após a configuração do S3, Lambda e API Gateway, o sistema é implantado e testado de ponta a ponta.
 
+##### Criação do bucket para UI demo:
+
+{{< video AWS6-BucketUI-DEMO.mp4 >}}
+
 ##### Demonstração — Deploy final e chamada da API de recomendação:
 
-*(Inserir vídeo da demo completa aqui)*
+{{< video AWS7-FINAL-DMEO.mp4 >}}
 
 ---
 
@@ -1492,7 +1496,7 @@ Essa abordagem permite evoluir o modelo (re-treino, novos pesos, novos sinais) s
 
 # Conclusion
 
-Este projeto demonstra a construção de um sistema de recomendação híbrido robusto, interpretável e orientado à produção, combinando rigor técnico com impacto direto no negócio.
+Este projeto demonstra a construção de um sistema de recomendação híbrido, interpretável e orientado à produção, combinando rigor técnico com impacto direto no negócio.
 
 A abordagem híbrida permite equilibrar personalização, cobertura e oportunidades de cross-sell, refletindo práticas reais adotadas em plataformas de e-commerce em escala.
 

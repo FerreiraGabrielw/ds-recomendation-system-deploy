@@ -322,7 +322,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>EDA (Exploratory Data Analysis)</h1>
 <section id="python-function-to-run-pure-sql-on-notebook" class="level5">
 <h5 data-anchor-id="python-function-to-run-pure-sql-on-notebook">Python Function to run pure SQL on notebook:</h5>
-<div id="752e781d" class="cell" data-execution_count="3">
+<div id="5b90c871" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> run_sql_pure(sql: <span class="bu">str</span>, params: <span class="bu">dict</span> <span class="op">=</span> <span class="va">None</span>):</span>
@@ -343,11 +343,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </details>
 </div>
 <hr>
-<p>O primeiro passo da EDA é validar a integridade estrutural das tabelas.</p>
+<p>The first step of the EDA is to validate the structural integrity of the tables.</p>
 </section>
 <section id="record-counts-per-table" class="level5">
 <h5 data-anchor-id="record-counts-per-table">Record counts per table:</h5>
-<div id="34277fd1" class="cell" data-execution_count="4">
+<div id="e60aa2b0" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>sql <span class="op">=</span> <span class="st">"""</span></span>
@@ -402,7 +402,7 @@ SELECT
 </section>
 <section id="missing-values-per-table" class="level5">
 <h5 data-anchor-id="missing-values-per-table">Missing values per table:</h5>
-<div id="e20e5eeb" class="cell" data-execution_count="5">
+<div id="7f9b102f" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># lista de tabelas a verificar</span></span>
@@ -510,7 +510,7 @@ SELECT
 </section>
 <section id="duplicates-and-keys-primary-key-uniqueness-check" class="level5">
 <h5 data-anchor-id="duplicates-and-keys-primary-key-uniqueness-check">Duplicates and keys (primary key uniqueness check):</h5>
-<div id="b0d74e2f" class="cell" data-execution_count="6">
+<div id="78bfb7d3" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>sql <span class="op">=</span> <span class="st">"""</span></span>
@@ -571,14 +571,14 @@ FROM transactions;
 <p>At this stage, we explore business behavior using SQL-based analyses.</p>
 <section id="product-price-distribution" class="level5">
 <h5 data-anchor-id="product-price-distribution">Product price distribution:</h5>
-<div id="62869587" class="cell" data-execution_count="7">
+<div id="b601a9be" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>sql <span class="op">=</span> <span class="st">"SELECT price FROM products WHERE price IS NOT NULL;"</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>df_price <span class="op">=</span> run_sql_pure(sql)</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>df_price[<span class="st">'price'</span>] <span class="op">=</span> pd.to_numeric(df_price[<span class="st">'price'</span>], errors<span class="op">=</span><span class="st">'coerce'</span>)</span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>plt.hist(df_price[<span class="st">'price'</span>].dropna(), bins<span class="op">=</span><span class="dv">30</span>)</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Product Price Distribuction"</span>)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Product Price Distribution"</span>)</span>
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Price"</span>)</span>
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Frequency"</span>)</span>
 <span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -657,7 +657,7 @@ SELECT price FROM products WHERE price IS NOT NULL;
 </section>
 <section id="top-products-by-quantity-sold-and-by-revenue" class="level5">
 <h5 data-anchor-id="top-products-by-quantity-sold-and-by-revenue">Top products by quantity sold and by revenue:</h5>
-<div id="14f4d4a5" class="cell" data-execution_count="8">
+<div id="dde78c06" class="cell" data-execution_count="8">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>sql <span class="op">=</span> <span class="st">"""</span></span>
@@ -673,15 +673,15 @@ SELECT price FROM products WHERE price IS NOT NULL;
 <span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>df_top <span class="op">=</span> run_sql_pure(sql)</span>
 <span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> df_top.plot.bar(x<span class="op">=</span><span class="st">'name'</span>, y<span class="op">=</span><span class="st">'total_qty'</span>, legend<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>plt.xticks(rotation<span class="op">=</span><span class="dv">70</span>, fontsize<span class="op">=</span><span class="dv">8</span>)</span>
-<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Top 15 produtos por quantidade vendida"</span>)</span>
-<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Quantidade"</span>)</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Top 15 products by quantity sold"</span>)</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Quantity"</span>)</span>
 <span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
 <span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a><span class="co"># revenue bar</span></span>
 <span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>df_top.plot.bar(x<span class="op">=</span><span class="st">'name'</span>, y<span class="op">=</span><span class="st">'total_revenue'</span>)</span>
 <span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>plt.xticks(rotation<span class="op">=</span><span class="dv">70</span>, fontsize<span class="op">=</span><span class="dv">8</span>)</span>
-<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Top 15 produtos por receita (mesmos produtos)"</span>)</span>
-<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Receita"</span>)</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Top 15 Revenue-Generating Products"</span>)</span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Revenue"</span>)</span>
 <span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
@@ -805,7 +805,7 @@ LIMIT 10;
 </section>
 <section id="monthly-sales" class="level5">
 <h5 data-anchor-id="monthly-sales">Monthly sales:</h5>
-<div id="0f192ab7" class="cell" data-execution_count="9">
+<div id="2dabb87f" class="cell" data-execution_count="9">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>sql <span class="op">=</span> <span class="st">"""</span></span>
@@ -819,9 +819,9 @@ LIMIT 10;
 <span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>df_ts <span class="op">=</span> run_sql_pure(sql)</span>
 <span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>df_ts[<span class="st">'ym'</span>] <span class="op">=</span> pd.to_datetime(df_ts[<span class="st">'ym'</span>] <span class="op">+</span> <span class="st">'-01'</span>)</span>
 <span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>plt.plot(df_ts[<span class="st">'ym'</span>], df_ts[<span class="st">'revenue'</span>])</span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Receita por mês"</span>)</span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Mês"</span>)</span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Receita"</span>)</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Monthly Revenue"</span>)</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Month"</span>)</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Revenue"</span>)</span>
 <span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>plt.grid(<span class="va">True</span>)</span>
 <span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
@@ -917,7 +917,7 @@ ORDER BY ym;
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="RecomendationSystemEN_files/figure-html/cell-10-output-3.png" width="812" height="450" class="figure-img"></p>
+<p><img src="RecomendationSystemEN_files/figure-html/cell-10-output-3.png" width="812" height="449" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -926,7 +926,7 @@ ORDER BY ym;
 </section>
 <section id="rfm-table-and-histograms" class="level5">
 <h5 data-anchor-id="rfm-table-and-histograms">RFM — table and histograms:</h5>
-<div id="93e2eae6" class="cell" data-execution_count="10">
+<div id="44366aa2" class="cell" data-execution_count="10">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>sql <span class="op">=</span> <span class="st">"""</span></span>
@@ -950,8 +950,8 @@ ORDER BY ym;
 <span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a><span class="co"># scatter recency x monetary</span></span>
 <span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>plt.scatter(df_rfm[<span class="st">'recency_days'</span>], df_rfm[<span class="st">'monetary'</span>])</span>
-<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Recency (dias)'</span>)<span class="op">;</span> plt.ylabel(<span class="st">'Monetary (total_spent)'</span>)</span>
-<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Recency x Monetary (clientes)'</span>)</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Recency (days)'</span>)<span class="op">;</span> plt.ylabel(<span class="st">'Monetary (total_spent)'</span>)</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Recency x Monetary (customer)'</span>)</span>
 <span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>plt.grid(<span class="va">True</span>)</span>
 <span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
@@ -986,70 +986,70 @@ SELECT * FROM last;
 <tr class="odd">
 <td data-quarto-table-cell-role="th">0</td>
 <td>1</td>
-<td>14</td>
+<td>15</td>
 <td>14</td>
 <td>14261.37</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">1</td>
 <td>2</td>
-<td>18</td>
+<td>19</td>
 <td>26</td>
 <td>26203.35</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">2</td>
 <td>3</td>
-<td>76</td>
+<td>77</td>
 <td>23</td>
 <td>25696.87</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">3</td>
 <td>4</td>
-<td>34</td>
+<td>35</td>
 <td>26</td>
 <td>31203.42</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">4</td>
 <td>5</td>
-<td>127</td>
+<td>128</td>
 <td>11</td>
 <td>16216.30</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">5</td>
 <td>6</td>
-<td>27</td>
+<td>28</td>
 <td>29</td>
 <td>26575.41</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">6</td>
 <td>7</td>
-<td>39</td>
+<td>40</td>
 <td>20</td>
 <td>21554.50</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">7</td>
 <td>8</td>
-<td>38</td>
+<td>39</td>
 <td>22</td>
 <td>31804.66</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">8</td>
 <td>9</td>
-<td>26</td>
+<td>27</td>
 <td>21</td>
 <td>24763.75</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">9</td>
 <td>10</td>
-<td>9</td>
+<td>10</td>
 <td>19</td>
 <td>18695.84</td>
 </tr>
@@ -1077,7 +1077,7 @@ SELECT * FROM last;
 </section>
 <section id="distribution-of-purchases-per-customer" class="level5">
 <h5 data-anchor-id="distribution-of-purchases-per-customer">Distribution of purchases per customer:</h5>
-<div id="48c6db12" class="cell" data-execution_count="11">
+<div id="9f1b7346" class="cell" data-execution_count="11">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>sql <span class="op">=</span> <span class="st">"""</span></span>
@@ -1087,9 +1087,9 @@ SELECT * FROM last;
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span>
 <span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>df_purchases <span class="op">=</span> run_sql_pure(sql)</span>
 <span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>plt.hist(df_purchases[<span class="st">'purchases'</span>], bins<span class="op">=</span><span class="dv">30</span>)</span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Distribuição de número de compras por cliente"</span>)</span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Número de compras"</span>)</span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Clientes"</span>)</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Distribution of Purchases per Customer"</span>)</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Number of Purchases"</span>)</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"customer"</span>)</span>
 <span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
@@ -1170,7 +1170,7 @@ GROUP BY customer_id;
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="RecomendationSystemEN_files/figure-html/cell-12-output-3.png" width="822" height="451" class="figure-img"></p>
+<p><img src="RecomendationSystemEN_files/figure-html/cell-12-output-3.png" width="822" height="449" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -1179,7 +1179,7 @@ GROUP BY customer_id;
 </section>
 <section id="view-to-purchase-conversion-by-product" class="level5">
 <h5 data-anchor-id="view-to-purchase-conversion-by-product">View-to-purchase conversion by product</h5>
-<div id="142ceae2" class="cell" data-execution_count="12">
+<div id="6679bcfc" class="cell" data-execution_count="12">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>sql <span class="op">=</span> <span class="st">"""</span></span>
@@ -1202,7 +1202,7 @@ GROUP BY customer_id;
 <span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>df_conv <span class="op">=</span> run_sql_pure(sql)</span>
 <span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>plt.scatter(df_conv[<span class="st">'views'</span>], df_conv[<span class="st">'buys'</span>])</span>
 <span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Views'</span>)<span class="op">;</span> plt.ylabel(<span class="st">'Buys'</span>)</span>
-<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Views x Buys (produtos)'</span>)</span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Views x Buys (products)'</span>)</span>
 <span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>plt.grid(<span class="va">True</span>)</span>
 <span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
@@ -1338,7 +1338,7 @@ LEFT JOIN (
 </section>
 <section id="sales-by-category" class="level5">
 <h5 data-anchor-id="sales-by-category">Sales by category:</h5>
-<div id="287308fb" class="cell" data-execution_count="13">
+<div id="6c81e6fa" class="cell" data-execution_count="13">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>sql <span class="op">=</span> <span class="st">"""</span></span>
@@ -1350,9 +1350,9 @@ LEFT JOIN (
 <span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span>
 <span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>df_cat <span class="op">=</span> run_sql_pure(sql)</span>
 <span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>df_cat.plot.bar(x<span class="op">=</span><span class="st">'category'</span>, y<span class="op">=</span><span class="st">'revenue'</span>)</span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Receita por categoria"</span>)</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Revenue per category"</span>)</span>
 <span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>plt.xticks(rotation<span class="op">=</span><span class="dv">60</span>)</span>
-<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Receita"</span>)</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Revenue"</span>)</span>
 <span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
@@ -1425,7 +1425,7 @@ ORDER BY revenue DESC;
 </section>
 <section id="aov-average-order-value" class="level5">
 <h5 data-anchor-id="aov-average-order-value">AOV (Average Order Value):</h5>
-<div id="564ad278" class="cell" data-execution_count="14">
+<div id="950763fd" class="cell" data-execution_count="14">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>sql <span class="op">=</span> <span class="st">"""</span></span>
@@ -1435,11 +1435,11 @@ ORDER BY revenue DESC;
 <span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span>
 <span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>df_orders <span class="op">=</span> run_sql_pure(sql)</span>
 <span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>aov <span class="op">=</span> df_orders[<span class="st">'order_value'</span>].mean()</span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"AOV (média de valor por pedido - aproximação): R$ </span><span class="sc">{</span>aov<span class="sc">:.2f}</span><span class="ss">"</span>)</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Average Order Value (Approx.): R$ </span><span class="sc">{</span>aov<span class="sc">:.2f}</span><span class="ss">"</span>)</span>
 <span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>plt.hist(df_orders[<span class="st">'order_value'</span>], bins<span class="op">=</span><span class="dv">30</span>)</span>
-<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Distribuição do valor por pedido (aprox.)"</span>)</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Distribution of Order Value (Approx.)"</span>)</span>
 <span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Order value"</span>)</span>
-<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Contagem"</span>)</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Count"</span>)</span>
 <span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
@@ -1529,12 +1529,12 @@ GROUP BY customer_id, DATE(transaction_date);
 </div>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>AOV (média de valor por pedido - aproximação): R$ 2083.08</code></pre>
+<pre><code>Average Order Value (Approx.): R$ 2083.08</code></pre>
 </div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="RecomendationSystemEN_files/figure-html/cell-15-output-4.png" width="825" height="450" class="figure-img"></p>
+<p><img src="RecomendationSystemEN_files/figure-html/cell-15-output-4.png" width="825" height="449" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -1543,7 +1543,7 @@ GROUP BY customer_id, DATE(transaction_date);
 </section>
 <section id="customer-product-matrix-density-sparsity" class="level5">
 <h5 data-anchor-id="customer-product-matrix-density-sparsity">Customer × product matrix — density (SPARSITY)</h5>
-<div id="f8bd83d5" class="cell" data-execution_count="15">
+<div id="0eab17bb" class="cell" data-execution_count="15">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>sql <span class="op">=</span> <span class="st">"""</span></span>
@@ -1557,7 +1557,7 @@ GROUP BY customer_id, DATE(transaction_date);
 <span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>n_trans <span class="op">=</span> <span class="bu">int</span>(df_dim[<span class="st">'n_transactions'</span>].iloc[<span class="dv">0</span>])</span>
 <span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>possible <span class="op">=</span> n_customers <span class="op">*</span> n_products</span>
 <span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>sparsity <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> (n_trans <span class="op">/</span> possible)</span>
-<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Clientes: </span><span class="sc">{</span>n_customers<span class="sc">}</span><span class="ss">, Produtos: </span><span class="sc">{</span>n_products<span class="sc">}</span><span class="ss">, Transações: </span><span class="sc">{</span>n_trans<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"customer: </span><span class="sc">{</span>n_customers<span class="sc">}</span><span class="ss">, Products: </span><span class="sc">{</span>n_products<span class="sc">}</span><span class="ss">, Transactions: </span><span class="sc">{</span>n_trans<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Sparsity (aprox): </span><span class="sc">{</span>sparsity<span class="sc">:.6f}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
@@ -1593,7 +1593,7 @@ SELECT (SELECT COUNT(DISTINCT customer_id) FROM transactions) AS n_customers_act
 </div>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Clientes: 1000, Produtos: 300, Transações: 21123
+<pre><code>customer: 1000, Products: 300, Transactions: 21123
 Sparsity (aprox): 0.929590</code></pre>
 </div>
 </div>
@@ -1647,7 +1647,7 @@ Sparsity (aprox): 0.929590</code></pre>
 <p>At this stage, we build a recommender system based exclusively on historical purchase patterns. Item-Item CF recommends items similar to those already purchased by the user, measuring similarity between items based on user behavior (users who bought A also bought B).</p>
 <section id="create-the-interaction-dataset-customer-product" class="level5">
 <h5 data-anchor-id="create-the-interaction-dataset-customer-product">Create the interaction dataset (customer × product):</h5>
-<div id="a2678f22" class="cell" data-execution_count="17">
+<div id="b1f7235f" class="cell" data-execution_count="17">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>interactions <span class="op">=</span> (</span>
@@ -1657,7 +1657,7 @@ Sparsity (aprox): 0.929590</code></pre>
 <span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>interactions[<span class="st">'interaction'</span>] <span class="op">=</span> <span class="dv">1</span></span>
 <span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>interactions.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="182">
+<div class="cell-output cell-output-display" data-execution_count="127">
 <div>
 
 
@@ -1711,7 +1711,7 @@ Sparsity (aprox): 0.929590</code></pre>
 </section>
 <section id="build-the-item-customer-matrix" class="level5">
 <h5 data-anchor-id="build-the-item-customer-matrix">Build the Item × Customer matrix:</h5>
-<div id="a91ad332" class="cell" data-execution_count="18">
+<div id="8b1e3f8a" class="cell" data-execution_count="18">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>item_user_matrix <span class="op">=</span> interactions.pivot_table(</span>
@@ -1723,7 +1723,7 @@ Sparsity (aprox): 0.929590</code></pre>
 <span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>item_user_matrix.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="183">
+<div class="cell-output cell-output-display" data-execution_count="128">
 <pre><code>(300, 1000)</code></pre>
 </div>
 </div>
@@ -1731,7 +1731,7 @@ Sparsity (aprox): 0.929590</code></pre>
 </section>
 <section id="check-sparsity" class="level5">
 <h5 data-anchor-id="check-sparsity">Check sparsity:</h5>
-<div id="644901d8" class="cell" data-execution_count="19">
+<div id="000f69f3" class="cell" data-execution_count="19">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>density <span class="op">=</span> item_user_matrix.values.<span class="bu">sum</span>() <span class="op">/</span> item_user_matrix.size</span>
@@ -1747,7 +1747,7 @@ Sparsity (aprox): 0.929590</code></pre>
 </section>
 <section id="compute-item-item-similarity-cosine" class="level5">
 <h5 data-anchor-id="compute-item-item-similarity-cosine">Compute Item-Item similarity (Cosine):</h5>
-<div id="fd9c2509" class="cell" data-execution_count="20">
+<div id="e5c58431" class="cell" data-execution_count="20">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>item_similarity <span class="op">=</span> cosine_similarity(item_user_matrix)</span>
@@ -1760,7 +1760,7 @@ Sparsity (aprox): 0.929590</code></pre>
 <span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>item_sim_df.iloc[:<span class="dv">5</span>, :<span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="185">
+<div class="cell-output cell-output-display" data-execution_count="130">
 <div>
 
 
@@ -1834,7 +1834,7 @@ Sparsity (aprox): 0.929590</code></pre>
 </section>
 <section id="co-occurrence" class="level5">
 <h5 data-anchor-id="co-occurrence">Co-occurrence</h5>
-<div id="0c6c4c46" class="cell" data-execution_count="21">
+<div id="4d0eb7a0" class="cell" data-execution_count="21">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>cooccurrence <span class="op">=</span> item_user_matrix <span class="op">@</span> item_user_matrix.T</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1844,7 +1844,7 @@ Sparsity (aprox): 0.929590</code></pre>
 </section>
 <section id="shrinkage" class="level5">
 <h5 data-anchor-id="shrinkage">Shrinkage</h5>
-<div id="2714caf2" class="cell" data-execution_count="22">
+<div id="cf109fad" class="cell" data-execution_count="22">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>LAMBDA <span class="op">=</span> <span class="dv">10</span></span>
@@ -1855,7 +1855,7 @@ Sparsity (aprox): 0.929590</code></pre>
 </section>
 <section id="recommendation-function-item-item-cf" class="level5">
 <h5 data-anchor-id="recommendation-function-item-item-cf">Recommendation function (Item-Item CF)</h5>
-<div id="7e42ce3d" class="cell" data-execution_count="23">
+<div id="89f733fa" class="cell" data-execution_count="23">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Função de Recomendação (Item-Item CF)</span></span>
@@ -1881,13 +1881,13 @@ Sparsity (aprox): 0.929590</code></pre>
 </section>
 <section id="model-testing" class="level5">
 <h5 data-anchor-id="model-testing">Model testing</h5>
-<div id="fe357b4e" class="cell" data-execution_count="24">
+<div id="1e4e7830" class="cell" data-execution_count="24">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>test_user <span class="op">=</span> interactions[<span class="st">'customer_id'</span>].iloc[<span class="dv">0</span>]</span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>recommend_item_item(test_user, k<span class="op">=</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="189">
+<div class="cell-output cell-output-display" data-execution_count="134">
 <pre><code>product_id
 226    0.049454
 115    0.049118
@@ -1901,7 +1901,7 @@ dtype: float64</code></pre>
 </section>
 <section id="enrich-recommendations-with-product-information" class="level5">
 <h5 data-anchor-id="enrich-recommendations-with-product-information">Enrich recommendations with product information</h5>
-<div id="283f2771" class="cell" data-execution_count="25">
+<div id="503eb9af" class="cell" data-execution_count="25">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> recommend_with_metadata(user_id, k<span class="op">=</span><span class="dv">10</span>):</span>
@@ -1916,7 +1916,7 @@ dtype: float64</code></pre>
 <span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>recommend_with_metadata(test_user, k<span class="op">=</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="190">
+<div class="cell-output cell-output-display" data-execution_count="135">
 <div>
 
 
@@ -2030,7 +2030,7 @@ dtype: float64</code></pre>
 <p>To mitigate these issues, Content-Based Filtering is used by representing products through their textual attributes.</p>
 <section id="product-text-preparation" class="level5">
 <h5 data-anchor-id="product-text-preparation">Product text preparation:</h5>
-<div id="af4dbb00" class="cell" data-execution_count="26">
+<div id="e9f9a9f1" class="cell" data-execution_count="26">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>products_cb <span class="op">=</span> products.copy()</span>
@@ -2043,7 +2043,7 @@ dtype: float64</code></pre>
 <span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>products_cb[[<span class="st">'product_id'</span>, <span class="st">'text'</span>]].head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="191">
+<div class="cell-output cell-output-display" data-execution_count="136">
 <div>
 
 
@@ -2091,7 +2091,7 @@ dtype: float64</code></pre>
 </section>
 <section id="tf-idf-vectorization" class="level5">
 <h5 data-anchor-id="tf-idf-vectorization">TF-IDF vectorization:</h5>
-<div id="e057f65b" class="cell" data-execution_count="27">
+<div id="53da3597" class="cell" data-execution_count="27">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>tfidf <span class="op">=</span> TfidfVectorizer(</span>
@@ -2103,7 +2103,7 @@ dtype: float64</code></pre>
 <span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>tfidf_matrix.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="192">
+<div class="cell-output cell-output-display" data-execution_count="137">
 <pre><code>(300, 178)</code></pre>
 </div>
 </div>
@@ -2111,7 +2111,7 @@ dtype: float64</code></pre>
 </section>
 <section id="product-similarity-cosine" class="level5">
 <h5 data-anchor-id="product-similarity-cosine">Product similarity (Cosine):</h5>
-<div id="59f78f17" class="cell" data-execution_count="28">
+<div id="5d620fc0" class="cell" data-execution_count="28">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>content_similarity <span class="op">=</span> cosine_similarity(tfidf_matrix)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -2121,7 +2121,7 @@ dtype: float64</code></pre>
 </section>
 <section id="build-the-product-product-matrix" class="level5">
 <h5 data-anchor-id="build-the-product-product-matrix">Build the Product × Product matrix:</h5>
-<div id="09939ef6" class="cell" data-execution_count="29">
+<div id="2685decf" class="cell" data-execution_count="29">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>content_sim_df <span class="op">=</span> pd.DataFrame(</span>
@@ -2132,7 +2132,7 @@ dtype: float64</code></pre>
 <span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>content_sim_df.iloc[:<span class="dv">5</span>, :<span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="194">
+<div class="cell-output cell-output-display" data-execution_count="139">
 <div>
 
 
@@ -2206,7 +2206,7 @@ dtype: float64</code></pre>
 </section>
 <section id="content-based-recommendation-function" class="level5">
 <h5 data-anchor-id="content-based-recommendation-function">Content-Based recommendation function:</h5>
-<div id="39e9f1a7" class="cell" data-execution_count="30">
+<div id="62e89276" class="cell" data-execution_count="30">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> recommend_content_based(user_id, k<span class="op">=</span><span class="dv">10</span>):</span>
@@ -2227,13 +2227,13 @@ dtype: float64</code></pre>
 </section>
 <section id="content-based-model-testing" class="level5">
 <h5 data-anchor-id="content-based-model-testing">Content-Based model testing:</h5>
-<div id="7c4a0e20" class="cell" data-execution_count="31">
+<div id="7cc2a7e1" class="cell" data-execution_count="31">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>test_user <span class="op">=</span> interactions[<span class="st">'customer_id'</span>].iloc[<span class="dv">0</span>]</span>
 <span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>recommend_content_based(test_user, k<span class="op">=</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="196">
+<div class="cell-output cell-output-display" data-execution_count="141">
 <pre><code>product_id
 273    0.261552
 48     0.261552
@@ -2247,7 +2247,7 @@ dtype: float64</code></pre>
 </section>
 <section id="enrich-recommendations-with-product-information-1" class="level5">
 <h5 data-anchor-id="enrich-recommendations-with-product-information-1">Enrich recommendations with product information:</h5>
-<div id="df38b821" class="cell" data-execution_count="32">
+<div id="c9c4aceb" class="cell" data-execution_count="32">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> recommend_cb_with_metadata(user_id, k<span class="op">=</span><span class="dv">10</span>):</span>
@@ -2261,7 +2261,7 @@ dtype: float64</code></pre>
 <span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a>recommend_cb_with_metadata(test_user, k<span class="op">=</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="197">
+<div class="cell-output cell-output-display" data-execution_count="142">
 <div>
 
 
@@ -2352,7 +2352,7 @@ dtype: float64</code></pre>
 <p>Isolated evaluation allows comparison using ranking metrics, informed tuning of hybrid model weights, and technical justification of the chosen architecture. In e-commerce scenarios, this practice ensures that the hybrid model delivers incremental gains over individual baselines rather than merely combining signals without measurable benefit.</p>
 <section id="create-a-leave-last-out-temporal-split-for-evaluation" class="level5">
 <h5 data-anchor-id="create-a-leave-last-out-temporal-split-for-evaluation">Create a Leave-Last-Out temporal split for evaluation:</h5>
-<div id="ab207e8a" class="cell" data-execution_count="33">
+<div id="2492652f" class="cell" data-execution_count="33">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>interactions_eval <span class="op">=</span> transactions[[<span class="st">'customer_id'</span>, <span class="st">'product_id'</span>, <span class="st">'transaction_date'</span>]].copy()</span>
@@ -2395,7 +2395,7 @@ dtype: float64</code></pre>
 </section>
 <section id="rebuild-the-item-user-matrix-for-training" class="level5">
 <h5 data-anchor-id="rebuild-the-item-user-matrix-for-training">Rebuild the Item × User matrix for training:</h5>
-<div id="51567a9d" class="cell" data-execution_count="34">
+<div id="ef282603" class="cell" data-execution_count="34">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>item_user_train <span class="op">=</span> train_df.pivot_table(</span>
@@ -2410,7 +2410,7 @@ dtype: float64</code></pre>
 </section>
 <section id="recompute-cf-on-the-training-set" class="level4">
 <h4 data-anchor-id="recompute-cf-on-the-training-set">Recompute CF on the training set:</h4>
-<div id="d84f489a" class="cell" data-execution_count="35">
+<div id="fba12dda" class="cell" data-execution_count="35">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>item_sim_train <span class="op">=</span> cosine_similarity(item_user_train)</span>
@@ -2424,7 +2424,7 @@ dtype: float64</code></pre>
 <p><br></p>
 <section id="recommendation-function-for-evaluation-cf" class="level5">
 <h5 data-anchor-id="recommendation-function-for-evaluation-cf">Recommendation function for evaluation (CF):</h5>
-<div id="9d91f79e" class="cell" data-execution_count="36">
+<div id="494aabfc" class="cell" data-execution_count="36">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> recommend_cf_eval(user_id, k<span class="op">=</span><span class="dv">10</span>):</span>
@@ -2445,7 +2445,7 @@ dtype: float64</code></pre>
 </section>
 <section id="recommendation-function-for-evaluation-cb" class="level5">
 <h5 data-anchor-id="recommendation-function-for-evaluation-cb">Recommendation function for evaluation (CB):</h5>
-<div id="646082e7" class="cell" data-execution_count="37">
+<div id="2ee4ea1d" class="cell" data-execution_count="37">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> recommend_cb_eval(user_id, k<span class="op">=</span><span class="dv">10</span>):</span>
@@ -2466,7 +2466,7 @@ dtype: float64</code></pre>
 </section>
 <section id="evaluate-hit-rate-k" class="level5">
 <h5 data-anchor-id="evaluate-hit-rate-k">Evaluate Hit Rate @ K:</h5>
-<div id="8b85771f" class="cell" data-execution_count="38">
+<div id="7940ff2c" class="cell" data-execution_count="38">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> hit_rate(model_func, k<span class="op">=</span><span class="dv">10</span>):</span>
@@ -2490,7 +2490,7 @@ dtype: float64</code></pre>
 </section>
 <section id="results-cf-vs-cb" class="level5">
 <h5 data-anchor-id="results-cf-vs-cb">Results — CF vs CB:</h5>
-<div id="d08b6ed3" class="cell" data-execution_count="39">
+<div id="3559418d" class="cell" data-execution_count="39">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k <span class="kw">in</span> [<span class="dv">5</span>, <span class="dv">10</span>]:</span>
@@ -2562,7 +2562,7 @@ Hit Rate @ 10
 <p>Isso inclui: <br> * pure CB * pure CF * intermediate hybrid configurations</p>
 <section id="utility-normalization-function" class="level5">
 <h5 data-anchor-id="utility-normalization-function">Utility normalization function:</h5>
-<div id="152da0bf" class="cell" data-execution_count="40">
+<div id="f216dbe3" class="cell" data-execution_count="40">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb58"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> min_max_normalize(scores: pd.Series):</span>
@@ -2575,7 +2575,7 @@ Hit Rate @ 10
 </section>
 <section id="hybrid-recommendation-function" class="level5">
 <h5 data-anchor-id="hybrid-recommendation-function">Hybrid recommendation function:</h5>
-<div id="70eba1b9" class="cell" data-execution_count="41">
+<div id="25b303f7" class="cell" data-execution_count="41">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> recommend_hybrid_eval(</span>
@@ -2615,7 +2615,7 @@ Hit Rate @ 10
 </section>
 <section id="hybrid-evaluation-function" class="level5">
 <h5 data-anchor-id="hybrid-evaluation-function">Hybrid evaluation function:</h5>
-<div id="c9ef18c7" class="cell" data-execution_count="42">
+<div id="de78c82d" class="cell" data-execution_count="42">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb60"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> evaluate_hybrid(weights, k<span class="op">=</span><span class="dv">10</span>):</span>
@@ -2652,7 +2652,7 @@ Hit Rate @ 10
 </section>
 <section id="run-weight-tuning" class="level5">
 <h5 data-anchor-id="run-weight-tuning">Run weight tuning:</h5>
-<div id="2feea63a" class="cell" data-execution_count="43">
+<div id="c5b83afd" class="cell" data-execution_count="43">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb61"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>weight_grid <span class="op">=</span> [</span>
@@ -2667,7 +2667,7 @@ Hit Rate @ 10
 <span id="cb61-10"><a href="#cb61-10" aria-hidden="true" tabindex="-1"></a>df_hybrid_eval <span class="op">=</span> evaluate_hybrid(weight_grid, k<span class="op">=</span><span class="dv">10</span>)</span>
 <span id="cb61-11"><a href="#cb61-11" aria-hidden="true" tabindex="-1"></a>df_hybrid_eval.sort_values(<span class="st">'hit_rate@10'</span>, ascending<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="208">
+<div class="cell-output cell-output-display" data-execution_count="153">
 <div>
 
 
@@ -2741,7 +2741,7 @@ Hit Rate @ 10
 <p>In other words, answering the question: What is usually bought together?</p>
 <section id="build-shopping-baskets" class="level5">
 <h5 data-anchor-id="build-shopping-baskets">Build shopping baskets:</h5>
-<div id="c23ceb9a" class="cell" data-execution_count="44">
+<div id="aa93e64f" class="cell" data-execution_count="44">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb62"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Garantir que a coluna 'transaction_date' seja do tipo datetime</span></span>
@@ -2762,7 +2762,7 @@ Hit Rate @ 10
 <span id="cb62-16"><a href="#cb62-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb62-17"><a href="#cb62-17" aria-hidden="true" tabindex="-1"></a>basket.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="209">
+<div class="cell-output cell-output-display" data-execution_count="154">
 <pre><code>order_id
 1000_2025-01-28    [5, 3, 179]
 1000_2025-04-01       [50, 82]
@@ -2776,7 +2776,7 @@ Name: product_id, dtype: object</code></pre>
 </section>
 <section id="one-hot-encoding-of-baskets" class="level5">
 <h5 data-anchor-id="one-hot-encoding-of-baskets">One-hot encoding of baskets:</h5>
-<div id="6a827788" class="cell" data-execution_count="45">
+<div id="c2e2cb30" class="cell" data-execution_count="45">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb64"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>te <span class="op">=</span> TransactionEncoder()</span>
@@ -2789,7 +2789,7 @@ Name: product_id, dtype: object</code></pre>
 <span id="cb64-8"><a href="#cb64-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb64-9"><a href="#cb64-9" aria-hidden="true" tabindex="-1"></a>basket_df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="210">
+<div class="cell-output cell-output-display" data-execution_count="155">
 <div>
 
 
@@ -2952,7 +2952,7 @@ Name: product_id, dtype: object</code></pre>
 </section>
 <section id="loop-by-category" class="level5">
 <h5 data-anchor-id="loop-by-category">Loop by category:</h5>
-<div id="58c8b007" class="cell" data-execution_count="46">
+<div id="9d3263ac" class="cell" data-execution_count="46">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb65"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Loop por categoria</span></span>
@@ -3008,13 +3008,13 @@ Name: product_id, dtype: object</code></pre>
 </section>
 <section id="consolidate-all-rules" class="level5">
 <h5 data-anchor-id="consolidate-all-rules">Consolidate all rules:</h5>
-<div id="da5a58c9" class="cell" data-execution_count="47">
+<div id="95eac9a7" class="cell" data-execution_count="47">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb66"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>rules_df <span class="op">=</span> pd.concat(rules_all, ignore_index<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>rules_df.sort_values(<span class="st">'lift'</span>, ascending<span class="op">=</span><span class="va">False</span>).head(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="212">
+<div class="cell-output cell-output-display" data-execution_count="157">
 <div>
 
 
@@ -3230,7 +3230,7 @@ Name: product_id, dtype: object</code></pre>
 </section>
 <section id="filter-rules" class="level5">
 <h5 data-anchor-id="filter-rules">Filter rules:</h5>
-<div id="30fdb192" class="cell" data-execution_count="48">
+<div id="deaf22a6" class="cell" data-execution_count="48">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb67"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>rules_filtered <span class="op">=</span> rules_df[</span>
@@ -3242,7 +3242,7 @@ Name: product_id, dtype: object</code></pre>
 <span id="cb67-7"><a href="#cb67-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb67-8"><a href="#cb67-8" aria-hidden="true" tabindex="-1"></a>rules_filtered.head(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="213">
+<div class="cell-output cell-output-display" data-execution_count="158">
 <div>
 
 
@@ -3422,7 +3422,7 @@ Name: product_id, dtype: object</code></pre>
 </section>
 <section id="recommendation-function-association-rules-by-category" class="level5">
 <h5 data-anchor-id="recommendation-function-association-rules-by-category">Recommendation function — Association Rules by category:</h5>
-<div id="e2e9d688" class="cell" data-execution_count="49">
+<div id="bb888d4b" class="cell" data-execution_count="49">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb68"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> recommend_association_by_category(user_id, k<span class="op">=</span><span class="dv">5</span>):</span>
@@ -3469,7 +3469,7 @@ Name: product_id, dtype: object</code></pre>
 </section>
 <section id="testing" class="level5">
 <h5 data-anchor-id="testing">Testing:</h5>
-<div id="a627d0dc" class="cell" data-execution_count="50">
+<div id="8120b5c8" class="cell" data-execution_count="50">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb69"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>user_items <span class="op">=</span> interactions.loc[</span>
@@ -3478,7 +3478,7 @@ Name: product_id, dtype: object</code></pre>
 <span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb69-5"><a href="#cb69-5" aria-hidden="true" tabindex="-1"></a>user_items</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="215">
+<div class="cell-output cell-output-display" data-execution_count="160">
 <pre><code>array([207, 228,  70,   1, 287,  32, 158, 144, 206, 224, 180,  12, 165,
         56,  74, 202,  65])</code></pre>
 </div>
@@ -3518,7 +3518,7 @@ Name: product_id, dtype: object</code></pre>
 <p><strong>Note:</strong> Each model produces scores on different scales. Therefore, scores must be normalized before aggregation.</p>
 <section id="utility-normalization-function-1" class="level5">
 <h5 data-anchor-id="utility-normalization-function-1">Utility normalization function:</h5>
-<div id="f6dd8a6a" class="cell" data-execution_count="51">
+<div id="267db1e9" class="cell" data-execution_count="51">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb71"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> min_max_normalize(scores: pd.Series):</span>
@@ -3531,7 +3531,7 @@ Name: product_id, dtype: object</code></pre>
 </section>
 <section id="hybrid-recommendation-function-1" class="level5">
 <h5 data-anchor-id="hybrid-recommendation-function-1">Hybrid recommendation function:</h5>
-<div id="2630d6e3" class="cell" data-execution_count="52">
+<div id="bfa43206" class="cell" data-execution_count="52">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb72"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> recommend_hybrid(</span>
@@ -3579,13 +3579,13 @@ Name: product_id, dtype: object</code></pre>
 </section>
 <section id="hybrid-model-testing" class="level5">
 <h5 data-anchor-id="hybrid-model-testing">Hybrid model testing:</h5>
-<div id="12e7e932" class="cell" data-execution_count="53">
+<div id="a206f9b4" class="cell" data-execution_count="53">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb73"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>test_user <span class="op">=</span> interactions[<span class="st">'customer_id'</span>].iloc[<span class="dv">0</span>]</span>
 <span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a>recommend_hybrid(test_user, k<span class="op">=</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="218">
+<div class="cell-output cell-output-display" data-execution_count="163">
 <pre><code>product_id
 226    0.699470
 48     0.566488
@@ -3604,7 +3604,7 @@ dtype: float64</code></pre>
 </section>
 <section id="enrich-recommendations-with-metadata" class="level5">
 <h5 data-anchor-id="enrich-recommendations-with-metadata">Enrich recommendations with metadata:</h5>
-<div id="52fd3d9c" class="cell" data-execution_count="54">
+<div id="2dd95fc8" class="cell" data-execution_count="54">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb75"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> recommend_hybrid_with_metadata(user_id, k<span class="op">=</span><span class="dv">10</span>):</span>
@@ -3620,7 +3620,7 @@ dtype: float64</code></pre>
 <span id="cb75-11"><a href="#cb75-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb75-12"><a href="#cb75-12" aria-hidden="true" tabindex="-1"></a>recommend_hybrid_with_metadata(test_user, k<span class="op">=</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="219">
+<div class="cell-output cell-output-display" data-execution_count="164">
 <div>
 
 
@@ -3786,7 +3786,7 @@ dtype: float64</code></pre>
 </ul>
 <section id="save-final-artifacts-of-the-built-hybrid-model" class="level5">
 <h5 data-anchor-id="save-final-artifacts-of-the-built-hybrid-model">Save final artifacts of the built hybrid model:</h5>
-<div id="f015ae3f" class="cell" data-execution_count="55">
+<div id="e3d1e65c" class="cell" data-execution_count="55">
 <details class="code-fold">
 <summary>Show Code</summary>
 <div class="sourceCode cell-code" id="cb76"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="co"># -------------------------</span></span>

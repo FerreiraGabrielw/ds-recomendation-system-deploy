@@ -359,7 +359,7 @@ sql = "SELECT price FROM products WHERE price IS NOT NULL;"
 df_price = run_sql_pure(sql)
 df_price['price'] = pd.to_numeric(df_price['price'], errors='coerce')
 plt.hist(df_price['price'].dropna(), bins=30)
-plt.title("Product Price Distribuction")
+plt.title("Product Price Distribution")
 plt.xlabel("Price")
 plt.ylabel("Frequency")
 plt.show()

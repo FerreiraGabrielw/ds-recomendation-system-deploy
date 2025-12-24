@@ -269,7 +269,7 @@ plt.rcParams['grid.linestyle'] = '--'
 
 ---
 
-O primeiro passo da EDA é validar a integridade estrutural das tabelas.
+The first step of the EDA is to validate the structural integrity of the tables.
 
 ##### Record counts per table:
 ```{python}
@@ -359,7 +359,7 @@ sql = "SELECT price FROM products WHERE price IS NOT NULL;"
 df_price = run_sql_pure(sql)
 df_price['price'] = pd.to_numeric(df_price['price'], errors='coerce')
 plt.hist(df_price['price'].dropna(), bins=30)
-plt.title("Product Price Distribuction")
+plt.title("Product Price Distribution")
 plt.xlabel("Price")
 plt.ylabel("Frequency")
 plt.show()
@@ -381,15 +381,15 @@ LIMIT 10;
 df_top = run_sql_pure(sql)
 ax = df_top.plot.bar(x='name', y='total_qty', legend=False)
 plt.xticks(rotation=70, fontsize=8)
-plt.title("Top 15 produtos por quantidade vendida")
-plt.ylabel("Quantidade")
+plt.title("Top 15 products by quantity sold")
+plt.ylabel("Quantity")
 plt.show()
 
 # revenue bar
 df_top.plot.bar(x='name', y='total_revenue')
 plt.xticks(rotation=70, fontsize=8)
-plt.title("Top 15 produtos por receita (mesmos produtos)")
-plt.ylabel("Receita")
+plt.title("Top 15 Revenue-Generating Products")
+plt.ylabel("Revenue")
 plt.show()
 ```
 <br>
@@ -407,9 +407,9 @@ ORDER BY ym;
 df_ts = run_sql_pure(sql)
 df_ts['ym'] = pd.to_datetime(df_ts['ym'] + '-01')
 plt.plot(df_ts['ym'], df_ts['revenue'])
-plt.title("Receita por mês")
-plt.xlabel("Mês")
-plt.ylabel("Receita")
+plt.title("Monthly Revenue")
+plt.xlabel("Month")
+plt.ylabel("Revenue")
 plt.grid(True)
 plt.show()
 ```
@@ -438,8 +438,8 @@ plt.show()
 
 # scatter recency x monetary
 plt.scatter(df_rfm['recency_days'], df_rfm['monetary'])
-plt.xlabel('Recency (dias)'); plt.ylabel('Monetary (total_spent)')
-plt.title('Recency x Monetary (clientes)')
+plt.xlabel('Recency (days)'); plt.ylabel('Monetary (total_spent)')
+plt.title('Recency x Monetary (customer)')
 plt.grid(True)
 plt.show()
 ```
@@ -454,9 +454,9 @@ GROUP BY customer_id;
 """
 df_purchases = run_sql_pure(sql)
 plt.hist(df_purchases['purchases'], bins=30)
-plt.title("Distribuição de número de compras por cliente")
-plt.xlabel("Número de compras")
-plt.ylabel("Clientes")
+plt.title("Distribution of Purchases per Customer")
+plt.xlabel("Number of Purchases")
+plt.ylabel("customer")
 plt.show()
 ```
 <br>
@@ -483,7 +483,7 @@ LEFT JOIN (
 df_conv = run_sql_pure(sql)
 plt.scatter(df_conv['views'], df_conv['buys'])
 plt.xlabel('Views'); plt.ylabel('Buys')
-plt.title('Views x Buys (produtos)')
+plt.title('Views x Buys (products)')
 plt.grid(True)
 plt.show()
 ```
@@ -500,9 +500,9 @@ ORDER BY revenue DESC;
 """
 df_cat = run_sql_pure(sql)
 df_cat.plot.bar(x='category', y='revenue')
-plt.title("Receita por categoria")
+plt.title("Revenue per category")
 plt.xticks(rotation=60)
-plt.ylabel("Receita")
+plt.ylabel("Revenue")
 plt.show()
 ```
 <br>
@@ -516,11 +516,11 @@ GROUP BY customer_id, DATE(transaction_date);
 """
 df_orders = run_sql_pure(sql)
 aov = df_orders['order_value'].mean()
-print(f"AOV (média de valor por pedido - aproximação): R$ {aov:.2f}")
+print(f"Average Order Value (Approx.): R$ {aov:.2f}")
 plt.hist(df_orders['order_value'], bins=30)
-plt.title("Distribuição do valor por pedido (aprox.)")
+plt.title("Distribution of Order Value (Approx.)")
 plt.xlabel("Order value")
-plt.ylabel("Contagem")
+plt.ylabel("Count")
 plt.show()
 ```
 <br>
@@ -538,7 +538,7 @@ n_products = int(df_dim['n_products_sold'].iloc[0])
 n_trans = int(df_dim['n_transactions'].iloc[0])
 possible = n_customers * n_products
 sparsity = 1 - (n_trans / possible)
-print(f"Clientes: {n_customers}, Produtos: {n_products}, Transações: {n_trans}")
+print(f"customer: {n_customers}, Products: {n_products}, Transactions: {n_trans}")
 print(f"Sparsity (aprox): {sparsity:.6f}")
 ```
 
@@ -929,7 +929,7 @@ for k in [5, 10]:
 ```
 <br>
 
-Before building the hybrid model, we evaluated the performance of Item-Item Collaborative Filtering and Content-Based Filtering separately using a Leave-One-Out strategy and the Hit Rate@K metric.
+Before building the hybrid model, we evaluated the performance of Item-Item Collaborative Filtering and Content-Based Filtering separately using a Leave-Last-Out strategy and the Hit Rate@K metric.
 
 The results indicate that the collaborative model exhibits stronger predictive capability, reflecting the strength of behavioral signals in implicit feedback data. Although the Content-Based model shows lower standalone performance, it remains consistent and suitable for complementing the system, particularly in cold start scenarios and for improving coverage.
 

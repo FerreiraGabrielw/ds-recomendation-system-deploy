@@ -65,6 +65,9 @@ Scores from each component are normalized and combined through a weighted hybrid
 ---
 
 ## Repository Structure
+
+```
+
 .
 ├── aws/
 │   └── Scripts and configuration files for AWS deployment
@@ -85,6 +88,7 @@ Scores from each component are normalized and combined through a weighted hybrid
 │
 ├── README.md
 └── LICENSE
+```
 
 ---
 

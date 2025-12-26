@@ -1,4 +1,3 @@
-```markdown
 # Hybrid Recommender System for E-commerce (End-to-End)
 
 ![Project Preview](quarto/capa.png)
@@ -123,4 +122,3 @@ This setup enables low-latency recommendations and easy model updates by replaci
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
-```

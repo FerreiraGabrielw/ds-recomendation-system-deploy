@@ -33,7 +33,7 @@ The pipeline follows a typical end-to-end architecture for modern recommender sy
 
 1. Business problem definition
 2. Database creation and data ingestion
-3. SQL-based exploration and validation
+3. SQL exploration and validation
 4. Data cleaning and preprocessing
 5. Feature engineering and modeling (CF, CB, AR)
 6. Hybrid model construction
@@ -237,7 +237,7 @@ DB_USER = "root"
 DB_HOST = "127.0.0.1"
 DB_PORT = 3306
 DB_NAME = "ecommerce_db"
-DB_PASS = "sqlmala123"
+DB_PASS = "********"
 
 CONN_STR = f"mysql+pymysql://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 engine = create_engine(CONN_STR, echo=False)
@@ -351,7 +351,7 @@ The results confirm that the data is complete and consistent, allowing the analy
 ---
 
 ### Visualizations and Insights
-At this stage, we explore business behavior using SQL-based analyses.
+At this stage, we explore business behavior using SQL analyses.
 
 ##### Product price distribution:
 ```{python}
@@ -952,8 +952,9 @@ At this stage, we test different weight combinations between CF and CB to maximi
 | 1.0  | 0.0  |
 
 
-Isso inclui:
+That includes:
 <br>
+
 * pure CB
 * pure CF
 * intermediate hybrid configurations

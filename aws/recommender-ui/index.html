@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Recommender System | Demo</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div class="container">
+    <h1>🛒 Sistema de Recomendação</h1>
+    <p>
+      Motor de recomendação híbrido (CF + CB + Association Rules) deployado na AWS.
+    </p>
+
+    <div class="input-group">
+      <input
+        type="number"
+        id="userId"
+        placeholder="Digite o ID do usuário"
+        value="1"
+      />
+      <button onclick="recomendar()">Recomendar</button>
+    </div>
+
+    <!-- ⚠️ ESSENCIAL -->
+    <div id="results"></div>
+  </div>
+
+  <!-- ⚠️ ESSENCIAL -->
+  <script src="script.js"></script>
+</body>
+</html>

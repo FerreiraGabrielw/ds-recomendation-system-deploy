@@ -1,0 +1,145 @@
+import json
+import boto3
+import pickle
+import pandas as pd
+import numpy as np
+from io import StringIO
+
+# =============================
+# Configurações
+# =============================
+BUCKET_NAME = "ml-recommender-artifacts-gabriel"
+ARTIFACTS_PREFIX = "artifacts/"
+
+s3 = boto3.client("s3")
+
+# =============================
+# Loaders
+# =============================
+def load_pickle(key):
+    obj = s3.get_object(Bucket=BUCKET_NAME, Key=ARTIFACTS_PREFIX + key)
+    return pickle.loads(obj["Body"].read())
+
+def load_csv(key):
+    obj = s3.get_object(Bucket=BUCKET_NAME, Key=ARTIFACTS_PREFIX + key)
+    return pd.read_csv(StringIO(obj["Body"].read().decode("utf-8")))
+
+# =============================
+# Carregar artefatos (cold start)
+# =============================
+cf_similarity = load_pickle("cf_similarity.pkl")
+cb_similarity = load_pickle("cb_similarity.pkl")
+rules = load_pickle("association_rules.pkl")
+
+products = load_csv("products.csv")
+interactions = load_csv("interactions.csv")
+
+# =============================
+# Funções auxiliares
+# =============================
+def min_max_normalize(scores):
+    if scores.empty:
+        return scores
+    return (scores - scores.min()) / (scores.max() - scores.min() + 1e-9)
+
+# =============================
+# Modelos individuais
+# =============================
+def recommend_item_item(user_id, k=50):
+    bought = interactions.loc[
+        interactions["customer_id"] == user_id, "product_id"
+    ].unique()
+
+    if len(bought) == 0:
+        return pd.Series(dtype=float)
+
+    scores = cf_similarity.loc[bought].mean(axis=0)
+    return scores.drop(bought, errors="ignore").sort_values(ascending=False).head(k)
+
+def recommend_content_based(user_id, k=50):
+    bought = interactions.loc[
+        interactions["customer_id"] == user_id, "product_id"
+    ].unique()
+
+    if len(bought) == 0:
+        return pd.Series(dtype=float)
+
+    scores = cb_similarity.loc[bought].mean(axis=0)
+    return scores.drop(bought, errors="ignore").sort_values(ascending=False).head(k)
+
+def recommend_association(user_id, k=50):
+    bought = interactions.loc[
+        interactions["customer_id"] == user_id, "product_id"
+    ].unique()
+
+    recs = []
+
+    for item in bought:
+        matched = rules[rules["antecedents"].apply(lambda x: item in x)]
+        for _, r in matched.iterrows():
+            recs.append((list(r["consequents"])[0], r["lift"]))
+
+    if not recs:
+        return pd.Series(dtype=float)
+
+    df = pd.DataFrame(recs, columns=["product_id", "score"])
+    return (
+        df
+        .groupby("product_id")["score"]
+        .max()
+        .sort_values(ascending=False)
+        .head(k)
+    )
+
+# =============================
+# Recomendador híbrido
+# =============================
+def recommend_hybrid(user_id, k=10, w_cf=0.5, w_cb=0.3, w_ar=0.2):
+
+    scores = pd.Series(dtype=float)
+
+    for w, func in [
+        (w_cf, recommend_item_item),
+        (w_cb, recommend_content_based),
+        (w_ar, recommend_association)
+    ]:
+        s = func(user_id)
+        s = min_max_normalize(s)
+        if not s.empty:
+            scores = scores.add(w * s, fill_value=0)
+
+    bought = interactions.loc[
+        interactions["customer_id"] == user_id, "product_id"
+    ].unique()
+
+    scores = scores.drop(bought, errors="ignore")
+
+    return scores.sort_values(ascending=False).head(k)
+
+# =============================
+# Lambda Handler
+# =============================
+def lambda_handler(event, context):
+
+    try:
+        user_id = int(event["queryStringParameters"]["user_id"])
+    except Exception:
+        return {
+            "statusCode": 400,
+            "body": json.dumps({"error": "user_id query param is required"})
+        }
+
+    recs = recommend_hybrid(user_id, k=10)
+
+    response = (
+        recs
+        .reset_index()
+        .rename(columns={"index": "product_id", 0: "score"})
+        .merge(products, on="product_id", how="left")
+        .to_dict(orient="records")
+    )
+
+    return {
+        "statusCode": 200,
+        "body": json.dumps(response)
+    }

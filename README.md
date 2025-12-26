@@ -1,6 +1,6 @@
 # Hybrid Recommender System for E-commerce (End-to-End)
 
-![Project Preview](quarto/capa.png)
+![Project Preview](Quarto/capa.png)
 
 ### ➡️ Full and Detailed Documentation in My Portfolio  
 [Access the complete project page here](https://ferreiragabrielw.github.io/portfolio-gabriel/projetos/DataScience/4RecomendationSystem/RecomendationSystemEN.html)
